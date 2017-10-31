@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "819164570454",
+    "firebase_url": "https://betteru-d0658.firebaseio.com",
+    "project_id": "betteru-d0658",
+    "storage_bucket": "betteru-d0658.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819164570454:android:38283deb439699b1",
+        "android_client_info": {
+          "package_name": "com.betteru.ucsd.myapplication4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819164570454-r40na03ahmcnfhr2eb8p3v1hb7e807uk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.betteru.ucsd.myapplication4",
+            "certificate_hash": "30de6f65878387caf55cc6332d587128bfd0bbdf"
+          }
+        },
+        {
+          "client_id": "819164570454-takcmubecv7kpu1qm34vr6jogcsbcbbe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1n4R-fJ57aE2Q1APDogL9Zzbk8t_HkuM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819164570454-takcmubecv7kpu1qm34vr6jogcsbcbbe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
