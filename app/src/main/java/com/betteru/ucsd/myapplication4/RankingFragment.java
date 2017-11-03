@@ -1,12 +1,11 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +78,14 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 d = d.plusDays(1);
+                load(userId, d);
+            }
+        });
+
+        FloatingActionButton todayButton = (FloatingActionButton) view.findViewById(R.id.button_today);
+        todayButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                d = LocalDate.now();
                 load(userId, d);
             }
         });
@@ -154,12 +160,11 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //showDialog();
-                Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         RankingFragment.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
+                        d.getYear(),
+                        d.getMonthValue()-1,
+                        d.getDayOfMonth()
                 );
                 dpd.setThemeDark(false);
                 dpd.vibrate(true);

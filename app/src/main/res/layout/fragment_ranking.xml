@@ -47,6 +47,18 @@
                 tools:layout_editor_absoluteY="4dp" />
 
             <android.support.design.widget.FloatingActionButton
+                android:id="@+id/button_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@+id/button_date"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_rotate" />
+
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/button_nextDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
