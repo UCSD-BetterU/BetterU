@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application4</string>
+    <string name="app_name">Better U</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -7,7 +7,10 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="goal_fragment">Goal fragment</string>
+    <string name="ranking_fragment">Ranking fragment</string>
+    <string name="challenge_fragment">Challenge fragment</string>
+    <string name="friends_fragment">Friends fragment</string>
     <string name="ok">OK!!</string>
 
     <string name="cancel">Cancel</string>
