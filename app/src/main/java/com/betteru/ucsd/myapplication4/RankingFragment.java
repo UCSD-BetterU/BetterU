@@ -199,9 +199,8 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String text = Integer.toString(monthOfYear+1)+"-"+Integer.toString(dayOfMonth);
-        loadButton(text);
-        load(userId, Integer.toString(monthOfYear+1), Integer.toString(dayOfMonth));
+        d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
+        load(userId, d);
     }
 
     private class PickerAdapter extends FragmentPagerAdapter {
