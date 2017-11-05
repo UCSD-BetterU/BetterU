@@ -31,6 +31,15 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="welcome_message">Welcome!</string>
+    <string name="login_success">Successfully logged in!</string>
+    <string name="login_cancel">Log in cancelled!</string>
+    <string name="login_error">Error when logging in!</string>
+    <string name="logout_success">Successfully logged out!</string>
+    <string name="logout_error">Error when logging out!</string>
+    <string name="logout_cancel">Log out cancelled!</string>
+
+
     <string name="title_activity_main">DateTimePicker Example</string>
     <string name="selected_time">The time you picked will be shown here.</string>
     <string name="selected_date">The date you picked will be shown here.</string>
@@ -53,6 +62,9 @@
     <string name="disable_dates">Disable specific dates</string>
     <string name="disable_times">Disable specific times</string>
     <string name="highlight_dates">Highlight certain dates</string>
->>>>>>> aa767f0c8e0391b965839b0bb107c03566786c52
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    >>>>>>> aa767f0c8e0391b965839b0bb107c03566786c52
 
 </resources>

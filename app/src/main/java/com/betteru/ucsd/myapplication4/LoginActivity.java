@@ -1,167 +1,73 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public class LoginActivity extends AppCompatActivity {
 
-/**
- * This class handles Facebook Login using LoginButton.
- * For more information on Facebook Login for Android see
- * https://developers.facebook.com/docs/facebook-login/android/
- */
-public class FacebookLogin {
-
-    /**
-     * HomeActivity is the activity handling Facebook Login in the app. Needed here to send
-     * the signal back when user successfully logged in.
-     */
-    private MainActivity activity;
-
-    /**
-     * CallbackManager is a Facebook SDK class managing the callbacks into the FacebookSdk from
-     * an Activity's or Fragment's onActivityResult() method.
-     * For more information see
-     * https://developers.facebook.com/docs/reference/android/current/interface/CallbackManager/
-     */
     private CallbackManager callbackManager;
+    private LoginButton fbLoginButton;
 
-    /**
-     * CallbackManager is exposed here to so that onActivityResult() can be called from Activities
-     * and Fragments when required. This is necessary so that the login result is passed to the
-     * LoginManager
-     */
-    public CallbackManager getCallbackManager() { return callbackManager; }
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-    /**
-     * AccessTokenTracker allows for tracking whenever the access token changes - whenever user logs
-     * in, logs out etc abstract method onCurrentAccessTokenChanged is called.
-     */
-    private AccessTokenTracker tokenTracker;
-
-    public FacebookLogin(MainActivity activity) {
-        super();
-        this.activity = activity;
-    }
-
-    /**
-     * Needs to be called after Facebook SDK has been initialized with a FacebookSdk.sdkInitialize()
-     * It overrides a method in AccessTokenTracker to get notified whenever AccessToken is
-     * changed, which typically means user logged in, logged out or granted new permissions.
-     * For more information see
-     * https://developers.facebook.com/docs/reference/android/current/class/AccessTokenTracker/
-     * https://developers.facebook.com/docs/reference/android/current/interface/FacebookCallback/
-     */
-    public void init() {
         callbackManager = CallbackManager.Factory.create();
-        tokenTracker = new AccessTokenTracker() {
+
+        fbLoginButton = findViewById(R.id.loginButton);
+
+        AccessToken accesstoken = AccessToken.getCurrentAccessToken();
+        Log.i("HELLO",Boolean.toString(!(accesstoken == null || accesstoken.getPermissions().isEmpty())));
+
+        // Callback registration
+        fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                       AccessToken currentAccessToken) {
-                activity.onLoginStateChanged(oldAccessToken, currentAccessToken);
-            }
-        };
-    }
-
-    /**
-     * Called when HomeActivity resumes. Ensures tokenTracker tracks token changes
-     */
-    public void activate() {
-        tokenTracker.startTracking();
-    }
-
-    /**
-     * Called when HomeActivity is paused. Ensures tokenTracker stops tracking
-     */
-    public void deactivate() {
-        tokenTracker.stopTracking();
-    }
-
-    /**
-     * LoginButton can be used to trigger the login dialog asking for any permission so it is
-     * important to specify which permissions you want to request from a user. In Friend Smash case
-     * only user_friends is required to enable access to friends, so that the game can show friends'
-     * profile picture to make the experience more personal and engaging.
-     * For more info on permissions see
-     * https://developers.facebook.com/docs/facebook-login/android/permissions
-     * This method is called from onCreateView() of a Fragment displayed when user is logged out of
-     * Facebook.
-     */
-    public void setUpLoginButton(LoginButton button) {
-        button.setReadPermissions(FacebookLoginPermission.USER_FRIENDS.toString());
-        button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.w("DEBUG", "onLoginButtonSuccess");
-                activity.onLoginStateChanged(null, AccessToken.getCurrentAccessToken());
+            public void onSuccess(final LoginResult loginResult) {
+                Toast.makeText(
+                        LoginActivity.this,
+                        R.string.login_success,
+                        Toast.LENGTH_LONG).show();
+                Intent startupIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startupIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(startupIntent);
+                finish();
             }
 
             @Override
             public void onCancel() {
-                Log.w("DEBUG", "on Login Cancel");
+                Toast.makeText(
+                        LoginActivity.this,
+                        R.string.login_cancel,
+                        Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onError(FacebookException error) {
-                Log.e(FriendSmashApplication.TAG, error.toString());
+            public void onError(final FacebookException exception) {
+                Toast.makeText(
+                        LoginActivity.this,
+                        R.string.login_error,
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    /**
-     * Uses LoginManager to request additional permissions when needed, e.g. when user has finished
-     * the game and is trying to post score the game would call this method to request publish_actions
-     * See https://developers.facebook.com/docs/facebook-login/android/permissions for more info on
-     * Login permissions
-     */
-    public void requestPermission (FacebookLoginPermission permission) {
-        if (!isPermissionGranted(permission)) {
-            Collection<String> permissions = new ArrayList<String>(1);
-            permissions.add(permission.toString());
-            if (permission.isRead()) {
-                LoginManager.getInstance().logInWithReadPermissions(activity, permissions);
-            } else {
-                LoginManager.getInstance().logInWithPublishPermissions(activity, permissions);
-            }
-        }
+    @Override
+    protected void onActivityResult(
+            final int requestCode,
+            final int resultCode,
+            final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-    /**
-     * Helper function checking if user is logged in and access token hasn't expired.
-     */
-    public static boolean isAccessTokenValid() {
-        return testAccessTokenValid(AccessToken.getCurrentAccessToken());
-    }
-    /**
-     * Helper function checking if user has granted particular permission to the app
-     * For more info on permissions see
-     * https://developers.facebook.com/docs/facebook-login/android/permissions
-     */
-    public static boolean isPermissionGranted(FacebookLoginPermission permission) {
-        return testTokenHasPermission(AccessToken.getCurrentAccessToken(), permission);
-    }
-
-    /**
-     * Helper function checking if the given access token is valid
-     */
-    public static boolean testAccessTokenValid(AccessToken token) {
-        return token != null && !token.isExpired();
-    }
-
-    /**
-     * Helper function checking if the given access token includes specified login permission
-     */
-    public static boolean testTokenHasPermission(AccessToken token, FacebookLoginPermission permission) {
-        return testAccessTokenValid(token) && token.getPermissions().contains(permission.toString());
-    }
-
 }
