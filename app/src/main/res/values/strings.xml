@@ -9,9 +9,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="goal_fragment">Goal fragment</string>
     <string name="ranking_fragment">Ranking fragment</string>
-    <string name="challenge_fragment">Challenge fragment</string>
+    <string name="challenge_fragment">My Challenge List</string>
     <string name="friends_fragment">Friends fragment</string>
     <string name="ok">OK!!</string>
 
     <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
