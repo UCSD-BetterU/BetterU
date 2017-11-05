@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,13 +15,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.DefaultAudience;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
+import android.content.Intent;
+import android.widget.Toast;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int LOGGED_OUT_HOME = 0;
+    private static final int HOME = 1;
+    private static final int FRAGMENT_COUNT = HOME +1;
+    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -76,6 +100,14 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+        if (id == R.id.nav_logout) {
+            LoginManager.getInstance().logOut();
+            Intent startupIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(startupIntent);
+            finish();
+            return true;
+        }
+
         if (id == R.id.nav_goal) {
             fragmentClass = GoalFragment.class;
         } else if (id == R.id.nav_ranking) {
@@ -84,10 +116,6 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = ChallengeFragment.class;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         try {
@@ -97,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
