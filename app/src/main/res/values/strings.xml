@@ -65,6 +65,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    >>>>>>> aa767f0c8e0391b965839b0bb107c03566786c52
 
+    <string name="ranking_peer">Peer</string>
+    <string name="ranking_all">All</string>
 </resources>
