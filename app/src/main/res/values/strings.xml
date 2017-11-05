@@ -38,4 +38,6 @@
     <string name="disable_times">Disable specific times</string>
     <string name="highlight_dates">Highlight certain dates</string>
 
+    <string name="ranking_peer">Peer</string>
+    <string name="ranking_all">All</string>
 </resources>
