@@ -15,10 +15,8 @@
 
     <string name="cancel">Cancel</string>
 
-<<<<<<< HEAD
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-=======
     <string name="facebook_app_id">498157577228706</string>
     <string name="fb_login_protocol_scheme">fb498157577228706</string>
     <string name="title_activity_login">Sign in</string>
@@ -68,9 +66,6 @@
     <string name="highlight_dates">Highlight certain dates</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="ranking_peer">Peer</string>
     <string name="ranking_all">All</string>
->>>>>>> origin/master
 </resources>
