@@ -186,25 +186,4 @@ public class RankingPeerFragment extends Fragment implements DatePickerDialog.On
         d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
         load(userId, d);
     }
-
-    private class PickerAdapter extends FragmentPagerAdapter {
-        private static final int NUM_PAGES = 2;
-        Fragment datePickerFragment;
-
-        PickerAdapter(FragmentManager fm) {
-            super(fm);
-            datePickerFragment = new DatePickerFragment();
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return datePickerFragment;
-        }
-    }
-
 }

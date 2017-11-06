@@ -25,7 +25,7 @@ public class RankingFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        adapter = new PickerAdapter(getFragmentManager());
+        adapter = new PickerAdapter(getChildFragmentManager());
         viewPager = getView().findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
 
@@ -43,8 +43,8 @@ public class RankingFragment extends Fragment {
 
         PickerAdapter(FragmentManager fm) {
             super(fm);
-            rankingPeerFragment = new RankingPeerFragment();
-            rankingAllFragment = new RankingAllFragment();
+            rankingPeerFragment = RankingPeerFragment.newInstance();
+            rankingAllFragment = RankingAllFragment.newInstance();
         }
 
         @Override
@@ -58,8 +58,9 @@ public class RankingFragment extends Fragment {
                 case 0:
                     return rankingPeerFragment;
                 case 1:
-                default:
                     return rankingAllFragment;
+                default:
+                    return rankingPeerFragment;
             }
         }
 
@@ -75,4 +76,10 @@ public class RankingFragment extends Fragment {
         }
     }
 
+    public static RankingFragment newInstance() {
+        RankingFragment fragment = new RankingFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
 }
