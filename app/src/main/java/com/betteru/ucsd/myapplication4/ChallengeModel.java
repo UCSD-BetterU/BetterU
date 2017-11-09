@@ -1,6 +1,8 @@
 package com.betteru.ucsd.myapplication4;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -17,12 +19,17 @@ public class ChallengeModel implements Serializable {
     ArrayList<String> winner;
     ArrayList<Integer> participantsIcon;
     ArrayList<Integer> activitiesIcon;
+    LocalDate date;
+
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     ChallengeModel(String ownerId, String title, String timeStamp,
                    ArrayList<String> participants, ArrayList<String> activities)
     {
         this.ownerId = ownerId;
         this.title = title;
         this.timeStamp = timeStamp;
+        this.date = LocalDate.parse(timeStamp, formatter);
         this.activities = activities;
         this.participants = participants;
     }
