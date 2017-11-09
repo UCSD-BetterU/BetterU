@@ -41,11 +41,4 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.4.0'
 }
 
-<<<<<<< Updated upstream
 apply plugin: 'com.google.gms.google-services'
-=======
-
-
-
-apply plugin: 'com.google.gms.google-services'
->>>>>>> Stashed changes
