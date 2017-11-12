@@ -68,4 +68,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="ranking_peer">Peer</string>
     <string name="ranking_all">All</string>
+
+
+    <string-array name="challenge_activity_array">
+        <item>Running</item>
+        <item>Sitting</item>
+        <item>Walking</item>
+    </string-array>
 </resources>
