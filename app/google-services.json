@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "819164570454-9qtc1a00pkeh3rn3dic71bdohmje4h3m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.betteru.ucsd.myapplication4",
+            "certificate_hash": "75f3d858090a82a2bc1b98786be0906605ac7117"
+          }
+        },
+        {
+          "client_id": "819164570454-82lih94aga6picrg0prtmlimu8l6p00m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.betteru.ucsd.myapplication4",
+            "certificate_hash": "44018cfeaae93d4d07caaf77307a4f0d9a1058ae"
+          }
+        },
+        {
           "client_id": "819164570454-r40na03ahmcnfhr2eb8p3v1hb7e807uk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
