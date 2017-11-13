@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 public class RankingFragment extends Fragment {
@@ -97,7 +96,7 @@ public class RankingFragment extends Fragment {
                 if(intent.hasExtra("hangingoutRanking")) {
                     hangingoutRanking = intent.getBooleanExtra("hangingoutRanking", false);
                 }
-                Toast.makeText(
+                /*Toast.makeText(
                         getActivity(),
                         "exercisingRanking: "+Boolean.toString(exercisingRanking)+"\n"
                                 + "cookingRanking: "+Boolean.toString(cookingRanking)+"\n"
@@ -108,7 +107,7 @@ public class RankingFragment extends Fragment {
                                 + "studyingRanking: "+Boolean.toString(studyingRanking)+"\n"
                                 + "hangingoutRanking: "+Boolean.toString(hangingoutRanking),
                         Toast.LENGTH_LONG
-                ).show();
+                ).show();*/
             }
         };
         IntentFilter filter = new IntentFilter("DialogChangeSaved");
