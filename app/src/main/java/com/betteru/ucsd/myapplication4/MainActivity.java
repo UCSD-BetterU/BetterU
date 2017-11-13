@@ -1,5 +1,6 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.media.FaceDetector;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -29,11 +30,15 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.firebase.auth.FirebaseAuth;
+
 import android.content.Intent;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final String TAG = "BetterU";
 
     private static final int LOGGED_OUT_HOME = 0;
     private static final int HOME = 1;
@@ -101,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_logout) {
-            LoginManager.getInstance().logOut();
+            FacebookLogin.logout();
             Intent startupIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(startupIntent);
             finish();
@@ -132,9 +137,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    /*public String getUid(){
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-    }
-    */
 }

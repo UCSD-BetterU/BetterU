@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Created by Yuting on 11/12/2017.
  */
 
-public class ChallengeActivityListFragment extends Fragment {
+public class ChallengeActivityListFragment extends FragmentActivity {
     ChallengeModel data;
     View view;
     ArrayAdapter<String> adapter;
@@ -29,7 +30,7 @@ public class ChallengeActivityListFragment extends Fragment {
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(LayoutInflater inflater, ViewGroup container,
+    public void onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");

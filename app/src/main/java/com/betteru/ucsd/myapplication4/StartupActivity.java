@@ -27,9 +27,9 @@ public class StartupActivity extends Activity {
 
     private boolean isLoggedIn() {
         return true;
-        /*
+    /*
         AccessToken accesstoken = AccessToken.getCurrentAccessToken();
         return !(accesstoken == null || accesstoken.getPermissions().isEmpty());
-        */
+    */
     }
 }
