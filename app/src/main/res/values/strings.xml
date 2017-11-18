@@ -74,5 +74,8 @@
         <item>Running</item>
         <item>Sitting</item>
         <item>Walking</item>
+        <item>Showering</item>
+        <item>Studying</item>
+        <item>Working</item>
     </string-array>
 </resources>

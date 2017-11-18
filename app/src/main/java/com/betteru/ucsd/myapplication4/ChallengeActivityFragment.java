@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +25,20 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +50,7 @@ public class ChallengeActivityFragment extends Fragment
     static ChallengeModel data;
     View view;
     public final static int EDITDIALOG_FRAGMENT = 1;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,9 +64,73 @@ public class ChallengeActivityFragment extends Fragment
         loadChallengeDate();
         loadChallengeParticipants();
         loadChallengeActivities();
+
         loadChallengeDateButton();
         loadChallengeNameButton();
+        loadChallengeActivityButton();
+        loadChallengeSubmitButton();
         return view;
+    }
+    public void loadChallengeSubmitButton(){
+        Button button = view.findViewById(R.id.button_saveChallenge);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("challenge", "submit challenge");
+                submitChallenge();
+            }
+        });
+    }
+    public void submitChallenge(){
+        showProgressDialog();
+        //get unique data id
+        DocumentReference ref = db.collection("challenge").document();
+        if(data.id.isEmpty()){
+            data.setId(ref.getId());
+        }
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("owner",data.ownerId );
+        dataMap.put("participants", data.participants);
+        dataMap.put("activities", data.activities);
+        dataMap.put("time", data.timeStamp);
+        dataMap.put("title", data.title);
+        Log.d("challenge", data.id);
+        db.collection("challenge").document(data.id).set(dataMap, SetOptions.merge())
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("challenge", "DocumentSnapshot successfully written!");
+                getFragmentManager().popBackStack();
+                hideProgressDialog();
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("challenge", "Error writing document", e);
+                hideProgressDialog();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+             @Override
+             public void onComplete(@NonNull Task<Void> task) {
+                 hideProgressDialog();
+             }
+         });
+    }
+
+    public void loadChallengeActivityButton(){
+        ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                ChallengeActivityListFragment fragment = new ChallengeActivityListFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("data",data);
+                fragment.setArguments(args);
+                fragmentTransaction.replace(R.id.fragmentContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     public void loadChallengeName() {
@@ -189,6 +269,30 @@ public class ChallengeActivityFragment extends Fragment
             // Create the AlertDialog object and return it
             return builder.create();
         }
+    }
+
+    public ProgressDialog mProgressDialog;
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this.getContext());
+            mProgressDialog.setMessage("Loading");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        hideProgressDialog();
     }
 
 }
