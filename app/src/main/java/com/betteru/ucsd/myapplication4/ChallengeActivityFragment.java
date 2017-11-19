@@ -81,6 +81,7 @@ public class ChallengeActivityFragment extends Fragment
         });
     }
     public void submitChallenge(){
+        final Fragment f = this;
         showProgressDialog();
         //get unique data id
         DocumentReference ref = db.collection("challenge").document();
@@ -99,7 +100,10 @@ public class ChallengeActivityFragment extends Fragment
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("challenge", "DocumentSnapshot successfully written!");
-                getFragmentManager().popBackStack();
+                //getFragmentManager().popBackStack();
+                getActivity().getFragmentManager().beginTransaction().remove(f).commit();
+                //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                //fragmentTransaction.remove()
                 hideProgressDialog();
             }
         })
@@ -127,7 +131,6 @@ public class ChallengeActivityFragment extends Fragment
                 args.putSerializable("data",data);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
-                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });

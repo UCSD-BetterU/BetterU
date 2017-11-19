@@ -91,7 +91,6 @@ public class ChallengeActivityListFragment extends Fragment {
     public void backToDetailPage(){
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         ChallengeActivityFragment fragment = new ChallengeActivityFragment();
-
         Bundle args = new Bundle();
         args.putSerializable("data",data);
         fragment.setArguments(args);
