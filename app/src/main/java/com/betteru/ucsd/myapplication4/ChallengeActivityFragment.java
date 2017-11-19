@@ -100,8 +100,8 @@ public class ChallengeActivityFragment extends Fragment
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("challenge", "DocumentSnapshot successfully written!");
-                //getFragmentManager().popBackStack();
-                getActivity().getFragmentManager().beginTransaction().remove(f).commit();
+                getFragmentManager().popBackStack();
+                //getActivity().getFragmentManager().beginTransaction().remove(f).commit();
                 //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 //fragmentTransaction.remove()
                 hideProgressDialog();
