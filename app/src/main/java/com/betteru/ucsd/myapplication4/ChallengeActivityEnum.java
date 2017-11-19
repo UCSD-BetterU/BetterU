@@ -13,7 +13,7 @@ import java.util.Map;
 
 public enum ChallengeActivityEnum {
 
-        Running("Running", R.drawable.ic_directions_run_black_48dp),
+        Lyingdown("Lying down", R.drawable.lying_down),
         Sitting("Sitting", R.drawable.ic_directions_bike_black_48dp),
         Walking("Walking", R.drawable.ic_directions_walk_black_48dp),
         Showering("Showering", R.drawable.ic_directions_walk_black_48dp),
