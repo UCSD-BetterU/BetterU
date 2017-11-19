@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         fbLoginButton.setReadPermissions("email", "public_profile");
         fbLoginButton.setReadPermissions(FBPermission.USER_FRIENDS.toString());
         AccessToken accesstoken = AccessToken.getCurrentAccessToken();
-        Log.i("HELLO",Boolean.toString(!(accesstoken == null || accesstoken.getPermissions().isEmpty())));
+        Log.i(BetterUApplication.TAG, "log in!!!!!!!");
 
         // Callback registration
         fbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -62,6 +62,47 @@ public class LoginActivity extends AppCompatActivity {
                         R.string.login_success,
                         Toast.LENGTH_LONG).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                FBGraphAPICall meCall = FBGraphAPICall.callMe("first_name", new FBGraphAPICallback() {
+                    @Override
+                    public void handleResponse(GraphResponse response) {
+                        JSONObject user = response.getJSONObject();
+                        Log.i(BetterUApplication.TAG+"_USER", user.toString());
+                        ((BetterUApplication) getApplication()).setCurrentFBUser(user);
+                    }
+
+                    @Override
+                    public void handleError(FacebookRequestError error) {
+                        showError(error.toString());
+                    }
+                });
+                FBGraphAPICall myFriendsCall = FBGraphAPICall.callMeFriends("name,first_name", new FBGraphAPICallback() {
+                    @Override
+                    public void handleResponse(GraphResponse response) {
+                        JSONArray friendsData = FBGraphAPICall.getDataFromResponse(response);
+                        Log.i(BetterUApplication.TAG+"_FRIENDS", friendsData.toString());
+                        ((BetterUApplication) getApplication()).setFriends(friendsData);
+                    }
+
+                    @Override
+                    public void handleError(FacebookRequestError error) {
+                        showError(error.toString());
+                    }
+                });
+                // Create a RequestBatch and add a callback once the batch of requests completes
+                GraphRequestBatch requestBatch = FBGraphAPICall.createRequestBatch(myFriendsCall, meCall);
+
+                requestBatch.addCallback(new GraphRequestBatch.Callback() {
+                    @Override
+                    public void onBatchCompleted(GraphRequestBatch batch) {
+                        if (((BetterUApplication)getApplication()).getCurrentFBUser() != null) {
+                        //    loadPersonalizedFragment();
+                        } else {
+                        //    showError(getString(R.string.error_fetching_profile));
+                        }
+                    }
+                });
+
+                requestBatch.executeAsync();
                 Intent startupIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startupIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(startupIntent);
@@ -105,20 +146,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(BetterUApplication.TAG, "signInWithCredential:success");
+                            Log.i(BetterUApplication.TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            FBGraphAPICall meCall = FBGraphAPICall.callMe("first_name", new FBGraphAPICallback() {
-                                @Override
-                                public void handleResponse(GraphResponse response) {
-                                    JSONObject user = response.getJSONObject();
-                                    ((BetterUApplication) getApplication()).setCurrentFBUser(user);
-                                }
-
-                                @Override
-                                public void handleError(FacebookRequestError error) {
-                                    showError(error.toString());
-                                }
-                            });
+                            Log.i(BetterUApplication.TAG+"_USER", user.toString());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(BetterUApplication.TAG, "signInWithCredential:failure", task.getException());
