@@ -13,11 +13,13 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView_noChallengeRecord"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/challenge_fragment"
+            android:layout_height="match_parent"
+            android:paddingTop="80dp"
+            android:text="No Existing Challenge"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <ListView
             android:id="@+id/ListView_challenge"

@@ -194,8 +194,20 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/button_saveChallenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:text="Save Challenge" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>
