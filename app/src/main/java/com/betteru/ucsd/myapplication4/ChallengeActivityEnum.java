@@ -14,11 +14,21 @@ import java.util.Map;
 public enum ChallengeActivityEnum {
 
         Lyingdown("Lying down", R.drawable.lying_down),
-        Sitting("Sitting", R.drawable.ic_directions_bike_black_48dp),
-        Walking("Walking", R.drawable.ic_directions_walk_black_48dp),
-        Showering("Showering", R.drawable.ic_directions_walk_black_48dp),
-        Studying("Studying", R.drawable.ic_directions_walk_black_48dp),
-        Working("Working", R.drawable.ic_directions_walk_black_48dp);
+        Sitting("Sitting", R.drawable.sitting),
+        Walking("Walking", R.drawable.walking),
+        Bathing("Bathing", R.drawable.bathing),
+        Party("At a party", R.drawable.at_a_party),
+        Bar("At a bar", R.drawable.at_the_ar),
+        Beach("At the beach", R.drawable.at_the_beach),
+        Gym("At the gym", R.drawable.at_the_gym),
+        Home("at home", R.drawable.athome),
+        Work("at work", R.drawable.atwork),
+        Cycling("Cycling", R.drawable.bicycling),
+        Cleaning("Cleaning", R.drawable.cleaning),
+        Computer("Computer Work", R.drawable.computer_work),
+        Cooking("Cooking", R.drawable.cooking);
+
+
 
         private final String name;
         private final Integer icon;
