@@ -7,6 +7,8 @@ package com.betteru.ucsd.myapplication4;
 import com.facebook.FacebookRequestError;
 import com.facebook.GraphResponse;
 
+import org.json.JSONException;
+
 /**
  * Callback for Graph API calls made using GraphAPICall object to easily handle
  * successful responses and errors.
@@ -15,7 +17,7 @@ public interface FBGraphAPICallback {
     /**
      * Called when GraphAPICall returned successfully.
      */
-    void handleResponse (GraphResponse response);
+    void handleResponse (GraphResponse response) throws JSONException;
 
     /**
      * Called when GraphAPICall returned with an error.

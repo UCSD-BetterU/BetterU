@@ -13,6 +13,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookRequestError;
+import com.facebook.GraphRequest;
 import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
@@ -25,12 +26,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -43,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
@@ -62,12 +71,13 @@ public class LoginActivity extends AppCompatActivity {
                         R.string.login_success,
                         Toast.LENGTH_LONG).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
-                FBGraphAPICall meCall = FBGraphAPICall.callMe("first_name", new FBGraphAPICallback() {
+                FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
                     @Override
-                    public void handleResponse(GraphResponse response) {
+                    public void handleResponse(GraphResponse response) throws JSONException {
                         JSONObject user = response.getJSONObject();
                         Log.i(BetterUApplication.TAG+"_USER", user.toString());
                         ((BetterUApplication) getApplication()).setCurrentFBUser(user);
+
                     }
 
                     @Override
@@ -81,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONArray friendsData = FBGraphAPICall.getDataFromResponse(response);
                         Log.i(BetterUApplication.TAG+"_FRIENDS", friendsData.toString());
                         ((BetterUApplication) getApplication()).setFriends(friendsData);
+
                     }
 
                     @Override
@@ -88,14 +99,43 @@ public class LoginActivity extends AppCompatActivity {
                         showError(error.toString());
                     }
                 });
+
                 // Create a RequestBatch and add a callback once the batch of requests completes
                 GraphRequestBatch requestBatch = FBGraphAPICall.createRequestBatch(myFriendsCall, meCall);
 
                 requestBatch.addCallback(new GraphRequestBatch.Callback() {
                     @Override
                     public void onBatchCompleted(GraphRequestBatch batch) {
-                        if (((BetterUApplication)getApplication()).getCurrentFBUser() != null) {
-                        //    loadPersonalizedFragment();
+                        JSONObject user = ((BetterUApplication) getApplication()).getCurrentFBUser();
+                        if (user != null) {
+                            Map<String, Object> userMap = new HashMap<>();
+                            String userId = null, firstName = null, name = null;
+                            try {
+                                userId = user.getString("id");
+                                firstName = user.getString("first_name");
+                                name = user.getString("name");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            userMap.put("first name", firstName);
+                            userMap.put("name", name);
+                            CollectionReference userCollection = db.collection("Users");
+                            userCollection.document(userId).set(userMap, SetOptions.merge());
+                            JSONArray friendsData = ((BetterUApplication) getApplication()).getFriends();
+                            if ( friendsData != null ) {
+                                Map<String, Integer> friendMap = new HashMap<>();
+                                for (int i = 0; i < friendsData.length(); i++) {
+                                    try {
+                                        String friendId = friendsData.getJSONObject(i).getString("id");
+                                        friendMap.put(friendId, 1);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                CollectionReference friendCollection = db.collection("friends");
+                                friendCollection.document(userId).set(friendMap, SetOptions.merge());
+                            }
+
                         } else {
                         //    showError(getString(R.string.error_fetching_profile));
                         }
@@ -103,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
                 requestBatch.executeAsync();
+
                 Intent startupIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startupIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(startupIntent);

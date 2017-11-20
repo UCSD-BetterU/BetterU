@@ -119,7 +119,11 @@ public class FBGraphAPICall {
                 path, new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
-                        handleResponse(response);
+                        try {
+                            handleResponse(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -133,7 +137,11 @@ public class FBGraphAPICall {
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                        handleResponse(graphResponse);
+                        try {
+                            handleResponse(graphResponse);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -147,7 +155,11 @@ public class FBGraphAPICall {
                 new GraphRequest.GraphJSONArrayCallback() {
                     @Override
                     public void onCompleted(JSONArray users, GraphResponse response) {
-                        handleResponse(response);
+                        try {
+                            handleResponse(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
     }
@@ -162,7 +174,11 @@ public class FBGraphAPICall {
         graphRequest = GraphRequest.newDeleteObjectRequest(token, objectId, new GraphRequest.Callback() {
             @Override
             public void onCompleted(GraphResponse response) {
-                handleResponse(response);
+                try {
+                    handleResponse(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -178,7 +194,7 @@ public class FBGraphAPICall {
      * See https://developers.facebook.com/docs/graph-api/using-graph-api/#paging for more details
      * on paging.
      */
-    private void handleResponse (GraphResponse response) {
+    private void handleResponse (GraphResponse response) throws JSONException {
         FacebookRequestError error = response.getError();
         if (error != null) {
             Log.e("GraphAPI", error.toString());
@@ -213,7 +229,11 @@ public class FBGraphAPICall {
             graphRequest.setCallback(new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
-                    handleResponse(graphResponse);
+                    try {
+                        handleResponse(graphResponse);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             graphRequest.executeAsync();
