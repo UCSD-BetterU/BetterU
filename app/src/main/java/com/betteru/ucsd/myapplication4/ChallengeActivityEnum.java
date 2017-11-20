@@ -1,7 +1,5 @@
 package com.betteru.ucsd.myapplication4;
 
-import com.squareup.okhttp.Challenge;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +16,7 @@ public enum ChallengeActivityEnum {
         Walking("Walking", R.drawable.walking),
         Bathing("Bathing", R.drawable.bathing),
         Party("At a party", R.drawable.at_a_party),
-        Bar("At a bar", R.drawable.at_the_ar),
+        Bar("At a bar", R.drawable.at_the_bar),
         Beach("At the beach", R.drawable.at_the_beach),
         Gym("At the gym", R.drawable.at_the_gym),
         Home("at home", R.drawable.athome),
@@ -27,6 +25,7 @@ public enum ChallengeActivityEnum {
         Cleaning("Cleaning", R.drawable.cleaning),
         Computer("Computer Work", R.drawable.computer_work),
         Cooking("Cooking", R.drawable.cooking);
+
 
 
 
