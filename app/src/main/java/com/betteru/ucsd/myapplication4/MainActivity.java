@@ -2,6 +2,7 @@ package com.betteru.ucsd.myapplication4;
 
 import android.media.FaceDetector;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,9 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookRequestError;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
@@ -30,10 +34,25 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import android.content.Intent;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     private static final int FRAGMENT_COUNT = HOME +1;
     private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private CallbackManager callbackManager;
+    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +82,84 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setUserAndFriends();
+    }
+
+    protected void setUserAndFriends() {
+        if (((BetterUApplication) getApplication()).getCurrentFBUser() != null) {
+            return;
+        }
+        FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
+            @Override
+            public void handleResponse(GraphResponse response) throws JSONException {
+                JSONObject userObject = response.getJSONObject();
+                String name = userObject.getString("name");
+                String firstName = userObject.getString("first_name");
+                String userId = userObject.getString("id");
+                UserModel user = new UserModel(name, firstName, userId);
+                Log.i(BetterUApplication.TAG+"_USER", user.toString());
+                ((BetterUApplication) getApplication()).setCurrentFBUser(user);
+            }
+
+            @Override
+            public void handleError(FacebookRequestError error) {
+                ((BetterUApplication) getApplication()).showError(error.toString());
+            }
+        });
+
+        GraphRequestBatch requestBatch = FBGraphAPICall.createRequestBatch(meCall);
+
+        requestBatch.addCallback(new GraphRequestBatch.Callback() {
+            @Override
+            public void onBatchCompleted(GraphRequestBatch batch) {
+                UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
+                if (user != null) {
+                    String userId = null;
+                    userId = user.getUserId() ;
+                    final CollectionReference userCollection = db.collection("Users");
+                    DocumentReference friendRef = db.collection("friends").document(userId);
+                    friendRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null) {
+                                    Map<String, Object> friendListData = document.getData();
+                                    Log.d(BetterUApplication.TAG, "DocumentSnapshot data: " + friendListData);
+                                    for (Map.Entry<String, Object> friend : friendListData.entrySet()) {
+                                        String friendId = friend.getKey();
+                                        DocumentReference userRef = userCollection.document(friendId);
+                                        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document.exists()) {
+                                                        Map<String, Object> friend = document.getData();
+                                                        UserModel friendData = new UserModel(
+                                                            (String) friend.get("name"),
+                                                            (String) friend.get("firstName"),
+                                                            (String) friend.get("userId"));
+                                                        ((BetterUApplication) getApplication()).addToFriendList(friendData);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.d(BetterUApplication.TAG, "No such document");
+                                }
+                            } else {
+                                Log.d(BetterUApplication.TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        requestBatch.executeAsync();
     }
 
     @Override

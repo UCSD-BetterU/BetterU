@@ -6,6 +6,7 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 
@@ -13,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BetterUApplication extends Application {
 
@@ -22,10 +24,10 @@ public class BetterUApplication extends Application {
     private boolean loggedIn = false;
     public static final String LOGGED_IN_KEY = "logged_in";
 
-    private JSONObject currentFBUser;
+    private UserModel currentFBUser;
     public static final String CURRENT_FB_USER_KEY = "current_fb_user";
 
-    private JSONArray friends;
+    private ArrayList<UserModel> friendList;
 
     public static final String FRIENDS_KEY = "friends";
 
@@ -40,39 +42,33 @@ public class BetterUApplication extends Application {
         }
     }
 
-    public JSONObject getCurrentFBUser() {
-        return currentFBUser;
-    }
+    public UserModel getCurrentFBUser() { return currentFBUser; }
 
-    public void setCurrentFBUser(JSONObject currentFBUser) {
+    public void setCurrentFBUser(UserModel currentFBUser) {
         this.currentFBUser = currentFBUser;
     }
 
-    public JSONArray getFriends() {
-        return friends;
+    public ArrayList<UserModel> getFriendList() {
+        return this.friendList;
     }
 
-    public ArrayList<String> getFriendsAsArrayListOfStrings() {
-        ArrayList<String> friendsAsArrayListOfStrings = new ArrayList<String>();
+    public void clearCurrentFBUser() { this.currentFBUser = null; }
 
-        int numFriends = friends.length();
-        for (int i = 0; i < numFriends; i++) {
-            friendsAsArrayListOfStrings.add(getFriend(i).toString());
+    public void setFriendList(ArrayList<UserModel> friendList) {
+        this.friendList = friendList;
+    }
+
+    public void addToFriendList(UserModel friend) {
+        if (this.friendList == null) {
+            this.friendList = new ArrayList<>();
         }
-
-        return friendsAsArrayListOfStrings;
+        this.friendList.add(friend);
     }
 
-    public JSONObject getFriend(int index) {
-        JSONObject friend = null;
-        if (friends != null && friends.length() > index) {
-            friend = friends.optJSONObject(index);
-        }
-        return friend;
-    }
+    public void clearFriendList() { this.friendList = null; }
 
-    public void setFriends(JSONArray friends) {
-        this.friends = friends;
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 
 }

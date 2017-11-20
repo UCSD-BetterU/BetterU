@@ -32,8 +32,8 @@ public class ChallengeActivityAdapter extends BaseAdapter {
         this.iconList = iconList;
         for(int i = 0; i < nameList.size(); i++)
         {
-            UserModel user = new UserModel(nameList.get(i), iconList.get(i));
-            list.add(user);
+        //    UserModel user = new UserModel(nameList.get(i), iconList.get(i));
+        //    list.add(user);
         }
     }
     @Override

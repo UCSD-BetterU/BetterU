@@ -1,17 +1,29 @@
 package com.betteru.ucsd.myapplication4;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * Created by Yuting on 11/5/2017.
+ * Created by verazou on 11/19/17.
  */
 
-public class UserModel {
+public class UserModel implements Serializable {
     String name;
-    Integer icon;
-    UserModel(String name, Integer icon)
+    String firstName;
+    String userId;
+
+    UserModel(String name, String firstName, String userId)
     {
         this.name = name;
-        this.icon = icon;
+        this.firstName = firstName;
+        this.userId = userId;
     }
+
+    public String getName() { return this.name; }
+    public String getFirstName() { return this.firstName; }
+    public String getUserId() { return this.userId; }
+
 }
+

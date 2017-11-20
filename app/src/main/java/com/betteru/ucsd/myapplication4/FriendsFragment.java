@@ -3,6 +3,7 @@ package com.betteru.ucsd.myapplication4;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -41,14 +43,12 @@ public class FriendsFragment extends Fragment {
     }
 
     private void loadData() {
-        JSONArray friendsData = ((BetterUApplication) getActivity().getApplication()).getFriends();
-        for (int i = 0; i < friendsData.length(); ++i) {
-            String friendName = null;
-            try {
-                friendName = friendsData.getJSONObject(i).getString("name");
+        ArrayList<UserModel> friendsData = ((BetterUApplication) getActivity().getApplication()).getFriendList();
+        Log.d(BetterUApplication.TAG+"friendfragment", friendsData.toString());
+        if (friendsData != null) {
+            for (int i = 0; i < friendsData.size(); ++i) {
+                String friendName = friendsData.get(i).getName();
                 this.friendsList.add(friendName);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
     }

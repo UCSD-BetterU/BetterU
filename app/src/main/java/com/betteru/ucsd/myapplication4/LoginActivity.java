@@ -1,5 +1,6 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -74,15 +75,20 @@ public class LoginActivity extends AppCompatActivity {
                 FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
                     @Override
                     public void handleResponse(GraphResponse response) throws JSONException {
-                        JSONObject user = response.getJSONObject();
+                        JSONObject userObject = response.getJSONObject();
+                        String name = userObject.getString("name");
+                        String firstName = userObject.getString("first_name");
+                        String userId = userObject.getString("id");
+                        UserModel user = new UserModel(name, firstName, userId);
                         Log.i(BetterUApplication.TAG+"_USER", user.toString());
-                        ((BetterUApplication) getApplication()).setCurrentFBUser(user);
-
+                        BetterUApplication app = (BetterUApplication) getApplication();
+                        app.clearCurrentFBUser();
+                        app.setCurrentFBUser(user);
                     }
 
                     @Override
                     public void handleError(FacebookRequestError error) {
-                        showError(error.toString());
+                        ((BetterUApplication) getApplication()).showError(error.toString());
                     }
                 });
                 FBGraphAPICall myFriendsCall = FBGraphAPICall.callMeFriends("name,first_name", new FBGraphAPICallback() {
@@ -90,13 +96,28 @@ public class LoginActivity extends AppCompatActivity {
                     public void handleResponse(GraphResponse response) {
                         JSONArray friendsData = FBGraphAPICall.getDataFromResponse(response);
                         Log.i(BetterUApplication.TAG+"_FRIENDS", friendsData.toString());
-                        ((BetterUApplication) getApplication()).setFriends(friendsData);
-
+                        ArrayList<UserModel> friendList = new ArrayList<>();
+                        for (int i = 0; i < friendsData.length(); i++) {
+                            try {
+                                JSONObject userObject = friendsData.getJSONObject(i);
+                                String name = userObject.getString("name");
+                                String firstName = userObject.getString("first_name");
+                                String userId = userObject.getString("id");
+                                UserModel user = new UserModel(name, firstName, userId);
+                                friendList.add(user);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        BetterUApplication app = (BetterUApplication) getApplication();
+                        app.clearFriendList();
+                        app.setFriendList(friendList);
+                        Log.d(BetterUApplication.TAG+"FriendList", friendList.toString());
                     }
 
                     @Override
                     public void handleError(FacebookRequestError error) {
-                        showError(error.toString());
+                        ((BetterUApplication) getApplication()).showError(error.toString());
                     }
                 });
 
@@ -106,31 +127,22 @@ public class LoginActivity extends AppCompatActivity {
                 requestBatch.addCallback(new GraphRequestBatch.Callback() {
                     @Override
                     public void onBatchCompleted(GraphRequestBatch batch) {
-                        JSONObject user = ((BetterUApplication) getApplication()).getCurrentFBUser();
+                        UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
                         if (user != null) {
                             Map<String, Object> userMap = new HashMap<>();
-                            String userId = null, firstName = null, name = null;
-                            try {
-                                userId = user.getString("id");
-                                firstName = user.getString("first_name");
-                                name = user.getString("name");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            String userId = user.getUserId();
+                            String firstName = user.getFirstName();
+                            String name = user.getName();
                             userMap.put("first name", firstName);
                             userMap.put("name", name);
                             CollectionReference userCollection = db.collection("Users");
                             userCollection.document(userId).set(userMap, SetOptions.merge());
-                            JSONArray friendsData = ((BetterUApplication) getApplication()).getFriends();
-                            if ( friendsData != null ) {
+                            ArrayList<UserModel> friendList = ((BetterUApplication) getApplication()).getFriendList();
+                            if ( friendList != null ) {
                                 Map<String, Integer> friendMap = new HashMap<>();
-                                for (int i = 0; i < friendsData.length(); i++) {
-                                    try {
-                                        String friendId = friendsData.getJSONObject(i).getString("id");
-                                        friendMap.put(friendId, 1);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                for (UserModel friend : friendList) {
+                                    String friendId = friend.getUserId();
+                                    friendMap.put(friendId, 1);
                                 }
                                 CollectionReference friendCollection = db.collection("friends");
                                 friendCollection.document(userId).set(friendMap, SetOptions.merge());
@@ -202,8 +214,5 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
-    }
 
 }
