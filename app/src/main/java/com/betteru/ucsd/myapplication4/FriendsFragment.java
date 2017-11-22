@@ -28,7 +28,7 @@ public class FriendsFragment extends Fragment {
 
     View view;
     FirebaseFirestore db;
-    ArrayList<String> friendsList;
+    ArrayList<UserModel> friendsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,21 +36,15 @@ public class FriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_friends, container, false);
         db = FirebaseFirestore.getInstance();
-        friendsList = new ArrayList<String>();
+        friendsList = new ArrayList<>();
         loadData();
         loadListView();
         return view;
     }
 
     private void loadData() {
-        ArrayList<UserModel> friendsData = ((BetterUApplication) getActivity().getApplication()).getFriendList();
-        Log.d(BetterUApplication.TAG+"friendfragment", friendsData.toString());
-        if (friendsData != null) {
-            for (int i = 0; i < friendsData.size(); ++i) {
-                String friendName = friendsData.get(i).getName();
-                this.friendsList.add(friendName);
-            }
-        }
+        friendsList = ((BetterUApplication) getActivity().getApplication()).getFriendList();
+        Log.d(BetterUApplication.TAG+"friendfragment", friendsList.toString());
     }
 
     private void loadListView() {
