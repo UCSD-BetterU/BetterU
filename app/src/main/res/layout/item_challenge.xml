@@ -8,15 +8,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
 
         <ImageView
-            android:id="@+id/challenge_icon"
+            android:id="@+id/imageView_challengeIcon"
             android:layout_width="66dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_weight="1"
-            app:srcCompat="@mipmap/ic_launcher_round"
+            app:srcCompat="@android:color/holo_green_light"
             tools:layout_editor_absoluteX="5dp"
             tools:layout_editor_absoluteY="5dp" />
 
@@ -26,13 +27,15 @@
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:paddingLeft="10dp"
             android:weightSum="1"
             tools:layout_editor_absoluteX="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -41,9 +44,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Description"
+                    android:textAlignment="viewStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <TextView
+                    android:id="@+id/textView_challengeDate"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -57,7 +62,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="31dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -69,7 +74,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
                     android:text="Participants"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="viewStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
                 <TextView

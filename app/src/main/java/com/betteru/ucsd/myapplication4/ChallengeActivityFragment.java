@@ -65,11 +65,26 @@ public class ChallengeActivityFragment extends Fragment
         loadChallengeParticipants();
         loadChallengeActivities();
 
+        loadEditButton();
+
+        return view;
+    }
+    public void loadEditButton(){
+        if(data.date.isBefore(LocalDate.now())){
+            ImageButton button2 = (ImageButton) view.findViewById(R.id.imageButton_challengeDate);
+            button2.setVisibility(View.GONE);
+            ImageButton button3 = (ImageButton) view.findViewById(R.id.imageButton_challengeName);
+            button3.setVisibility(View.GONE);
+            ImageButton button4 = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
+            button4.setVisibility(View.GONE);
+            Button button1 = view.findViewById(R.id.button_saveChallenge);
+            button1.setVisibility(View.GONE);
+            return;
+        }
         loadChallengeDateButton();
         loadChallengeNameButton();
         loadChallengeActivityButton();
         loadChallengeSubmitButton();
-        return view;
     }
     public void loadChallengeSubmitButton(){
         Button button = view.findViewById(R.id.button_saveChallenge);
@@ -153,7 +168,9 @@ public class ChallengeActivityFragment extends Fragment
     public void loadChallengeActivities(){
         //set GridView
         GridView gridViewActivities = (GridView) view.findViewById(R.id.gridView_challenge_activities);
-        ChallengeActivityAdapter adapterAct =new ChallengeActivityAdapter(this.getActivity(), data.activities, data.activitiesIcon);
+        ChallengeActivityAdapter adapterAct = new ChallengeActivityAdapter(this.getActivity(), data.activities, data.activitiesIcon);
+        Log.d("challenge detail page", data.activities.toString());
+        Log.d("challenge detail page", data.activitiesIcon.toString());
         gridViewActivities.setAdapter(adapterAct);
     }
 
@@ -192,6 +209,7 @@ public class ChallengeActivityFragment extends Fragment
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         data.date = LocalDate.of(year, monthOfYear+1, dayOfMonth);
+        data.timeStamp = data.date.format(data.formatter);
         loadChallengeDate();
     }
 
