@@ -14,17 +14,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 public class FriendsAdapter extends BaseAdapter{
 
-    public ArrayList<String> friendsList;
+    public ArrayList<UserModel> friendsList;
 
     Activity activity;
-    TextView friendName;
+    TextView friendNameView;
+    ProfilePictureView profilePicView;
 
     public static final String FIRST_COLUMN="Activity";
     public static final String SECOND_COLUMN="Ranking";
 
-    public FriendsAdapter(Activity activity, ArrayList<String> friendsList){
+    public FriendsAdapter(Activity activity, ArrayList<UserModel> friendsList){
         super();
         this.activity = activity;
         this.friendsList=friendsList;
@@ -55,14 +58,16 @@ public class FriendsAdapter extends BaseAdapter{
         LayoutInflater inflater = activity.getLayoutInflater();
 
         if(convertView == null){
-
             convertView = inflater.inflate(R.layout.friend_item, null);
-
-            friendName = (TextView) convertView.findViewById(R.id.friend_name);
+            profilePicView = (ProfilePictureView) convertView.findViewById(R.id.friend_profile);
+            friendNameView = (TextView) convertView.findViewById(R.id.friend_name);
         }
 
-        String name = friendsList.get(position);
-        friendName.setText(name);
+        profilePicView.setProfileId(friendsList.get(position).getUserId());
+        profilePicView.setCropped(true);
+
+        String name = friendsList.get(position).getName();
+        friendNameView.setText(name);
         return convertView;
     }
 

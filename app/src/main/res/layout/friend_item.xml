@@ -7,20 +7,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="1">
 
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/friend_profile"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
         <TextView
             android:id="@+id/friend_name"
             android:layout_width="32dp"
+            android:gravity="center"
             android:layout_height="match_parent"
             android:layout_weight="0.42"
             android:textAlignment="textStart"
             android:textSize="20sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
+            android:layout_marginLeft="10dp"
             tools:text="User Name" />
 
     </LinearLayout>

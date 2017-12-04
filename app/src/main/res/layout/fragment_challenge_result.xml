@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="37dp">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -26,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/imageView2"
+            android:layout_marginTop="10dp"
             android:text="My Challenge Name"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -39,10 +39,40 @@
             android:text="2017-11-01"
             android:textAlignment="center" />
 
+        <TextView
+            android:id="@+id/textView_noWinner"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView_challengeDate"
+            android:paddingTop="100dp"
+            android:text="Winner to be determined..."
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
         <ListView
             android:id="@+id/listView_winner"
+            style="@style/Widget.AppCompat.Light.ListView.DropDown"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView_challengeDate"
+            android:layout_marginTop="10dp"
+            android:headerDividersEnabled="true">
+
+        </ListView>
+
+        <Button
+            android:id="@+id/button_challengeDetail"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView_challengeDate" />
-    </RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="serif-monospace"
+            android:text="> see details"
+            android:textAlignment="viewEnd" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

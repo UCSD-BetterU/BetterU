@@ -67,4 +67,8 @@ public class ChallengeModel implements Serializable {
         for(int i = 0; i < this.participants.size(); i++)
             this.participantsIcon.add(R.drawable.ic_face_black_48dp);
     }
+
+    public void setWinner(ArrayList<String> winner){
+        this.winner = winner;
+    }
 }

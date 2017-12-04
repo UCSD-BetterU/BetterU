@@ -100,6 +100,9 @@ public class ChallengeFragment extends Fragment {
                                     (String) obj.get("time"),
                                     (ArrayList<String>) obj.get("participants"),
                                     (ArrayList<String>) obj.get("activities"));
+                            if(obj.containsKey("winner")){
+                                    temp.setWinner((ArrayList<String>) obj.get("winner"));
+                            }
                             temp.setId(document.getId());
                             data.add(temp);
                     }
@@ -145,8 +148,8 @@ public class ChallengeFragment extends Fragment {
                 int pos = position + 1;
 
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                ChallengeActivityFragment fragment = new ChallengeActivityFragment();
-
+                //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
+                ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
                 fragment.setArguments(args);

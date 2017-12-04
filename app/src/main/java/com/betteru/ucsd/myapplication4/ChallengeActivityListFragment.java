@@ -53,7 +53,7 @@ public class ChallengeActivityListFragment extends Fragment {
                 Log.d("activity found", list[i]);
             }
             else{
-                Log.d("activity not fount", list[i]);
+                Log.d("activity not found", list[i]);
             }
         }
 

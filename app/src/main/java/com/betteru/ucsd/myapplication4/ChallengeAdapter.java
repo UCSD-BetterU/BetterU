@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,8 +23,10 @@ public class ChallengeAdapter extends BaseAdapter {
     public ArrayList<ChallengeModel> list;
     Activity activity;
     TextView txtTitle;
+    TextView txtDate;
     TextView txtParticipantNum;
     TextView txtActivityNum;
+    ImageView imgStatus;
 
     public ChallengeAdapter(Activity activity,ArrayList<ChallengeModel> list){
         super();
@@ -60,11 +64,20 @@ public class ChallengeAdapter extends BaseAdapter {
             txtTitle = (TextView) convertView.findViewById(R.id.challenge_title);
             txtParticipantNum =(TextView) convertView.findViewById(R.id.challenge_participants_number);
             txtActivityNum =(TextView) convertView.findViewById(R.id.challenge_activities_number);
+            txtDate = (TextView) convertView.findViewById(R.id.textView_challengeDate);
+            imgStatus = (ImageView) convertView.findViewById(R.id.imageView_challengeIcon);
         }
         ChallengeModel obj =list.get(position);
         txtTitle.setText(obj.title);
         txtParticipantNum.setText(Integer.toString(obj.participants.size()));
         txtActivityNum.setText(Integer.toString(obj.activities.size()));
+        txtDate.setText(obj.date.format(obj.formatter));
+        if(obj.date.isBefore(LocalDate.now().minusDays(3)))
+            imgStatus.setImageResource(R.color.colorChallengeEnd);
+        else if(obj.date.isBefore(LocalDate.now()))
+            imgStatus.setImageResource(R.color.colorChallengeNear);
+        else
+            imgStatus.setImageResource(R.color.colorChallengeFuture);
         return convertView;
     }
 

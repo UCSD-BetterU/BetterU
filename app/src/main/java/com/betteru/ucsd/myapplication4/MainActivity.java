@@ -23,6 +23,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookRequestError;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
@@ -44,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private static final int FRAGMENT_COUNT = HOME +1;
     private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private CallbackManager callbackManager;
+    private ProfileTracker profileTracker;
     protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         setUserAndFriends();
@@ -115,8 +118,15 @@ public class MainActivity extends AppCompatActivity
             public void onBatchCompleted(GraphRequestBatch batch) {
                 UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
                 if (user != null) {
-                    String userId = null;
-                    userId = user.getUserId() ;
+                    String userId = user.getUserId() ;
+                    // Set profile pic
+                    ProfilePictureView profilePicView = findViewById(R.id.userProfile);
+                    profilePicView.setProfileId(user.getUserId());
+                    profilePicView.setCropped(true);
+                    // Set user name
+                    TextView userNameView = findViewById(R.id.userName);
+                    userNameView.setText(user.getFirstName());
+
                     final CollectionReference userCollection = db.collection("Users");
                     DocumentReference friendRef = db.collection("friends").document(userId);
                     friendRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -124,7 +134,7 @@ public class MainActivity extends AppCompatActivity
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
-                                if (document != null) {
+                                if (document.exists()) {
                                     Map<String, Object> friendListData = document.getData();
                                     Log.d(BetterUApplication.TAG, "DocumentSnapshot data: " + friendListData);
                                     for (Map.Entry<String, Object> friend : friendListData.entrySet()) {

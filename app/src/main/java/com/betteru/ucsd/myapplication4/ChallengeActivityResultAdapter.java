@@ -5,31 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by Yuting on 11/5/2017.
+ * Created by Yuting on 11/30/2017.
  */
 
-public class ChallengeActivityAdapter extends BaseAdapter {
-    //public ArrayList<UserModel> list = new ArrayList<>();
+public class ChallengeActivityResultAdapter extends BaseAdapter {
     public ArrayList<String> nameList;
+    public ArrayList<String> activityList;
     public ArrayList<Integer> iconList;
     Activity activity;
     ImageView imgIcon;
+    TextView txtActivity;
     TextView txtName;
 
-    public ChallengeActivityAdapter(Activity activity,ArrayList<String> nameList, ArrayList<Integer> iconList){
+    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<Integer> iconList, ArrayList<String> activityList){
         super();
         this.activity =activity;
         this.nameList = nameList;
         this.iconList = iconList;
+        this.activityList = activityList;
     }
     @Override
     public int getCount() {
@@ -56,12 +55,14 @@ public class ChallengeActivityAdapter extends BaseAdapter {
 
         if(convertView == null){
 
-            convertView=inflater.inflate(R.layout.item_challenge_activities, null);
-            txtName = (TextView) convertView.findViewById(R.id.textView_icon_name);
-            imgIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
+            convertView=inflater.inflate(R.layout.item_challenge_winner, null);
+            txtActivity = (TextView) convertView.findViewById(R.id.textView_winner_act);
+            txtName = (TextView) convertView.findViewById(R.id.textView_winner);
+            imgIcon = (ImageView) convertView.findViewById(R.id.imageView_winner_photo);
         }
         txtName.setText(nameList.get(position));
         imgIcon.setImageResource(iconList.get(position));
+        txtActivity.setText(activityList.get(position).toUpperCase());
         return convertView;
     }
 }
