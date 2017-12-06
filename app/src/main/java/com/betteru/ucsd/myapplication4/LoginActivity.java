@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -20,6 +21,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -46,18 +48,26 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton fbLoginButton;
     private FirebaseAuth mAuth;
+    protected BetterUApplication app;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (AccessToken.getCurrentAccessToken() != null) {
+            Log.d(BetterUApplication.TAG + "LogIn", "LoggedIn in LoginActivity");
+            finish();
+        }
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        app = (BetterUApplication) getApplication();
         mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
         fbLoginButton = findViewById(R.id.loginButton);
 
+        app.clearCurrentFBUser();
+        app.clearFriendList();
         fbLoginButton.setReadPermissions("email", "public_profile");
         fbLoginButton.setReadPermissions(FBPermission.USER_FRIENDS.toString());
         AccessToken accesstoken = AccessToken.getCurrentAccessToken();
@@ -82,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                         UserModel user = new UserModel(name, firstName, userId);
                         Log.i(BetterUApplication.TAG+"_USER", user.toString());
                         BetterUApplication app = (BetterUApplication) getApplication();
-                        app.clearCurrentFBUser();
+                        Log.i(BetterUApplication.TAG+"_USER", "user set" + name);
                         app.setCurrentFBUser(user);
                     }
 
@@ -110,9 +120,10 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                         BetterUApplication app = (BetterUApplication) getApplication();
-                        app.clearFriendList();
                         app.setFriendList(friendList);
-                        Log.d(BetterUApplication.TAG+"FriendList", friendList.toString());
+                        for (int i = 0; i < app.getFriendList().size(); ++i) {
+                            Log.d(BetterUApplication.TAG + "FriendList", app.getFriendList().get(i).getUserId());
+                        }
                     }
 
                     @Override
@@ -135,6 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                             String name = user.getName();
                             userMap.put("first name", firstName);
                             userMap.put("name", name);
+                            userMap.put("user id", userId);
                             CollectionReference userCollection = db.collection("Users");
                             userCollection.document(userId).set(userMap, SetOptions.merge());
                             ArrayList<UserModel> friendList = ((BetterUApplication) getApplication()).getFriendList();
