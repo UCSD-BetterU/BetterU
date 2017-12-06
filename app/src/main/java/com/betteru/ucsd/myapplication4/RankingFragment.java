@@ -3,10 +3,6 @@ package com.betteru.ucsd.myapplication4;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -55,7 +51,8 @@ public class RankingFragment extends Fragment {
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = RankingSettingsDialogFragment.newInstance(
+                DialogFragment dialog = new RankingSettingsDialogFragment();
+                /*DialogFragment dialog = RankingSettingsDialogFragment.newInstance(
                         exercisingRanking,
                         cookingRanking,
                         houseworkRanking,
@@ -64,12 +61,12 @@ public class RankingFragment extends Fragment {
                         workingRanking,
                         studyingRanking,
                         hangingoutRanking
-                );
+                );*/
                 dialog.show(getFragmentManager(), "RankingSettingsDialogFragment");
             }
         });
 
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+       /* BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if(intent.hasExtra("exercisingRanking")) {
@@ -107,11 +104,11 @@ public class RankingFragment extends Fragment {
                                 + "studyingRanking: "+Boolean.toString(studyingRanking)+"\n"
                                 + "hangingoutRanking: "+Boolean.toString(hangingoutRanking),
                         Toast.LENGTH_LONG
-                ).show();*/
+                ).show();
             }
         };
         IntentFilter filter = new IntentFilter("DialogChangeSaved");
-        getActivity().registerReceiver(broadcastReceiver,filter);
+        getActivity().registerReceiver(broadcastReceiver,filter);*/
     }
 
     private class PickerAdapter extends FragmentPagerAdapter {

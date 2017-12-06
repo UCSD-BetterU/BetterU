@@ -79,4 +79,56 @@
         <item>Studying</item>
         <item>Working</item>
     </string-array>
+    
+    <string name="LyingDown">Lying down</string>
+    <string name="Sitting">Sitting</string>
+    <string name="Standing">Standing</string>
+    <string name="Walking">Walking</string>
+    <string name="Running">Running</string>
+    <string name="Bicycling">Bicycling</string>
+    <string name="Sleeping">Sleeping</string>
+    <string name="LabWork">Lab work</string>
+    <string name="InClass">In class</string>
+    <string name="InAMeeting">In a meeting</string>
+    <string name="AtWork">At work</string>
+    <string name="Indoors">Indoors</string>
+    <string name="Outside">Outside</string>
+    <string name="InACar">In a car</string>
+    <string name="OnABus">On a bus</string>
+    <string name="Driver">Driver</string>
+    <string name="Passenger">Passenger</string>
+    <string name="AtHome">At home</string>
+    <string name="AtSchool">At school</string>
+    <string name="AtARestaurant">At a restaurant</string>
+    <string name="Exercising">Exercising</string>
+    <string name="Cooking">Cooking</string>
+    <string name="Shopping">Shopping</string>
+    <string name="Strolling">Strolling</string>
+    <string name="Drinking">Drinking</string>
+    <string name="Bathing">Bathing</string>
+    <string name="Cleaning">Cleaning</string>
+    <string name="DoingLaundry">Doing laundry</string>
+    <string name="WashingDishes">Washing dishes</string>
+    <string name="WatchingTV">Watching TV</string>
+    <string name="SurfingTheInternet">Surfing Internet</string>
+    <string name="AtAParty">At a party</string>
+    <string name="AtABar">At a bar</string>
+    <string name="AtTheBeach">At the beach</string>
+    <string name="Singing">Singing</string>
+    <string name="Talking">Talking</string>
+    <string name="ComputerWork">Computer work</string>
+    <string name="Eating">Eating</string>
+    <string name="Toilet">Toilet</string>
+    <string name="Grooming">Grooming</string>
+    <string name="Dressing">Dressing</string>
+    <string name="AtTheGym">At the gym</string>
+    <string name="StairsUp">Stairs up</string>
+    <string name="StairsDown">Stairs down</string>
+    <string name="Elevator">Elevator</string>
+    <string name="PhoneInPocket">Phone in pocket</string>
+    <string name="PhoneInHand">Phone in hand</string>
+    <string name="PhoneInBag">Phone in bag</string>
+    <string name="PhoneOnTable">Phone on table</string>
+    <string name="WithCoworkers">With co-workers</string>
+    <string name="WithFriends">With friends</string>
 </resources>
