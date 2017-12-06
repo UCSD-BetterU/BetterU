@@ -6,8 +6,10 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 
 import org.json.JSONArray;
@@ -27,19 +29,27 @@ public class BetterUApplication extends Application {
     private UserModel currentFBUser;
     public static final String CURRENT_FB_USER_KEY = "current_fb_user";
 
-    private ArrayList<UserModel> friendList;
+    private ArrayList<UserModel> friendList = new ArrayList<>();
 
     public static final String FRIENDS_KEY = "friends";
 
-    public boolean isLoggedIn() {
+    /*public boolean isLoggedIn() {
         return loggedIn;
-    }
+    }*/
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
         if (!loggedIn) {
 
         }
+    }
+
+    public boolean isLoggedIn() {
+        //    return true;
+
+        AccessToken accesstoken = AccessToken.getCurrentAccessToken();
+        return !(accesstoken == null || accesstoken.getPermissions().isEmpty());
+
     }
 
     public UserModel getCurrentFBUser() { return currentFBUser; }
@@ -55,6 +65,9 @@ public class BetterUApplication extends Application {
     public void clearCurrentFBUser() { this.currentFBUser = null; }
 
     public void setFriendList(ArrayList<UserModel> friendList) {
+        for (int i = 0; i < friendList.size(); ++i) {
+            Log.d(BetterUApplication.TAG + "app", "set" + friendList.get(i).getUserId() + " " + friendList.get(i).getName());
+        }
         this.friendList = friendList;
     }
 
@@ -62,6 +75,7 @@ public class BetterUApplication extends Application {
         if (this.friendList == null) {
             this.friendList = new ArrayList<>();
         }
+        Log.d(BetterUApplication.TAG+"app", "add " + friend.getUserId() + friend.getFirstName());
         this.friendList.add(friend);
     }
 

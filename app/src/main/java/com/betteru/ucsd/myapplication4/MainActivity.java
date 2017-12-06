@@ -68,11 +68,16 @@ public class MainActivity extends AppCompatActivity
     private CallbackManager callbackManager;
     private ProfileTracker profileTracker;
     protected FirebaseFirestore db = FirebaseFirestore.getInstance();
+    protected BetterUApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        app = (BetterUApplication) getApplication();
+        Log.d(BetterUApplication.TAG, "main activity!");
+        Log.d(BetterUApplication.TAG+"LOGIN", String.valueOf(app.isLoggedIn()));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,13 +91,42 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (app.getFriendList() != null) {
+            for (int i = 0; i < app.getFriendList().size(); ++i) {
+                Log.d(BetterUApplication.TAG + "main", app.getFriendList().get(i).getUserId() + " " + app.getFriendList().get(i).getName());
+            }
+        } else {
+            Log.d(BetterUApplication.TAG + "main", "no friend list");
+        }
+
         setUserAndFriends();
     }
 
     protected void setUserAndFriends() {
+
         if (((BetterUApplication) getApplication()).getCurrentFBUser() != null) {
+            UserModel user_ = ((BetterUApplication) getApplication()).getCurrentFBUser();
+            Log.d(BetterUApplication.TAG, "User is not null");
+            Log.d(BetterUApplication.TAG, user_.getName() + " " + user_.getUserId());
             return;
         }
+        /*
+        if (!app.isLoggedIn()) {
+            if (app.getCurrentFBUser() != null) {
+                String userId = app.getCurrentFBUser().getUserId();
+                String firstName = app.getCurrentFBUser().getFirstName();
+                // Set profile pic
+                ProfilePictureView profilePicView = findViewById(R.id.userProfile);
+                profilePicView.setProfileId(userId);
+                profilePicView.setCropped(true);
+                // Set user name
+                TextView userNameView = findViewById(R.id.userName);
+                userNameView.setText(firstName);
+            }
+            return;
+        }
+        */
+        app.setLoggedIn(true);
         FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
             @Override
             public void handleResponse(GraphResponse response) throws JSONException {
@@ -118,14 +152,22 @@ public class MainActivity extends AppCompatActivity
             public void onBatchCompleted(GraphRequestBatch batch) {
                 UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
                 if (user != null) {
-                    String userId = user.getUserId() ;
+                    String userId = user.getUserId();
+                    Log.d(BetterUApplication.TAG, "userid " + userId + " name " + user.getFirstName());
                     // Set profile pic
                     ProfilePictureView profilePicView = findViewById(R.id.userProfile);
-                    profilePicView.setProfileId(user.getUserId());
+                    profilePicView.setProfileId(userId);
                     profilePicView.setCropped(true);
                     // Set user name
                     TextView userNameView = findViewById(R.id.userName);
                     userNameView.setText(user.getFirstName());
+
+                    if (app.getFriendList() != null) {
+                        for (int i = 0; i < app.getFriendList().size(); ++i){
+                            Log.d(BetterUApplication.TAG+"main", app.getFriendList().get(i).getUserId() + " " + app.getFriendList().get(i).getName());
+                        }
+                        return;
+                    }
 
                     final CollectionReference userCollection = db.collection("Users");
                     DocumentReference friendRef = db.collection("friends").document(userId);
@@ -149,14 +191,16 @@ public class MainActivity extends AppCompatActivity
                                                         Map<String, Object> friend = document.getData();
                                                         UserModel friendData = new UserModel(
                                                             (String) friend.get("name"),
-                                                            (String) friend.get("firstName"),
-                                                            (String) friend.get("userId"));
+                                                            (String) friend.get("first name"),
+                                                            (String) friend.get("user id"));
+                                                        Log.d(BetterUApplication.TAG+"main", "add to friendlist");
                                                         ((BetterUApplication) getApplication()).addToFriendList(friendData);
                                                     }
                                                 }
                                             }
                                         });
                                     }
+                                    //Log.d(BetterUApplication.TAG+"FriendListMain", ((BetterUApplication) getApplication()).getFriendList().toString());
                                 } else {
                                     Log.d(BetterUApplication.TAG, "No such document");
                                 }
