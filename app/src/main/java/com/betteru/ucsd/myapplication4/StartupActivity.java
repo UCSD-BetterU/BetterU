@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.facebook.AccessToken;
 
-public class StartupActivity extends AppCompatActivity {
+public class StartupActivity extends Activity {
 
     protected BetterUApplication app;
 
