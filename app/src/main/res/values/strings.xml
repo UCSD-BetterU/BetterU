@@ -66,8 +66,8 @@
     <string name="highlight_dates">Highlight certain dates</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="ranking_peer">Peer</string>
-    <string name="ranking_all">All</string>
+    <string name="report">Report</string>
+    <string name="ranking">Ranking</string>
     <string name="save">Save</string>
 
 

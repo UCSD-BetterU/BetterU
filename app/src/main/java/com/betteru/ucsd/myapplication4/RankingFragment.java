@@ -2,32 +2,43 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class RankingFragment extends Fragment {
-    ViewPager viewPager;
-    PickerAdapter adapter;
+public class RankingFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+    private ListView mainListView ;
+    private TextView noRecordView;
+    private ArrayAdapter<String> listAdapter ;
+    ArrayList<HashMap<String,String>> list;
 
-
-    private boolean exercisingRanking = true;
-    private boolean cookingRanking = true;
-    private boolean houseworkRanking = true;
-    private boolean shoppingRanking = true;
-    private boolean sleepingRanking = true;
-    private boolean workingRanking = true;
-    private boolean studyingRanking = true;
-    private boolean hangingoutRanking = true;
+    FirebaseFirestore db;
+    String userId = "user0001";
+    LocalDate d = LocalDate.now();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,118 +48,136 @@ public class RankingFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        adapter = new PickerAdapter(getChildFragmentManager());
-        viewPager = getView().findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
+        db = FirebaseFirestore.getInstance();
+        list = new ArrayList<HashMap<String, String>>();
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar((Toolbar) getView().findViewById(R.id.toolbar));
-        TabLayout tabLayout = getView().findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        for(int i=0;i<adapter.getCount();i++) //noinspection ConstantConditions
-            tabLayout.getTabAt(i).setText(adapter.getTitle(i));
+        load(userId, d);
+
+        FloatingActionButton prevButton = (FloatingActionButton) view.findViewById(R.id.button_prevDate);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                d = d.minusDays(1);
+                load(userId, d);
+            }
+        });
+
+        FloatingActionButton nextButton = (FloatingActionButton) view.findViewById(R.id.button_nextDate);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                d = d.plusDays(1);
+                load(userId, d);
+            }
+        });
+
+        FloatingActionButton todayButton = (FloatingActionButton) view.findViewById(R.id.button_today);
+        todayButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                d = LocalDate.now();
+                load(userId, d);
+            }
+        });
 
         FloatingActionButton settingButton = (FloatingActionButton) getView().findViewById(R.id.button_setting);
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment dialog = new RankingSettingsDialogFragment();
-                /*DialogFragment dialog = RankingSettingsDialogFragment.newInstance(
-                        exercisingRanking,
-                        cookingRanking,
-                        houseworkRanking,
-                        shoppingRanking,
-                        sleepingRanking,
-                        workingRanking,
-                        studyingRanking,
-                        hangingoutRanking
-                );*/
                 dialog.show(getFragmentManager(), "RankingSettingsDialogFragment");
             }
         });
-
-       /* BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(intent.hasExtra("exercisingRanking")) {
-                    exercisingRanking = intent.getBooleanExtra("exercisingRanking", false);
-                }
-                if(intent.hasExtra("cookingRanking")) {
-                    cookingRanking = intent.getBooleanExtra("cookingRanking", false);
-                }
-                if(intent.hasExtra("houseworkRanking")) {
-                    houseworkRanking = intent.getBooleanExtra("houseworkRanking", false);
-                }
-                if(intent.hasExtra("shoppingRanking")) {
-                    shoppingRanking = intent.getBooleanExtra("shoppingRanking", false);
-                }
-                if(intent.hasExtra("sleepingRanking")) {
-                    sleepingRanking = intent.getBooleanExtra("sleepingRanking", false);
-                }
-                if(intent.hasExtra("workingRanking")) {
-                    workingRanking = intent.getBooleanExtra("workingRanking", false);
-                }
-                if(intent.hasExtra("studyingRanking")) {
-                    studyingRanking = intent.getBooleanExtra("studyingRanking", false);
-                }
-                if(intent.hasExtra("hangingoutRanking")) {
-                    hangingoutRanking = intent.getBooleanExtra("hangingoutRanking", false);
-                }
-                /*Toast.makeText(
-                        getActivity(),
-                        "exercisingRanking: "+Boolean.toString(exercisingRanking)+"\n"
-                                + "cookingRanking: "+Boolean.toString(cookingRanking)+"\n"
-                                + "houseworkRanking: "+Boolean.toString(houseworkRanking)+"\n"
-                                + "shoppingRanking: "+Boolean.toString(shoppingRanking)+"\n"
-                                + "sleepingRanking: "+Boolean.toString(sleepingRanking)+"\n"
-                                + "workingRanking: "+Boolean.toString(workingRanking)+"\n"
-                                + "studyingRanking: "+Boolean.toString(studyingRanking)+"\n"
-                                + "hangingoutRanking: "+Boolean.toString(hangingoutRanking),
-                        Toast.LENGTH_LONG
-                ).show();
-            }
-        };
-        IntentFilter filter = new IntentFilter("DialogChangeSaved");
-        getActivity().registerReceiver(broadcastReceiver,filter);*/
     }
 
-    private class PickerAdapter extends FragmentPagerAdapter {
-        private static final int NUM_PAGES = 2;
-        Fragment rankingPeerFragment;
-        Fragment rankingAllFragment;
+    private void load(String userId, LocalDate d) {
+        String monthS = String.format("%02d", d.getMonthValue());
+        String dayS = String.format("%02d", d.getDayOfMonth());
+        load(userId, monthS, dayS);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-dd");
+        String text = d.format(formatter);
+        loadButton(text);
+    }
 
-        PickerAdapter(FragmentManager fm) {
-            super(fm);
-            rankingPeerFragment = RankingPeerFragment.newInstance();
-            rankingAllFragment = RankingAllFragment.newInstance();
+    private void load(String userId, String month, String day)
+    {
+        DocumentReference dbUser;
+        DocumentReference dbData;
+        try {
+            dbUser = db.collection("ranking").document(userId);
+            dbData = dbUser.collection(month).document(day);
+        }catch (Exception e)
+        {
+            Log.d("Exception", e.toString());
+            return;
         }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch(position) {
-                case 0:
-                    return rankingPeerFragment;
-                case 1:
-                    return rankingAllFragment;
-                default:
-                    return rankingPeerFragment;
+        list.clear();
+        dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document != null){
+                        if(!document.exists()){
+                            loadNoRecordView(true);
+                        } else {
+                            Log.d("DATA IN CLOUT", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            for (String key : obj.keySet()) {
+                                Log.d("DATA IN CLOUD", key);
+                                HashMap<String, String> temp = new HashMap<String, String>();
+                                temp.put("Activity", key);
+                                temp.put("Ranking", document.getString(key));
+                                list.add(temp);
+                            }
+                            Log.d("DATA in LIST", list.toString());
+                            loadListView();
+                            loadNoRecordView(false);
+                        }
+                    }
+                }else{
+                    Log.d("Data in Cloud", "Error getting documents" , task.getException());
+                }
             }
-        }
+        });
+    }
 
-        int getTitle(int position) {
-            switch(position) {
-                case 0:
-                    return R.string.ranking_peer;
-                case 1:
-                    return R.string.ranking_all;
-                default:
-                    return R.string.ranking_peer;
+    private void loadButton(String date){
+        Button button = (Button) getView().findViewById(R.id.button_date);
+        button.setText(date);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //showDialog();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        RankingFragment.this,
+                        d.getYear(),
+                        d.getMonthValue()-1,
+                        d.getDayOfMonth()
+                );
+                dpd.setThemeDark(false);
+                dpd.vibrate(true);
+                dpd.dismissOnPause(false);
+                dpd.showYearPickerFirst(false);
+                dpd.setVersion(DatePickerDialog.Version.VERSION_1);
+                dpd.show(getFragmentManager(), "Datepickerdialog");
             }
-        }
+        });
+    }
+    private void loadNoRecordView(Boolean flag){
+        noRecordView = (TextView) getView().findViewById(R.id.textView_noRecord);
+        if(flag == true) noRecordView.setVisibility(View.VISIBLE);
+        else noRecordView.setVisibility(View.GONE);
+    }
+    private void loadListView(){
+        ListView listView=(ListView) getView().findViewById(R.id.rankingListView);
+        RankingAdapter adapter=new RankingAdapter(getActivity(), list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id)
+            {
+                int pos=position+1;
+                Toast.makeText(getActivity(), Integer.toString(pos)+" Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static RankingFragment newInstance() {
@@ -158,4 +187,9 @@ public class RankingFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
+        load(userId, d);
+    }
 }
