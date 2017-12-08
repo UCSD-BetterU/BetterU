@@ -1,29 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+        <RelativeLayout
+            android:id="@+id/RelativeLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+            <com.facebook.login.widget.ProfilePictureView
+                android:id="@+id/profileView_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/cast_abc_scrubber_control_to_pressed_mtrl_000"
+                app:srcCompat="@android:drawable/sym_def_app_icon"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textView_icon_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/imageView_icon"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/imageView_icon"
+            android:layout_below="@id/RelativeLayout2"
+            android:layout_centerHorizontal = "true"
             android:text="Android"
             android:textAlignment="center"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="60dp" />
+
     </RelativeLayout>
+
+
+
 </android.support.constraint.ConstraintLayout>

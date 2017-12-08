@@ -25,7 +25,8 @@ public enum ChallengeActivityEnum {
         Cycling("Cycling", R.drawable.bicycling),
         Cleaning("Cleaning", R.drawable.cleaning),
         Computer("Computer Work", R.drawable.computer_work),
-        Cooking("Cooking", R.drawable.cooking);
+        Cooking("Cooking", R.drawable.cooking),
+        Shopping("Shopping", R.drawable.shopping);
 
         private final String name;
         private final Integer icon;

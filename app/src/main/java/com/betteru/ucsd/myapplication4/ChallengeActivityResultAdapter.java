@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import java.util.ArrayList;
 
 /**
@@ -17,17 +19,17 @@ import java.util.ArrayList;
 public class ChallengeActivityResultAdapter extends BaseAdapter {
     public ArrayList<String> nameList;
     public ArrayList<String> activityList;
-    public ArrayList<Integer> iconList;
+    public ArrayList<String> idList;
     Activity activity;
-    ImageView imgIcon;
+    ProfilePictureView profile;
     TextView txtActivity;
     TextView txtName;
 
-    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<Integer> iconList, ArrayList<String> activityList){
+    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<String> activityList){
         super();
         this.activity =activity;
         this.nameList = nameList;
-        this.iconList = iconList;
+        this.idList = idList;
         this.activityList = activityList;
     }
     @Override
@@ -58,10 +60,11 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
             convertView=inflater.inflate(R.layout.item_challenge_winner, null);
             txtActivity = (TextView) convertView.findViewById(R.id.textView_winner_act);
             txtName = (TextView) convertView.findViewById(R.id.textView_winner);
-            imgIcon = (ImageView) convertView.findViewById(R.id.imageView_winner_photo);
+            profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_winner);
         }
         txtName.setText(nameList.get(position));
-        imgIcon.setImageResource(iconList.get(position));
+        profile.setProfileId(idList.get(position));
+        profile.setCropped(true);
         txtActivity.setText(activityList.get(position).toUpperCase());
         return convertView;
     }

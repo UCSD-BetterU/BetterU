@@ -39,6 +39,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.wdullaer:materialdatetimepicker:3.4.0'
+    compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

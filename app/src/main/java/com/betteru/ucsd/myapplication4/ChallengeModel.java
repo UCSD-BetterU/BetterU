@@ -16,8 +16,9 @@ public class ChallengeModel implements Serializable {
     String timeStamp;
     ArrayList<String> activities;
     ArrayList<String> participants;
+    ArrayList<String> participants_name;
     ArrayList<String> winner;
-    ArrayList<Integer> participantsIcon;
+    ArrayList<String> winner_name;
     ArrayList<Integer> activitiesIcon;
     LocalDate date;
     String id;
@@ -25,7 +26,7 @@ public class ChallengeModel implements Serializable {
     static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     ChallengeModel(String ownerId, String title, String timeStamp,
-                   ArrayList<String> participants, ArrayList<String> activities)
+                   ArrayList<String> participants, ArrayList<String> participants_name, ArrayList<String> activities)
     {
         this.ownerId = ownerId;
         this.title = title;
@@ -33,20 +34,15 @@ public class ChallengeModel implements Serializable {
         this.date = LocalDate.parse(timeStamp, formatter);
         this.activities = activities;
         this.participants = participants;
+        this.participants_name = participants_name;
         this.id = "";
         setActivityIcon();
-        setParticipantsIcon();
     }
     public void setId(String id)
     {
         this.id = id;
     }
 
-    public void setIcon(ArrayList<Integer> parIcon, ArrayList<Integer> actIcon)
-    {
-        this.participantsIcon = parIcon;
-        this.activitiesIcon = actIcon;
-    }
     private void setActivityIcon()
     {
         this.activitiesIcon = new ArrayList<>();
@@ -61,14 +57,9 @@ public class ChallengeModel implements Serializable {
         }
 
     }
-    private void setParticipantsIcon()
-    {
-        this.participantsIcon = new ArrayList<>();
-        for(int i = 0; i < this.participants.size(); i++)
-            this.participantsIcon.add(R.drawable.ic_face_black_48dp);
-    }
 
-    public void setWinner(ArrayList<String> winner){
+    public void setWinner(ArrayList<String> winner, ArrayList<String> winner_name){
         this.winner = winner;
+        this.winner_name = winner_name;
     }
 }

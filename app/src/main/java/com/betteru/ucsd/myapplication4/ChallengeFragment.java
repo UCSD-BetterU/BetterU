@@ -39,7 +39,7 @@ public class ChallengeFragment extends Fragment {
     ArrayList<ChallengeModel> data = new ArrayList<>();
     View view;
     FirebaseFirestore db;
-    String userId = "user0001";
+    UserModel user;
     LocalDate date;
 
     @Override
@@ -48,8 +48,10 @@ public class ChallengeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_challenge, container, false);
         db = FirebaseFirestore.getInstance();
+        user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
         //loadData();
-        loadData(userId);
+        if(data.isEmpty())
+            loadData(user.getUserId());
         loadListView();
         FloatingActionButton button = view.findViewById(R.id.button_challenge_add);
         button.setOnClickListener(new View.OnClickListener() {
@@ -73,13 +75,12 @@ public class ChallengeFragment extends Fragment {
     }
 
     public void loadData(String userId){
-        if(!data.isEmpty())
-            return;
+        showProgressDialog();
         CollectionReference challengeRef;
         Query query;
         try {
             challengeRef = db.collection("challenge");
-            query = challengeRef.whereEqualTo("owner", userId);
+            query = challengeRef.whereEqualTo("owner", userId).orderBy("time", Query.Direction.DESCENDING);
         }catch (Exception e)
         {
             Log.d("Exception", e.toString());
@@ -88,7 +89,6 @@ public class ChallengeFragment extends Fragment {
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task){
-                hideProgressDialog();
                 if(task.isSuccessful()){
                     loadNoRecordView(false);
                     for (DocumentSnapshot document : task.getResult()) {
@@ -99,9 +99,11 @@ public class ChallengeFragment extends Fragment {
                                     (String) obj.get("title"),
                                     (String) obj.get("time"),
                                     (ArrayList<String>) obj.get("participants"),
+                                    (ArrayList<String>) obj.get("participants_name"),
                                     (ArrayList<String>) obj.get("activities"));
                             if(obj.containsKey("winner")){
-                                    temp.setWinner((ArrayList<String>) obj.get("winner"));
+                                    temp.setWinner((ArrayList<String>) obj.get("winner"),
+                                            (ArrayList<String>) obj.get("winner_name"));
                             }
                             temp.setId(document.getId());
                             data.add(temp);
@@ -110,34 +112,10 @@ public class ChallengeFragment extends Fragment {
                     loadNoRecordView(true);
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
+                hideProgressDialog();
             }
         });
     }
-    public void loadData(){
-        data.clear();
-        ArrayList<String> par = new ArrayList<String>(Arrays.asList("user0002", "user0003"));
-        ArrayList<Integer> parIcon = new ArrayList<Integer>();
-        parIcon.add(R.drawable.ic_face_black_48dp);
-        parIcon.add(R.drawable.ic_face_black_48dp);
-        ArrayList<String> act = new ArrayList<String>(Arrays.asList("Running", "Walking", "Showering"));
-        ArrayList<Integer> actIcon = new ArrayList<>();
-        actIcon.add(R.drawable.ic_directions_run_black_48dp);
-        actIcon.add(R.drawable.ic_directions_walk_black_48dp);
-        actIcon.add(R.drawable.ic_directions_bike_black_48dp);
-        ChallengeModel data1 = new ChallengeModel("user0001",
-                "My First Challenge", "2017-01-01", par, act);
-        data1.setIcon(parIcon, actIcon);
-        ChallengeModel data2 = new ChallengeModel("user0001",
-                "My Second Challenge", "2017-01-02", par, act);
-        data2.setIcon(parIcon, actIcon);
-        ChallengeModel data3 = new ChallengeModel("user0001",
-                "My Third Challenge", "2017-01-02", par, act);
-        data3.setIcon(parIcon, actIcon);
-        data.add(data1);
-        data.add(data2);
-        data.add(data3);
-    }
-
     private void loadListView() {
         ListView listView = (ListView) view.findViewById(R.id.ListView_challenge);
         ChallengeAdapter adapter = new ChallengeAdapter(this.getActivity(), data);
@@ -162,9 +140,10 @@ public class ChallengeFragment extends Fragment {
 
     private void newChallenge(){
         String timeStamp = date.now().format(ChallengeModel.formatter);
-        ChallengeModel newChallenge = new ChallengeModel(userId,
+        ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
                 "Input Challenge Name",
                 timeStamp,
+                new ArrayList<String>(),
                 new ArrayList<String>(),
                 new ArrayList<String>());
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

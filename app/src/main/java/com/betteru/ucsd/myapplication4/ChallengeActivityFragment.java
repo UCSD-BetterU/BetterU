@@ -35,6 +35,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +85,7 @@ public class ChallengeActivityFragment extends Fragment
         loadChallengeDateButton();
         loadChallengeNameButton();
         loadChallengeActivityButton();
+        loadChallengeParticipantsButton();
         loadChallengeSubmitButton();
     }
     public void loadChallengeSubmitButton(){
@@ -95,6 +97,7 @@ public class ChallengeActivityFragment extends Fragment
             }
         });
     }
+
     public void submitChallenge(){
         final Fragment f = this;
         showProgressDialog();
@@ -106,6 +109,7 @@ public class ChallengeActivityFragment extends Fragment
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("owner",data.ownerId );
         dataMap.put("participants", data.participants);
+        dataMap.put("participants", data.participants_name);
         dataMap.put("activities", data.activities);
         dataMap.put("time", data.timeStamp);
         dataMap.put("title", data.title);
@@ -144,6 +148,7 @@ public class ChallengeActivityFragment extends Fragment
                 ChallengeActivityListFragment fragment = new ChallengeActivityListFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data",data);
+                args.putBoolean("participants", false);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
                 fragmentTransaction.commit();
@@ -151,6 +156,21 @@ public class ChallengeActivityFragment extends Fragment
         });
     }
 
+    public void loadChallengeParticipantsButton(){
+        ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeParticipant);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                ChallengeActivityListFragment fragment = new ChallengeActivityListFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("data",data);
+                args.putBoolean("participants", true);
+                fragment.setArguments(args);
+                fragmentTransaction.replace(R.id.fragmentContent, fragment);
+                fragmentTransaction.commit();
+            }
+        });
+    }
     public void loadChallengeName() {
         TextView name = (TextView) view.findViewById(R.id.textView_challengeName);
         name.setText(data.title);
@@ -161,14 +181,18 @@ public class ChallengeActivityFragment extends Fragment
     }
     public void loadChallengeParticipants() {
         //set GridView
+        ArrayList<String> name = data.participants_name;
+        ArrayList<String> id = data.participants;
         GridView gridViewParticipants = (GridView) view.findViewById(R.id.gridview_challenge_participants);
-        ChallengeActivityAdapter adapterPar = new ChallengeActivityAdapter(this.getActivity(), data.participants, data.participantsIcon);
+        ChallengeParticipantsAdapter adapterPar = new ChallengeParticipantsAdapter(this.getActivity(),
+                name,id);
         gridViewParticipants.setAdapter(adapterPar);
     }
     public void loadChallengeActivities(){
         //set GridView
         GridView gridViewActivities = (GridView) view.findViewById(R.id.gridView_challenge_activities);
-        ChallengeActivityAdapter adapterAct = new ChallengeActivityAdapter(this.getActivity(), data.activities, data.activitiesIcon);
+        ChallengeActivityAdapter adapterAct = new ChallengeActivityAdapter(this.getActivity(),
+                data.activities, data.activitiesIcon);
         Log.d("challenge detail page", data.activities.toString());
         Log.d("challenge detail page", data.activitiesIcon.toString());
         gridViewActivities.setAdapter(adapterAct);

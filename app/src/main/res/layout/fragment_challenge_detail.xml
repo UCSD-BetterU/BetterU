@@ -183,11 +183,11 @@
             <GridView
                 android:id="@+id/gridview_challenge_participants"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/textView_challengeParticipant"
                 android:background="@color/cardview_light_background"
-                android:columnWidth="50dp"
+                android:columnWidth="70dp"
                 android:gravity="center"
                 android:horizontalSpacing="0dp"
                 android:numColumns="auto_fit"

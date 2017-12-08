@@ -72,12 +72,12 @@ public class ChallengeAdapter extends BaseAdapter {
         txtParticipantNum.setText(Integer.toString(obj.participants.size()));
         txtActivityNum.setText(Integer.toString(obj.activities.size()));
         txtDate.setText(obj.date.format(obj.formatter));
-        if(obj.date.isBefore(LocalDate.now().minusDays(3)))
-            imgStatus.setImageResource(R.color.colorChallengeEnd);
-        else if(obj.date.isBefore(LocalDate.now()))
+        if(obj.date.isAfter(LocalDate.now()))
+            imgStatus.setImageResource(R.color.colorChallengeFuture);
+        else if(obj.winner == null)
             imgStatus.setImageResource(R.color.colorChallengeNear);
         else
-            imgStatus.setImageResource(R.color.colorChallengeFuture);
+            imgStatus.setImageResource(R.color.colorChallengeEnd);
         return convertView;
     }
 
