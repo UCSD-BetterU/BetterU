@@ -57,15 +57,17 @@ public class ChallengeActivityAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        LayoutInflater inflater=activity.getLayoutInflater();
+
 
         if(convertView == null){
-
+            LayoutInflater inflater=activity.getLayoutInflater();
             convertView=inflater.inflate(R.layout.item_challenge_activities, null);
-            txtName = (TextView) convertView.findViewById(R.id.textView_icon_name);
-            imgIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
-            profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_icon);
         }
+
+        txtName = (TextView) convertView.findViewById(R.id.textView_icon_name);
+        imgIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
+        profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_icon);
+
         txtName.setText(nameList.get(position));
         imgIcon.setImageResource(iconList.get(position));
         profile.setVisibility(View.GONE);

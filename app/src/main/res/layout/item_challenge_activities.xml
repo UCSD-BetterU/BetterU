@@ -25,7 +25,7 @@
                 android:id="@+id/profileView_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:background="@drawable/cast_abc_scrubber_control_to_pressed_mtrl_000"
+                android:foreground="@drawable/circle"
                 app:srcCompat="@android:drawable/sym_def_app_icon"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />

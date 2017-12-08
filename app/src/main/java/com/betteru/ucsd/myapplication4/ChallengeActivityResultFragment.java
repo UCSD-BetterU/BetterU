@@ -47,11 +47,16 @@ public class ChallengeActivityResultFragment extends Fragment {
     public final static int EDITDIALOG_FRAGMENT = 1;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<ArrayList<Integer>> result;
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("challenge result", "on create");
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.i("challenge result", "on create view");
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
         Log.d("DATA", Integer.toString(data.activitiesIcon.size()));
@@ -99,18 +104,25 @@ public class ChallengeActivityResultFragment extends Fragment {
     }
 
     public void loadChallengeDetailButton() {
+        final Fragment f = this;
         Button button = (Button) view.findViewById(R.id.button_challengeDetail);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction tx = getFragmentManager().beginTransaction();
                 ChallengeActivityFragment fragment = new ChallengeActivityFragment();
-                //ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data);
                 fragment.setArguments(args);
-                fragmentTransaction.replace(R.id.fragmentContent, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if(data.winner != null && !data.winner.isEmpty()) {
+                    tx.hide(f);
+                    tx.add(R.id.fragmentContent, fragment);
+                    tx.addToBackStack(null);
+                }
+                else {
+                    tx.replace(R.id.fragmentContent, fragment);
+                    tx.addToBackStack(null);
+                }
+                tx.commit();
             }
         });
     }

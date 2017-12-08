@@ -34,34 +34,29 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stuct
         return nameList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return nameList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-        LayoutInflater inflater=activity.getLayoutInflater();
-
         if(convertView == null){
-
+            LayoutInflater inflater=activity.getLayoutInflater();
             convertView=inflater.inflate(R.layout.item_challenge_winner, null);
-            txtActivity = (TextView) convertView.findViewById(R.id.textView_winner_act);
-            txtName = (TextView) convertView.findViewById(R.id.textView_winner);
-            profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_winner);
         }
+        txtActivity = (TextView) convertView.findViewById(R.id.textView_winner_act);
+        txtName = (TextView) convertView.findViewById(R.id.textView_winner);
+        profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_winner);
+
         txtName.setText(nameList.get(position));
         profile.setProfileId(idList.get(position));
         profile.setCropped(true);

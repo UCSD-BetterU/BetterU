@@ -7,8 +7,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:scrollbars="vertical"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="37dp">
 
@@ -16,8 +17,17 @@
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="@color/cardview_light_background"
             app:srcCompat="@drawable/trophy" />
+
+        <Button
+            android:id="@+id/button_challengeDetail"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="    CHALLENGE WINNER   >"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/textView_challengeName"
@@ -27,8 +37,8 @@
             android:layout_below="@+id/imageView2"
             android:layout_marginTop="10dp"
             android:text="My Challenge Name"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView_challengeDate"
@@ -58,20 +68,11 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView_challengeDate"
             android:layout_marginTop="10dp"
-            android:headerDividersEnabled="true">
+            android:headerDividersEnabled="true"
+            android:padding="10dp">
 
         </ListView>
 
-        <Button
-            android:id="@+id/button_challengeDetail"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="30dp"
-            android:fontFamily="serif-monospace"
-            android:text="> see details"
-            android:textAlignment="viewEnd" />
 
     </LinearLayout>
 

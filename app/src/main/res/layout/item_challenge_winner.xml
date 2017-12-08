@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/border2"
         android:orientation="horizontal"
-        android:paddingTop="5dp">
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/profileView_winner"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textView_winner"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="15dp"
             android:layout_weight="1"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+            android:background="@drawable/com_facebook_profile_picture_blank_square"
+            android:foreground="@drawable/circle">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        </com.facebook.login.widget.ProfilePictureView>
+
+        <ImageView
+            android:id="@+id/imageView_winner"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@+id/textView_winner"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="18dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            app:srcCompat="@drawable/first_place_1" />
 
-            <TextView
-                android:id="@+id/textView_winner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Yuting Wang"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-            <TextView
-                android:id="@+id/textView_winner_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Participant" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView_winner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imageView_winner"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/profileView_winner"
+            android:fontFamily="sans-serif"
+            android:text="Yuting Wang"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/textView_winner_act"
             android:layout_width="120dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView_winner"
+            android:layout_below="@+id/textView_winner"
             android:layout_weight="1"
-            android:paddingTop="15dp"
+            android:paddingTop="5dp"
             android:text="Running"
-            android:textAlignment="textEnd"
-            android:textAllCaps="true" />
+            android:textAlignment="viewStart"
+            android:textAllCaps="true"
+            tools:layout_editor_absoluteX="79dp"
+            tools:layout_editor_absoluteY="44dp" />
 
-        <ImageView
-            android:id="@+id/imageView_winner"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/btn_star_big_on" />
-    </LinearLayout>
+    </RelativeLayout>
+
+
+
 </android.support.constraint.ConstraintLayout>

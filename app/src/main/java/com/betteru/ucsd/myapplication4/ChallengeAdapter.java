@@ -33,7 +33,10 @@ public class ChallengeAdapter extends BaseAdapter {
         this.activity=activity;
         this.list=list;
     }
-
+    public void refresh(ArrayList<ChallengeModel> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
@@ -56,17 +59,18 @@ public class ChallengeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        LayoutInflater inflater=activity.getLayoutInflater();
+
 
         if(convertView == null){
-
+            LayoutInflater inflater=activity.getLayoutInflater();
             convertView=inflater.inflate(R.layout.item_challenge, null);
-            txtTitle = (TextView) convertView.findViewById(R.id.challenge_title);
-            txtParticipantNum =(TextView) convertView.findViewById(R.id.challenge_participants_number);
-            txtActivityNum =(TextView) convertView.findViewById(R.id.challenge_activities_number);
-            txtDate = (TextView) convertView.findViewById(R.id.textView_challengeDate);
-            imgStatus = (ImageView) convertView.findViewById(R.id.imageView_challengeIcon);
         }
+        txtTitle = (TextView) convertView.findViewById(R.id.challenge_title);
+        txtParticipantNum =(TextView) convertView.findViewById(R.id.challenge_participants_number);
+        txtActivityNum =(TextView) convertView.findViewById(R.id.challenge_activities_number);
+        txtDate = (TextView) convertView.findViewById(R.id.textView_challengeDate);
+        imgStatus = (ImageView) convertView.findViewById(R.id.imageView_challengeIcon);
+
         ChallengeModel obj =list.get(position);
         txtTitle.setText(obj.title);
         txtParticipantNum.setText(Integer.toString(obj.participants.size()));

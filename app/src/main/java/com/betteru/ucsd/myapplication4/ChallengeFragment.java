@@ -41,33 +41,51 @@ public class ChallengeFragment extends Fragment {
     FirebaseFirestore db;
     UserModel user;
     LocalDate date;
+    ListView listView;
+    ChallengeAdapter adapter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        Log.i("challenge fragment", "on create");
+        db = FirebaseFirestore.getInstance();
+        user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_challenge, container, false);
-        db = FirebaseFirestore.getInstance();
-        user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
-        //loadData();
-        if(data.isEmpty())
-            loadData(user.getUserId());
-        loadListView();
-        FloatingActionButton button = view.findViewById(R.id.button_challenge_add);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                newChallenge();
-            }
-        });
+        Log.i("challenge fragment", "on create view");
+        if(view == null) {
+            Log.i("challenge fragment", "view == null");
+            view = inflater.inflate(R.layout.fragment_challenge, container, false);
+            listView = (ListView) view.findViewById(R.id.ListView_challenge);
+            adapter = new ChallengeAdapter(this.getActivity(), data);
+            listView.setAdapter(adapter);
+        }
         return view;
     }
-
+    @Override
+    public void onResume(){
+        Log.i("challenge list", Integer.toString(data.size()));
+        if(data.isEmpty())
+            loadData(user.getUserId());
+        else {
+            loadNoRecordView(false);
+            Log.i("challenge list", listView.toString() + " " + listView.getAdapter().toString());
+            adapter.refresh(data);
+            adapter.notifyDataSetChanged();
+            loadListView();
+        }
+        loadNewChallengeButton();
+        super.onResume();
+    }
     public ChallengeFragment newInstance() {
         ChallengeFragment fragment = new ChallengeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
+
     public void loadNoRecordView(Boolean flag){
         TextView noRecordView = (TextView) getView().findViewById(R.id.textView_noChallengeRecord);
         if(flag == true) noRecordView.setVisibility(View.VISIBLE);
@@ -90,7 +108,6 @@ public class ChallengeFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task){
                 if(task.isSuccessful()){
-                    loadNoRecordView(false);
                     for (DocumentSnapshot document : task.getResult()) {
 
                             Map<String, Object> obj = document.getData();
@@ -108,23 +125,23 @@ public class ChallengeFragment extends Fragment {
                             temp.setId(document.getId());
                             data.add(temp);
                     }
+                    loadNoRecordView(false);
                 }else {
                     loadNoRecordView(true);
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
+
+                loadListView();
                 hideProgressDialog();
             }
         });
     }
     private void loadListView() {
-        ListView listView = (ListView) view.findViewById(R.id.ListView_challenge);
-        ChallengeAdapter adapter = new ChallengeAdapter(this.getActivity(), data);
-        listView.setAdapter(adapter);
+        final Fragment f = this;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
-
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
@@ -132,12 +149,24 @@ public class ChallengeFragment extends Fragment {
                 args.putSerializable("data", data.get(position));
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
+                /*
+                fragmentTransaction.hide(f);
+                fragmentTransaction.add(R.id.fragmentContent, fragment);
+                */
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
     }
 
+    public void loadNewChallengeButton(){
+        FloatingActionButton button = view.findViewById(R.id.button_challenge_add);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                newChallenge();
+            }
+        });
+    }
     private void newChallenge(){
         String timeStamp = date.now().format(ChallengeModel.formatter);
         ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
@@ -152,6 +181,8 @@ public class ChallengeFragment extends Fragment {
         args.putSerializable("data",newChallenge);
         fragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragmentContent, fragment);
+        //fragmentTransaction.hide(this);
+        //fragmentTransaction.add(R.id.fragmentContent, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -173,6 +204,18 @@ public class ChallengeFragment extends Fragment {
             mProgressDialog.dismiss();
         }
     }
+
+    /*
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i("challenge fragment", "on hidden change");
+        if(!hidden){
+            data.clear();
+            loadData(user.getUserId());
+            loadListView();
+        }
+    }*/
 
 
 }

@@ -51,6 +51,8 @@ public class ChallengeActivityFragment extends Fragment
     static ChallengeModel data;
     View view;
     public final static int EDITDIALOG_FRAGMENT = 1;
+    public final static int EDIT_ACTIVITY_FRAGMENT = 2;
+    public final static int EDIT_PARTICIPANTS_FRAGMENT = 3;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -65,25 +67,25 @@ public class ChallengeActivityFragment extends Fragment
         loadChallengeDate();
         loadChallengeParticipants();
         loadChallengeActivities();
-
         loadEditButton();
-
         return view;
     }
     public void loadEditButton(){
-        if(data.date.isBefore(LocalDate.now())){
+        if(data.winner != null  || data.date.isBefore(LocalDate.now())){
             ImageButton button2 = (ImageButton) view.findViewById(R.id.imageButton_challengeDate);
             button2.setVisibility(View.GONE);
             ImageButton button3 = (ImageButton) view.findViewById(R.id.imageButton_challengeName);
             button3.setVisibility(View.GONE);
             ImageButton button4 = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
             button4.setVisibility(View.GONE);
+            ImageButton button5 = (ImageButton) view.findViewById(R.id.imageButton_challengeParticipant);
+            button5.setVisibility(View.GONE);
             Button button1 = view.findViewById(R.id.button_saveChallenge);
             button1.setVisibility(View.GONE);
             return;
         }
-        loadChallengeDateButton();
         loadChallengeNameButton();
+        loadChallengeDateButton();
         loadChallengeActivityButton();
         loadChallengeParticipantsButton();
         loadChallengeSubmitButton();
@@ -121,22 +123,30 @@ public class ChallengeActivityFragment extends Fragment
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("challenge", "DocumentSnapshot successfully written!");
-                getFragmentManager().popBackStack();
-                //getActivity().getFragmentManager().beginTransaction().remove(f).commit();
-                //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                //fragmentTransaction.remove()
-                hideProgressDialog();
             }
         })
         .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w("challenge", "Error writing document", e);
-                hideProgressDialog();
             }
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
              @Override
              public void onComplete(@NonNull Task<Void> task) {
+                 getFragmentManager().popBackStack();
+                 FragmentTransaction fx = getFragmentManager().beginTransaction();
+                /*
+                ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("data",data);
+                fragment.setArguments(args);
+                fx.replace(R.id.fragmentContent, fragment);
+                fx.commit();
+                */
+                 FragmentTransaction tx = getActivity().getFragmentManager().beginTransaction();
+                 tx.remove(f);
+                 //tx.detach(f);
+                 tx.commit();
                  hideProgressDialog();
              }
          });
@@ -144,6 +154,7 @@ public class ChallengeActivityFragment extends Fragment
 
     public void loadChallengeActivityButton(){
         ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
+        /*
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -156,10 +167,19 @@ public class ChallengeActivityFragment extends Fragment
                 fragmentTransaction.commit();
             }
         });
+        */
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DialogFragment newFragment = EditActivityDialogFragment.newInstance(data, false);
+                newFragment.setTargetFragment(ChallengeActivityFragment.this, EDIT_ACTIVITY_FRAGMENT);
+                newFragment.show(getFragmentManager(), "challengeActivityEditDialog");
+            }
+        });
     }
 
     public void loadChallengeParticipantsButton(){
         ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeParticipant);
+        /*
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -170,6 +190,14 @@ public class ChallengeActivityFragment extends Fragment
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
                 fragmentTransaction.commit();
+            }
+        });
+        */
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DialogFragment newFragment = EditActivityDialogFragment.newInstance(data, true);
+                newFragment.setTargetFragment(ChallengeActivityFragment.this, EDIT_PARTICIPANTS_FRAGMENT);
+                newFragment.show(getFragmentManager(), "challengeParticipantsEditDialog");
             }
         });
     }
@@ -241,13 +269,27 @@ public class ChallengeActivityFragment extends Fragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bundle bundle = data.getExtras();
         switch (requestCode) {
             case EDITDIALOG_FRAGMENT:
                 if (resultCode == Activity.RESULT_OK) {
-                    Bundle bundle = data.getExtras();
                     String title = bundle.getString("challengeName");
                     this.data.title = title;
                     loadChallengeName();
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                }
+                break;
+            case EDIT_ACTIVITY_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    this.data = (ChallengeModel) bundle.getSerializable("data");
+                    loadChallengeActivities();
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                }
+                break;
+            case EDIT_PARTICIPANTS_FRAGMENT:
+                if (resultCode == Activity.RESULT_OK) {
+                    this.data = (ChallengeModel) bundle.getSerializable("data");
+                    loadChallengeParticipants();
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                 }
                 break;
@@ -290,7 +332,6 @@ public class ChallengeActivityFragment extends Fragment
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-
             builder.setTitle("Challenge Name");
             final View dialogView = inflater.inflate(R.layout.dialog_challenge_name, null);
             builder.setView(dialogView);
@@ -341,5 +382,7 @@ public class ChallengeActivityFragment extends Fragment
         super.onStop();
         hideProgressDialog();
     }
+
+
 
 }
