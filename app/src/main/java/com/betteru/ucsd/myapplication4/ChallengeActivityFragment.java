@@ -109,7 +109,7 @@ public class ChallengeActivityFragment extends Fragment
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("owner",data.ownerId );
         dataMap.put("participants", data.participants);
-        dataMap.put("participants", data.participants_name);
+        dataMap.put("participants_name", data.participants_name);
         dataMap.put("activities", data.activities);
         dataMap.put("time", data.timeStamp);
         dataMap.put("title", data.title);
