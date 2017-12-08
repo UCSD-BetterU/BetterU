@@ -44,7 +44,7 @@ public class ChallengeActivityResultFragment extends Fragment {
     static ChallengeModel data;
     View view;
     UserModel user;
-    public final static int EDITDIALOG_FRAGMENT = 1;
+    ArrayList<Integer> winner_data;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<ArrayList<Integer>> result;
     @Override
@@ -148,6 +148,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         for (int i = 0; i < activity.size(); i++) {
             result.add(new ArrayList<Integer>(Collections.nCopies(participants.size(), 0)));
         }
+        //TODO: change year and day
         getUserDailyActivity(0, participants, participants_name, "201712", "05", activity);
     }
 
@@ -155,14 +156,15 @@ public class ChallengeActivityResultFragment extends Fragment {
         Log.d("winner all data", result.toString());
         data.winner = new ArrayList<>();
         data.winner_name = new ArrayList<>();
+        winner_data = new ArrayList<Integer>();
         for (int i = 0; i < result.size(); i++) {
             int maxValue = Collections.max(result.get(i));
+            winner_data.add(maxValue);
             int maxIdx = result.get(i).lastIndexOf(maxValue);
             data.winner.add(participants.get(maxIdx));
             data.winner_name.add(participants_name.get(maxIdx));
         }
         Log.d("winner_name", data.winner_name.toString());
-
     }
 
     public void showWinner(){
@@ -173,6 +175,7 @@ public class ChallengeActivityResultFragment extends Fragment {
                 this.getActivity(),
                 nameList,
                 idList,
+                winner_data,
                 data.activities);
         listViewWinner.setAdapter(adapter);
     }

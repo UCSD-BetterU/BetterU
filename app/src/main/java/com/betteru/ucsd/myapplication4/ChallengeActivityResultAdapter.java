@@ -17,19 +17,21 @@ import java.util.ArrayList;
  */
 
 public class ChallengeActivityResultAdapter extends BaseAdapter {
-    public ArrayList<String> nameList;
-    public ArrayList<String> activityList;
-    public ArrayList<String> idList;
+    ArrayList<String> nameList;
+    ArrayList<String> activityList;
+    ArrayList<String> idList;
+    ArrayList<Integer> dataList;
     Activity activity;
     ProfilePictureView profile;
     TextView txtActivity;
     TextView txtName;
 
-    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<String> activityList){
+    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<Integer> dataList, ArrayList<String> activityList){
         super();
         this.activity =activity;
         this.nameList = nameList;
         this.idList = idList;
+        this.dataList = dataList;
         this.activityList = activityList;
     }
     @Override
@@ -60,7 +62,8 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
         txtName.setText(nameList.get(position));
         profile.setProfileId(idList.get(position));
         profile.setCropped(true);
-        txtActivity.setText(activityList.get(position).toUpperCase());
+        txtActivity.setText(activityList.get(position).toUpperCase() + " " +
+                Integer.toString(dataList.get(position)) + " MIN");
         return convertView;
     }
 }

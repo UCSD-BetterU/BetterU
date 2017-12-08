@@ -133,9 +133,7 @@ public class ChallengeActivityFragment extends Fragment
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
              @Override
              public void onComplete(@NonNull Task<Void> task) {
-                 getFragmentManager().popBackStack();
-                 FragmentTransaction fx = getFragmentManager().beginTransaction();
-                /*
+                 /*
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data",data);
@@ -143,10 +141,19 @@ public class ChallengeActivityFragment extends Fragment
                 fx.replace(R.id.fragmentContent, fragment);
                 fx.commit();
                 */
+                 /*
+                 getFragmentManager().popBackStack();
+                 FragmentTransaction fx = getFragmentManager().beginTransaction();
                  FragmentTransaction tx = getActivity().getFragmentManager().beginTransaction();
                  tx.remove(f);
-                 //tx.detach(f);
                  tx.commit();
+                 */
+                 FragmentManager fragmentManager = getFragmentManager();
+                 fragmentManager.popBackStack();
+                 ChallengeFragment fragment = new ChallengeFragment().newInstance();
+                 FragmentTransaction fx = getFragmentManager().beginTransaction();
+                 fx.replace(R.id.fragmentContent, fragment);
+                 fx.commit();
                  hideProgressDialog();
              }
          });
