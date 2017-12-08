@@ -106,6 +106,8 @@ public class ChallengeActivityFragment extends Fragment
         if(data.id.isEmpty()){
             data.setId(ref.getId());
         }
+        Log.d("submit challenge", data.participants.toString());
+        Log.d("submit challenge", data.participants_name.toString());
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("owner",data.ownerId );
         dataMap.put("participants", data.participants);
