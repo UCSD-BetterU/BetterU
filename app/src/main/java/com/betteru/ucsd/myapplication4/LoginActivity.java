@@ -82,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                         R.string.login_success,
                         Toast.LENGTH_LONG).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+                /*
                 FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
                     @Override
                     public void handleResponse(GraphResponse response) throws JSONException {
@@ -138,35 +140,36 @@ public class LoginActivity extends AppCompatActivity {
                 requestBatch.addCallback(new GraphRequestBatch.Callback() {
                     @Override
                     public void onBatchCompleted(GraphRequestBatch batch) {
-                        UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
-                        if (user != null) {
-                            Map<String, Object> userMap = new HashMap<>();
-                            String userId = user.getUserId();
-                            String firstName = user.getFirstName();
-                            String name = user.getName();
-                            userMap.put("first name", firstName);
-                            userMap.put("name", name);
-                            userMap.put("user id", userId);
-                            CollectionReference userCollection = db.collection("Users");
-                            userCollection.document(userId).set(userMap, SetOptions.merge());
-                            ArrayList<UserModel> friendList = ((BetterUApplication) getApplication()).getFriendList();
-                            if ( friendList != null ) {
-                                Map<String, Integer> friendMap = new HashMap<>();
-                                for (UserModel friend : friendList) {
-                                    String friendId = friend.getUserId();
-                                    friendMap.put(friendId, 1);
-                                }
-                                CollectionReference friendCollection = db.collection("friends");
-                                friendCollection.document(userId).set(friendMap, SetOptions.merge());
+                    UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
+                    if (user != null) {
+                        Map<String, Object> userMap = new HashMap<>();
+                        String userId = user.getUserId();
+                        String firstName = user.getFirstName();
+                        String name = user.getName();
+                        userMap.put("first name", firstName);
+                        userMap.put("name", name);
+                        userMap.put("user id", userId);
+                        CollectionReference userCollection = db.collection("Users");
+                        userCollection.document(userId).set(userMap, SetOptions.merge());
+                        ArrayList<UserModel> friendList = ((BetterUApplication) getApplication()).getFriendList();
+                        if ( friendList != null ) {
+                            Map<String, Integer> friendMap = new HashMap<>();
+                            for (UserModel friend : friendList) {
+                                String friendId = friend.getUserId();
+                                friendMap.put(friendId, 1);
                             }
-
-                        } else {
-                        //    showError(getString(R.string.error_fetching_profile));
+                            CollectionReference friendCollection = db.collection("friends");
+                            friendCollection.document(userId).set(friendMap, SetOptions.merge());
                         }
+
+                    } else {
+                    //    showError(getString(R.string.error_fetching_profile));
+                    }
                     }
                 });
 
                 requestBatch.executeAsync();
+                */
 
                 Intent startupIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startupIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

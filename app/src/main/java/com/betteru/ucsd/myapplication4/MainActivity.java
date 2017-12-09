@@ -1,7 +1,14 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.IntentService;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.FaceDetector;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -52,7 +59,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +78,7 @@ public class MainActivity extends AppCompatActivity
     private ProfileTracker profileTracker;
     protected FirebaseFirestore db = FirebaseFirestore.getInstance();
     protected BetterUApplication app;
+    private Intent extrasensoryService = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +110,41 @@ public class MainActivity extends AppCompatActivity
         }
 
         setUserAndFriends();
+
+        //extrasensoryService = new Intent(MainActivity.this, ExtrasensoryService.class);
+        //startService(extrasensoryService);
+
+        setExtrasensoryService();
+
+    }
+
+    /**
+     * Return the super-directory, where a users' ExtraSensory-App label files should be
+     * @return The users' files' directory
+     * @throws PackageManager.NameNotFoundException
+     */
+    private File getUsersFilesDirectory() throws PackageManager.NameNotFoundException {
+        Log.d(BetterUApplication.TAG+"ESA", "getUsersFilesDirectory");
+        // Locate the ESA saved files directory, and the specific minute-example's file:
+        Context extraSensoryAppContext = getApplicationContext().createPackageContext("edu.ucsd.calab.extrasensory",0);
+        File esaFilesDir = extraSensoryAppContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        Log.d(BetterUApplication.TAG+"ESA", esaFilesDir.getName());
+        if (!esaFilesDir.exists()) {
+            Log.d(BetterUApplication.TAG+"ESA", "esaFilesDir is null hohoho");
+            return null;
+        }
+        return esaFilesDir;
     }
 
     protected void setUserAndFriends() {
-
+        /*
         if (((BetterUApplication) getApplication()).getCurrentFBUser() != null) {
             UserModel user_ = ((BetterUApplication) getApplication()).getCurrentFBUser();
             Log.d(BetterUApplication.TAG, "User is not null");
             Log.d(BetterUApplication.TAG, user_.getName() + " " + user_.getUserId());
             return;
         }
+        */
         /*
         if (!app.isLoggedIn()) {
             if (app.getCurrentFBUser() != null) {
@@ -126,6 +161,9 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         */
+
+
+        /*
         app.setLoggedIn(true);
         FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
             @Override
@@ -214,6 +252,115 @@ public class MainActivity extends AppCompatActivity
         });
 
         requestBatch.executeAsync();
+        */
+
+        FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
+            @Override
+            public void handleResponse(GraphResponse response) throws JSONException {
+                JSONObject userObject = response.getJSONObject();
+                String name = userObject.getString("name");
+                String firstName = userObject.getString("first_name");
+                String userId = userObject.getString("id");
+                UserModel user = new UserModel(name, firstName, userId);
+                Log.i(BetterUApplication.TAG+"_USER", user.toString());
+                BetterUApplication app = (BetterUApplication) getApplication();
+                Log.i(BetterUApplication.TAG+"_USER", "user set" + name);
+                app.setCurrentFBUser(user);
+            }
+
+            @Override
+            public void handleError(FacebookRequestError error) {
+                ((BetterUApplication) getApplication()).showError(error.toString());
+            }
+        });
+        FBGraphAPICall myFriendsCall = FBGraphAPICall.callMeFriends("name,first_name", new FBGraphAPICallback() {
+            @Override
+            public void handleResponse(GraphResponse response) {
+                JSONArray friendsData = FBGraphAPICall.getDataFromResponse(response);
+                Log.i(BetterUApplication.TAG+"_FRIENDS", friendsData.toString());
+                ArrayList<UserModel> friendList = new ArrayList<>();
+                for (int i = 0; i < friendsData.length(); i++) {
+                    try {
+                        JSONObject userObject = friendsData.getJSONObject(i);
+                        String name = userObject.getString("name");
+                        String firstName = userObject.getString("first_name");
+                        String userId = userObject.getString("id");
+                        UserModel user = new UserModel(name, firstName, userId);
+                        friendList.add(user);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                BetterUApplication app = (BetterUApplication) getApplication();
+                app.setFriendList(friendList);
+                for (int i = 0; i < app.getFriendList().size(); ++i) {
+                    Log.d(BetterUApplication.TAG + "FriendList", app.getFriendList().get(i).getUserId());
+                }
+            }
+
+            @Override
+            public void handleError(FacebookRequestError error) {
+                ((BetterUApplication) getApplication()).showError(error.toString());
+            }
+        });
+
+        // Create a RequestBatch and add a callback once the batch of requests completes
+        GraphRequestBatch requestBatch = FBGraphAPICall.createRequestBatch(myFriendsCall, meCall);
+
+        requestBatch.addCallback(new GraphRequestBatch.Callback() {
+            @Override
+            public void onBatchCompleted(GraphRequestBatch batch) {
+                UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
+                if (user != null) {
+                    Map<String, Object> userMap = new HashMap<>();
+                    String userId = user.getUserId();
+                    String firstName = user.getFirstName();
+                    String name = user.getName();
+                    // Set profile pic
+                    ProfilePictureView profilePicView = findViewById(R.id.userProfile);
+                    profilePicView.setProfileId(userId);
+                    profilePicView.setCropped(true);
+                    // Set user name
+                    TextView userNameView = findViewById(R.id.userName);
+                    userNameView.setText(firstName);
+                    userMap.put("first name", firstName);
+                    userMap.put("name", name);
+                    userMap.put("user id", userId);
+                    CollectionReference userCollection = db.collection("Users");
+                    userCollection.document(userId).set(userMap, SetOptions.merge());
+                    ArrayList<UserModel> friendList = ((BetterUApplication) getApplication()).getFriendList();
+                    if ( friendList != null ) {
+                        Map<String, Integer> friendMap = new HashMap<>();
+                        for (UserModel friend : friendList) {
+                            String friendId = friend.getUserId();
+                            friendMap.put(friendId, 1);
+                        }
+                        CollectionReference friendCollection = db.collection("friends");
+                        friendCollection.document(userId).set(friendMap, SetOptions.merge());
+                    }
+
+                } else {
+                    //    showError(getString(R.string.error_fetching_profile));
+                }
+            }
+        });
+
+        requestBatch.executeAsync();
+    }
+
+    @SuppressLint("ShortAlarm")
+    private void setExtrasensoryService() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, 10);
+
+        Intent extrasensoryIntent = new Intent(this, ExtrasensoryService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, extrasensoryIntent, 0);
+
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        //for 30 mint 60*60*1000
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 10000,
+                /*60*60*1000*/3*60*1000, pendingIntent);
+
     }
 
     @Override

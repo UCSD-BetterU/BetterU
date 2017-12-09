@@ -39,11 +39,11 @@ public class StartupActivity extends Activity {
     }
 
     private boolean isLoggedIn() {
-    //    return true;
+        //return true;
 
         AccessToken accesstoken = AccessToken.getCurrentAccessToken();
         Log.d(BetterUApplication.TAG+"LogIn", String.valueOf(accesstoken != null));
         return accesstoken != null;
-
     }
+
 }

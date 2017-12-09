@@ -44,6 +44,10 @@ public class FriendsFragment extends Fragment {
 
     private void loadData() {
         friendsList = ((BetterUApplication) getActivity().getApplication()).getFriendList();
+        if (friendsList == null) {
+            Log.d(BetterUApplication.TAG+"friendfragment", "friend list is null");
+            return;
+        }
         for (int i = 0; i < friendsList.size(); ++i){
             Log.d(BetterUApplication.TAG+"friendfragment", friendsList.get(i).getUserId() + " " + friendsList.get(i).getName());
         }
