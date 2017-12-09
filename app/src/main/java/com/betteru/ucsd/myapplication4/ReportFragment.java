@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,9 +35,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -58,7 +56,8 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
 
     FirebaseFirestore db;
     String userId = "user0001";
-    LocalDate d = LocalDate.now();
+    //LocalDate d = LocalDate.now();
+    Calendar calendar = Calendar.getInstance();
 
     RelativeLayout chart1, chart2, chart3;
     TextView textView1, textView2, textView3;
@@ -104,40 +103,40 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
         noRecordView = (TextView) getView().findViewById(R.id.textView_noRecord);
         spinner = (ProgressBar) getView().findViewById(R.id.spinner);
 
-        load(userId, d);
+        load(userId, calendar);
 
         FloatingActionButton prevButton = (FloatingActionButton) view.findViewById(R.id.button_prevDate);
         prevButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                d = d.minusDays(1);
-                load(userId, d);
+                calendar.add(Calendar.DATE, -1);
+                load(userId, calendar);
             }
         });
 
         FloatingActionButton nextButton = (FloatingActionButton) view.findViewById(R.id.button_nextDate);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                d = d.plusDays(1);
-                load(userId, d);
+                calendar.add(Calendar.DATE, 1);
+                load(userId, calendar);
             }
         });
 
         FloatingActionButton todayButton = (FloatingActionButton) view.findViewById(R.id.button_today);
         todayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                d = LocalDate.now();
-                load(userId, d);
+                calendar = Calendar.getInstance();
+                load(userId, calendar);
             }
         });
     }
 
-    private void load(String userId, LocalDate d) {
-        String monthS = String.format("%02d", d.getMonthValue());
-        String dayS = String.format("%02d", d.getDayOfMonth());
-        String yearS = String.format("%04d", d.getYear());
+    private void load(String userId, Calendar calendar) {
+        String monthS = String.format("%02d", calendar.get(Calendar.MONTH)+1);
+        String dayS = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+        String yearS = String.format("%04d", calendar.get(Calendar.YEAR));
         load(userId, yearS, monthS, dayS);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-dd");
-        String text = d.format(formatter);
+        //DateFormat formatter = DateTimeFormatter.ofPattern("MMM-dd");
+        String text = yearS+"-"+monthS+"-"+dayS;
         loadButton(text);
     }
 
@@ -308,9 +307,12 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                 //showDialog();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         ReportFragment.this,
-                        d.getYear(),
+                        /*d.getYear(),
                         d.getMonthValue()-1,
-                        d.getDayOfMonth()
+                        d.getDayOfMonth()*/
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH)+1,
+                        calendar.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.setThemeDark(false);
                 dpd.vibrate(true);
@@ -350,7 +352,11 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
-        load(userId, d);
+        /*d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
+        load(userId, d);*/
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear+1);
+        calendar.set(Calendar.MINUTE, dayOfMonth);
+        load(userId, calendar);
     }
 }
