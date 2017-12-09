@@ -6,26 +6,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="1">
 
         <ImageView
-            android:id="@+id/activity_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_centerVertical="true"
+            android:id="@+id/activity_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.12"
+            android:textAlignment="viewStart"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/activity_content"
-            android:layout_width="32dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.42"
-            android:textAlignment="textStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.40"
+            android:textAlignment="viewStart"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Activity" />
@@ -34,8 +38,8 @@
             android:id="@+id/activity_ranking"
             style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.46"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.32"
             android:textAlignment="viewEnd"
             android:textSize="20sp"
             tools:text="Top 10%" />

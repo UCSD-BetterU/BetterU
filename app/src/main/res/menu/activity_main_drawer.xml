@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
+      <!--  <item
             android:id="@+id/nav_goal"
-            android:title="Goal" />
+            android:title="Goal" /> -->
         <item
-            android:id="@+id/nav_ranking"
-            android:title="Ranking" />
+            android:id="@+id/nav_report"
+            android:title="Report" />
         <item
             android:id="@+id/nav_challenge"
             android:title="Challenge" />
