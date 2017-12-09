@@ -2,6 +2,10 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -100,6 +104,15 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                 dialog.show(getFragmentManager(), "RankingSettingsDialogFragment");
             }
         });
+
+        BroadcastReceiver dialogReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                load(userId, d);
+            }
+        };
+        IntentFilter filter = new IntentFilter("DialogChangeSaved");
+        getActivity().registerReceiver(dialogReceiver,filter);
     }
 
     private void load(String userId, LocalDate d) {
