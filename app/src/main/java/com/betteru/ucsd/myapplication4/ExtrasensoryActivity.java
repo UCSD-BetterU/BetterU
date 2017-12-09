@@ -6,6 +6,16 @@ public class ExtrasensoryActivity {
     private Integer icon;
     private String label;
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    private int index;
+
     public String getLabel() {
         return label;
     }
@@ -38,10 +48,11 @@ public class ExtrasensoryActivity {
         this.icon = icon;
     }
 
-    public ExtrasensoryActivity(String text, String label,int type, Integer icon) {
+    public ExtrasensoryActivity(String text, String label,int type, Integer icon, int index) {
         this.text = text;
         this.label = label;
         this.type = type;
         this.icon = icon;
+        this.index = index;
     }
 }

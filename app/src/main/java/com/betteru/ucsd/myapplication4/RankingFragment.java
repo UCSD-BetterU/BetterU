@@ -13,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,9 +38,17 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
     private ArrayAdapter<String> listAdapter ;
     ArrayList<HashMap<String,String>> list;
 
+    private boolean[] preferences = new boolean[51];
+    HashMap<String, Long> selfRankingData;
+    HashMap<String, Integer> rankingMap;
+
     FirebaseFirestore db;
     String userId = "user0001";
     LocalDate d = LocalDate.now();
+
+    ProgressBar spinner;
+
+    ExtrasensoryActivities activities = new ExtrasensoryActivities();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +60,11 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
     public void onViewCreated(View view, Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<HashMap<String, String>>();
+        selfRankingData = new HashMap<>();
+        rankingMap = new HashMap<>();
+
+        spinner = (ProgressBar) view.findViewById(R.id.spinner);
+        noRecordView = (TextView) getView().findViewById(R.id.textView_noRecord);
 
         load(userId, d);
 
@@ -90,24 +105,96 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
     private void load(String userId, LocalDate d) {
         String monthS = String.format("%02d", d.getMonthValue());
         String dayS = String.format("%02d", d.getDayOfMonth());
-        load(userId, monthS, dayS);
+        String yearS = String.format("%04d", d.getYear());
+        loadRankingPreferences(userId, yearS, monthS, dayS);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-dd");
         String text = d.format(formatter);
         loadButton(text);
     }
 
-    private void load(String userId, String month, String day)
-    {
-        DocumentReference dbUser;
-        DocumentReference dbData;
+    private void loadRankingPreferences(String userId, String year, String month, String day) {
+        spinner.setVisibility(View.VISIBLE);
+        noRecordView.setVisibility(View.GONE);
+        DocumentReference ranking_preferences;
         try {
-            dbUser = db.collection("ranking").document(userId);
-            dbData = dbUser.collection(month).document(day);
-        }catch (Exception e)
-        {
+            ranking_preferences = db.collection("ranking_preferences").document(userId);
+        } catch (Exception e) {
             Log.d("Exception", e.toString());
             return;
         }
+        list.clear();
+        final String id = userId;
+        final String y = year;
+        final String m = month;
+        final String d = day;
+        ranking_preferences.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (!document.exists()) {
+                            Log.d("Data in Cloud", "no preferences");
+                        } else {
+                            Map<String, Object> obj = document.getData();
+                            for (String key : obj.keySet()) {
+                                int k = Integer.valueOf(key);
+                                preferences[k] = document.getBoolean(key);
+                            }
+                            loadUserData(id, y, m, d);
+                        }
+                    }
+                } else {
+                    Log.d("Data in Cloud", "Error getting documents", task.getException());
+                }
+            }
+        });
+    }
+
+    private void loadUserData(String userId, String year, String month, String day){
+        DocumentReference dbData;
+        dbData = db.collection("extrasensory").document(userId).collection(year+month).document(day);
+        selfRankingData.clear();
+        final String y = year;
+        final String m = month;
+        final String d = day;
+        dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document != null){
+                        if(!document.exists()){
+                            loadListView();
+                            loadNoRecordView(true);
+                        } else {
+                            Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            for (String key : obj.keySet()) {
+                                if (!activities.map.containsKey(key)) {
+                                    continue;
+                                }
+                                int index = activities.map.get(key).getIndex();
+                                if (!preferences[index]) {
+                                    continue;
+                                }
+                                selfRankingData.put(key, document.getLong(key));
+                            }
+                            Log.d("DATA in LIST", selfRankingData.toString());
+                            loadAllUserData(y,m,d);
+                        }
+                    }
+                }else{
+                    Log.d("Data in Cloud", "Error getting documents" , task.getException());
+                }
+            }
+        });
+    }
+
+    private void loadAllUserData(String year, String month, String day) {
+        DocumentReference dbData;
+        dbData = db.collection("alluser").document(year+month+day);
+        rankingMap.clear();
         list.clear();
         dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
@@ -116,20 +203,35 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                     DocumentSnapshot document = task.getResult();
                     if(document != null){
                         if(!document.exists()){
+                            loadListView();
                             loadNoRecordView(true);
+                            spinner.setVisibility(View.GONE);
                         } else {
-                            Log.d("DATA IN CLOUT", document.getId() + " -> " + document.getData());
+                            Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
                             for (String key : obj.keySet()) {
-                                Log.d("DATA IN CLOUD", key);
+                                if (!selfRankingData.containsKey(key)) {
+                                    continue;
+                                }
+                                long selfTime = selfRankingData.get(key);
+                                Log.d("self data", key + " -- " + Long.toString(selfTime));
+                                ArrayList allUserData = (ArrayList) document.get(key);
+                                Log.d("check", document.get(key).toString()+" "+allUserData.size());
+                                int n = allUserData.size();
+                                int r = 0;
+                                for(Object t: allUserData){
+                                    if(selfTime>=(long)t) r++;
+                                }
+                                float rank = 100 * (float) r / (float) n;
+                                String ranking = String.format("%.0f%%", rank);
+                                Log.d("ranking", key+" "+ranking);
                                 HashMap<String, String> temp = new HashMap<String, String>();
                                 temp.put("Activity", key);
-                                temp.put("Ranking", document.getString(key));
+                                temp.put("Ranking", ranking);
                                 list.add(temp);
+                                loadListView();
+                                spinner.setVisibility(View.GONE);
                             }
-                            Log.d("DATA in LIST", list.toString());
-                            loadListView();
-                            loadNoRecordView(false);
                         }
                     }
                 }else{
@@ -161,15 +263,13 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         });
     }
     private void loadNoRecordView(Boolean flag){
-        noRecordView = (TextView) getView().findViewById(R.id.textView_noRecord);
         if(flag == true) noRecordView.setVisibility(View.VISIBLE);
-        else noRecordView.setVisibility(View.GONE);
     }
     private void loadListView(){
         ListView listView=(ListView) getView().findViewById(R.id.rankingListView);
         RankingAdapter adapter=new RankingAdapter(getActivity(), list);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id)
@@ -177,7 +277,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                 int pos=position+1;
                 Toast.makeText(getActivity(), Integer.toString(pos)+" Clicked", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     public static RankingFragment newInstance() {

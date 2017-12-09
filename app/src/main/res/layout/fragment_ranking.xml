@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/reportBackgoundColor">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -83,14 +85,6 @@
             android:textSize="18sp"
             android:layout_marginBottom="20dp"/>
 
-        <TextView
-            android:id="@+id/textView_noRecord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No Record On The Selected Date"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
         <ListView
             android:id="@+id/rankingListView"
             android:layout_width="match_parent"
@@ -101,13 +95,41 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/textView_noRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Record On The Selected Date"
+            android:layout_centerInParent="true"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_preferences"
-        app:srcCompat="@android:drawable/ic_media_next" />
-</android.support.design.widget.CoordinatorLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_menu_preferences"
+            app:srcCompat="@android:drawable/ic_media_next" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/spinner"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

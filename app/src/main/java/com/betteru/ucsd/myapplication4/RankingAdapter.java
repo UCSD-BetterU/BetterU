@@ -4,15 +4,16 @@ package com.betteru.ucsd.myapplication4;
  * Created by Yuting on 10/30/2017.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RankingAdapter extends BaseAdapter{
 
@@ -20,6 +21,7 @@ public class RankingAdapter extends BaseAdapter{
     Activity activity;
     TextView txtFirst;
     TextView txtSecond;
+    ImageView icon;
 
     public static final String FIRST_COLUMN="Activity";
     public static final String SECOND_COLUMN="Ranking";
@@ -53,18 +55,22 @@ public class RankingAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
          LayoutInflater inflater=activity.getLayoutInflater();
+         ExtrasensoryActivities activities = new ExtrasensoryActivities();
 
         if(convertView == null){
 
             convertView=inflater.inflate(R.layout.ranking_item, null);
 
+            icon = (ImageView) convertView.findViewById(R.id.activity_icon);
             txtFirst=(TextView) convertView.findViewById(R.id.activity_content);
             txtSecond=(TextView) convertView.findViewById(R.id.activity_ranking);
         }
 
         HashMap<String, String> map=list.get(position);
-        txtFirst.setText(map.get(FIRST_COLUMN));
+        ExtrasensoryActivity activity = activities.map.get(map.get(FIRST_COLUMN));
+        txtFirst.setText(activity.getLabel());
         txtSecond.setText(map.get(SECOND_COLUMN));
+        icon.setImageResource(activity.getIcon());
         return convertView;
     }
 
