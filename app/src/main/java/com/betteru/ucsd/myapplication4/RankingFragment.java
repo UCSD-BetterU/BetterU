@@ -49,6 +49,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
     HashMap<String, Integer> rankingMap;
 
     FirebaseFirestore db;
+    UserModel currentFBUser;// = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
     String userId = "user0001";
     //LocalDate d = LocalDate.now();
     Calendar calendar = Calendar.getInstance();
@@ -65,6 +66,9 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        currentFBUser = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
+        userId = currentFBUser.getUserId();
+
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<HashMap<String, String>>();
         selfRankingData = new HashMap<>();
@@ -153,6 +157,9 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                     if (document != null) {
                         if (!document.exists()) {
                             Log.d("Data in Cloud", "no preferences");
+                            spinner.setVisibility(View.GONE);
+                            loadNoRecordView(true);
+                            noRecordView.setText("No Ranking Preferences");
                         } else {
                             Map<String, Object> obj = document.getData();
                             for (String key : obj.keySet()) {
@@ -348,7 +355,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                         d.getMonthValue()-1,
                         d.getDayOfMonth()*/
                         calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH)+1,
+                        calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.setThemeDark(false);
@@ -390,8 +397,8 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         /*d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
         load(userId, d);*/
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, monthOfYear+1);
-        calendar.set(Calendar.MINUTE, dayOfMonth);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         load(userId, calendar);
     }
 }
