@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parentLayout"
     android:background="@color/reportBackgoundColor">
 
     <ScrollView
@@ -233,15 +234,6 @@
 
         </RelativeLayout>
 
-
-<!--        <TextView
-            android:id="@+id/textView_noRecord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No Record On The Selected Date"
-            android:textAlignment="center"
-            android:textSize="18sp" />-->
-
         <ListView
             android:id="@+id/rankingListView"
             android:layout_width="match_parent"
@@ -252,4 +244,25 @@
 
     </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView_noRecord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No Record On The Selected Date"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/spinner"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
