@@ -34,6 +34,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 
 public class RankingFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
@@ -222,6 +224,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                         } else {
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
+                            TreeMap<Float, String> rankings = new TreeMap<>();
                             for (String key : obj.keySet()) {
                                 if (!selfRankingData.containsKey(key)) {
                                     continue;
@@ -238,13 +241,17 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                 float rank = 100 * (float) r / (float) n;
                                 String ranking = String.format("%.0f%%", rank);
                                 Log.d("ranking", key+" "+ranking);
-                                HashMap<String, String> temp = new HashMap<String, String>();
-                                temp.put("Activity", key);
-                                temp.put("Ranking", ranking);
-                                list.add(temp);
-                                loadListView();
-                                spinner.setVisibility(View.GONE);
+                                rankings.put(rank, key);
                             }
+                            NavigableMap<Float, String> descendingMap = rankings.descendingMap();
+                            for(NavigableMap.Entry<Float,String> entry: descendingMap.entrySet()){
+                                HashMap<String,String> temp = new HashMap<>();
+                                temp.put("Activity", entry.getValue());
+                                temp.put("Ranking", String.format("%.0f%%", entry.getKey()));
+                                list.add(temp);
+                            }
+                            loadListView();
+                            spinner.setVisibility(View.GONE);
                         }
                     }
                 }else{
