@@ -6,7 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/reportBackgoundColor">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -82,20 +83,22 @@
 
         </RelativeLayout>
 
-<!--        <TextView
-            android:id="@+id/textView_range"
+        <TextView
+            android:id="@+id/textView_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="See where your time goes..."
+            android:text="Activies"
+            android:typeface="monospace"
+            android:textStyle="bold"
             android:textAlignment="center"
-            android:textSize="18sp"
-            android:layout_marginBottom="20dp"/>-->
+            android:textSize="24sp"
+            android:layout_marginBottom="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="16dp">
+            android:layout_marginLeft="20dp">
 
             <LinearLayout
                 android:id="@+id/medal_1"
@@ -105,8 +108,8 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/medal1"/>
                 <TextView
                     android:id="@+id/text_1"
@@ -125,8 +128,8 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="8dp">
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/medal2"/>
                 <TextView
                     android:id="@+id/text_2"
@@ -145,8 +148,8 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="8dp">
                 <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/medal3"/>
                 <TextView
                     android:id="@+id/text_3"
@@ -159,35 +162,77 @@
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/chartLayout1"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="32dp"
+            android:layout_marginTop="16dp"
             tools:context="com.android_examples.barchart_android_examplescom.MainActivity">
 
-            <com.github.mikephil.charting.charts.BarChart
+            <com.github.mikephil.charting.charts.HorizontalBarChart
                 android:id="@+id/bar_chart"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" />
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/textView_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"/>
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/chartLayout2"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="32dp"
             tools:context="com.android_examples.piechart_android_examplescom.MainActivity">
 
             <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pie_chart"
+                android:id="@+id/pie_chart1"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" />
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Locations"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"/>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/chartLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            tools:context="com.android_examples.piechart_android_examplescom.MainActivity">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pie_chart2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+
+        </RelativeLayout>
+
 
 <!--        <TextView
             android:id="@+id/textView_noRecord"
