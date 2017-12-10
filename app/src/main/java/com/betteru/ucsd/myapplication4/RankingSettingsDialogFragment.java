@@ -154,7 +154,6 @@ public class RankingSettingsDialogFragment extends DialogFragment {
                             }
                             for (int i = 0; i < 51; i++) {
                                 final int k = i;
-                                changedPreferences.put(k, false);
                                 boxes[i].setChecked(preferences[i]);
                                 boxes[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override

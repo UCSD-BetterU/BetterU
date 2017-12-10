@@ -58,6 +58,9 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
 
     ExtrasensoryActivities activities = new ExtrasensoryActivities();
 
+    int nusers = 0;
+    int kuser = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -221,14 +224,17 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         });
     }
 
-    private void loadAllUserData1 (String year, String month, String day) {
+    private void loadAllUserData (String year, String month, String day) {
         final String ym = year+month;
         final String d = day;
         list.clear();
+        nusers = 0;
+        kuser = 0;
         db.collection("extrasensory").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task){
                 if(task.isSuccessful()){
+                    nusers = task.getResult().size();
                     for (DocumentSnapshot doc : task.getResult()) {
                         Log.d("test",doc.getId());
                         doc.getReference().collection(ym).document(d).get()
@@ -239,9 +245,6 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                     DocumentSnapshot document = task.getResult();
                                     if(document != null){
                                         if(!document.exists()){
-                                            loadListView();
-                                            loadNoRecordView(true);
-                                            spinner.setVisibility(View.GONE);
                                         } else {
                                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                                             Map<String, Object> obj = document.getData();
@@ -255,32 +258,30 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                                 }
                                                 rankingN.put(key, rankingN.get(key)+1);
                                             }
-                                            for (String key: selfRankingData.keySet()) {
-                                                float m = (float)rankingM.get(key);
-                                                float n = (float)rankingN.get(key);
-                                                float r = 100 *  m / n;
-                                                Log.d("ha????", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
-                                            }
                                         }
                                     }
                                 }else{
                                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                                 }
+                                if(++kuser == nusers) {
+                                    Log.d("ha????", Integer.toString(kuser)+" "+Integer.toString(nusers));
+                                    for (String key: selfRankingData.keySet()) {
+                                        HashMap<String,String> temp = new HashMap<>();
+                                        temp.put("Activity", key);
+                                        float m = (float)rankingM.get(key);
+                                        float n = (float)rankingN.get(key);
+                                        float r = 100 *  m / n;
+                                        temp.put("Ranking", String.format("%.0f%%", r));
+                                        Log.d("checkcheck", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
+                                        list.add(temp);
+                                    }
+                                    loadListView();
+                                    spinner.setVisibility(View.GONE);
+                                }
                             }
                         });
                     }
-                    for (String key: selfRankingData.keySet()) {
-                        HashMap<String,String> temp = new HashMap<>();
-                        temp.put("Activity", key);
-                        float m = (float)rankingM.get(key);
-                        float n = (float)rankingN.get(key);
-                        float r = 100 *  m / n;
-                        temp.put("Ranking", String.format("%.0f%%", r));
-                        Log.d("checkcheck", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
-                        list.add(temp);
-                    }
-                    loadListView();
-                    spinner.setVisibility(View.GONE);
+
                 }else{
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
@@ -288,7 +289,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         });
     }
 
-    private void loadAllUserData(String year, String month, String day) {
+    private void loadAllUserData1 (String year, String month, String day) {
         DocumentReference dbData;
         dbData = db.collection("alluser").document(year+month+day);
         rankingMap.clear();
