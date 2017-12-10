@@ -260,17 +260,17 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                 if (topK > 0) {
                                     textView1.setVisibility(View.VISIBLE);
                                     medal_1.setVisibility(View.VISIBLE);
-                                    text_1.setText("You spent " + top3label.get(2) + " min " + top3time.get(2));
+                                    text_1.setText("You spent " + top3time.get(2) + " min " + top3label.get(2));
                                 }
                                 if (topK > 1) {
                                     textView2.setVisibility(View.VISIBLE);
                                     medal_2.setVisibility(View.VISIBLE);
-                                    text_2.setText("You spent " + top3label.get(1) + " min " + top3time.get(1));
+                                    text_2.setText("You spent " + top3time.get(1) + " min " + top3label.get(1));
                                 }
                                 if (topK > 2) {
                                     textView2.setVisibility(View.VISIBLE);
                                     medal_3.setVisibility(View.VISIBLE);
-                                    text_3.setText("You spent " + top3label.get(0) + " min " + top3time.get(0));
+                                    text_3.setText("You spent " + top3time.get(0) + " min " + top3label.get(0));
                                 }
                                 BarDataSet barDataSet = new BarDataSet(BARENTRY, "Activities");
                                 BarData barData = new BarData(BarEntryLabels, barDataSet);
