@@ -71,7 +71,6 @@ public class ChallengeFragment extends Fragment {
             loadData(user.getUserId());
         else {
             loadNoRecordView(false);
-            Log.i("challenge list", listView.toString() + " " + listView.getAdapter().toString());
             adapter.refresh(data);
             adapter.notifyDataSetChanged();
             loadListView();

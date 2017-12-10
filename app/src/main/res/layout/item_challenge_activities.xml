@@ -17,8 +17,9 @@
 
             <ImageView
                 android:id="@+id/imageView_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:foreground="@drawable/circle"
                 app:srcCompat="@android:drawable/sym_def_app_icon" />
 
             <com.facebook.login.widget.ProfilePictureView

@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class RankingSettingsDialogFragment extends DialogFragment {
     FirebaseFirestore db;
+    UserModel currentFBUser;
     String userId = "user0001";
 
     private CheckBox[] boxes = new CheckBox[51];
@@ -40,6 +41,8 @@ public class RankingSettingsDialogFragment extends DialogFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        currentFBUser = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
+        userId = currentFBUser.getUserId();
         db = FirebaseFirestore.getInstance();
 
         boxes[0] = (CheckBox) getView().findViewById(R.id.checkBoxLyingDown);
@@ -108,6 +111,7 @@ public class RankingSettingsDialogFragment extends DialogFragment {
                         childUpdates.put(Integer.toString(key),value);
                     }
                 }
+
                 db.collection("ranking_preferences").document(userId).update(childUpdates);
 
                 Intent intent = new Intent("DialogChangeSaved");

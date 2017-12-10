@@ -55,6 +55,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
     private TreeMap<Long, String> timeSpent3 = new TreeMap<>();
 
     FirebaseFirestore db;
+    UserModel currentFBUser; //= ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
     String userId = "user0001";
     //LocalDate d = LocalDate.now();
     Calendar calendar = Calendar.getInstance();
@@ -66,6 +67,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
     PieChart pieChart2;
 
     ExtrasensoryActivities activities = new ExtrasensoryActivities();
+    int nact2 = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +77,9 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        currentFBUser = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
+        userId = currentFBUser.getUserId();
+
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<HashMap<String, String>>();
 
@@ -167,6 +172,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
         timeSpent1.clear();
         timeSpent2.clear();
         timeSpent3.clear();
+        nact2 = 0;
         dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){
@@ -183,19 +189,42 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                     continue;
                                 }
                                 int type = activities.map.get(key).getType();
+                                Long time = document.getLong(key);
                                 switch (type) {
                                     case 1:
-                                        timeSpent1.put(document.getLong(key), key);
+                                        if (timeSpent1.containsKey(time)) {
+                                            timeSpent1.put(time, timeSpent1.get(time)+";"+key);
+                                        } else {
+                                            timeSpent1.put(time, key);
+                                        }
                                         break;
                                     case 2:
-                                        timeSpent2.put(document.getLong(key), key);
+                                        if (timeSpent2.containsKey(time)) {
+                                            timeSpent2.put(time, timeSpent3.get(time)+";"+key);
+                                        } else {
+                                            timeSpent2.put(time, key);
+                                        }
+                                        nact2++;
                                         break;
                                     case 3:
-                                        timeSpent3.put(document.getLong(key), key);
+                                        if (timeSpent3.containsKey(time)) {
+                                            timeSpent3.put(time, timeSpent3.get(time)+";"+key);
+                                        } else {
+                                            timeSpent3.put(time, key);
+                                        }
                                         break;
                                     case 5:
-                                        timeSpent1.put(document.getLong(key), key);
-                                        timeSpent2.put(document.getLong(key), key);
+                                        if (timeSpent1.containsKey(time)) {
+                                            timeSpent1.put(time, timeSpent1.get(time)+";"+key);
+                                        } else {
+                                            timeSpent1.put(time, key);
+                                        }
+                                        if (timeSpent2.containsKey(time)) {
+                                            timeSpent2.put(time, timeSpent2.get(time)+";"+key);
+                                        } else {
+                                            timeSpent2.put(time, key);
+                                        }
+                                        nact2++;
                                         break;
                                     default:
                                         break;
@@ -211,28 +240,36 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                             if(!timeSpent2.isEmpty()) {
                                 NavigableMap<Long, String> descMap2 = timeSpent2.descendingMap();
                                 int k2 = 0;
-                                for (NavigableMap.Entry<Long, String> entry : descMap2.entrySet()) {
-                                    if (k2 > 2) break;
-                                    String time = Long.toString(entry.getKey());
-                                    String text = activities.map.get(entry.getValue()).getText();
-                                    if (k2 == 0) {
-                                        textView1.setVisibility(View.VISIBLE);
-                                        medal_1.setVisibility(View.VISIBLE);
-                                        text_1.setText("You spent " + time + " min " + text);
-                                    } else if (k2 == 1) {
-                                        medal_2.setVisibility(View.VISIBLE);
-                                        text_2.setText("You spent " + time + " min " + text);
-                                    } else if (k2 == 2) {
-                                        medal_3.setVisibility(View.VISIBLE);
-                                        text_3.setText("You spent " + time + " min " + text);
-                                    }
-                                    k2++;
-                                }
-                                k2 = 0;
+                                ArrayList<String> top3label = new ArrayList<>();
+                                ArrayList<Long> top3time = new ArrayList<>();
                                 for (NavigableMap.Entry<Long, String> entry : timeSpent2.entrySet()) {
-                                    BARENTRY.add(new BarEntry(entry.getKey(), k2));
-                                    BarEntryLabels.add(entry.getValue());
-                                    k2++;
+                                    String [] acts = entry.getValue().split(";");
+                                    for (String act : acts) {
+                                        String label = activities.map.get(act).getLabel();
+                                        BarEntryLabels.add(label);
+                                        BARENTRY.add(new BarEntry(entry.getKey(), k2));
+                                        if((nact2-k2)<=3){
+                                            top3label.add(label);
+                                            top3time.add(entry.getKey());
+                                        }
+                                        k2++;
+                                    }
+                                }
+                                int topK = top3label.size();
+                                if (topK > 0) {
+                                    textView1.setVisibility(View.VISIBLE);
+                                    medal_1.setVisibility(View.VISIBLE);
+                                    text_1.setText("You spent " + top3label.get(2) + " min " + top3time.get(2));
+                                }
+                                if (topK > 1) {
+                                    textView2.setVisibility(View.VISIBLE);
+                                    medal_2.setVisibility(View.VISIBLE);
+                                    text_2.setText("You spent " + top3label.get(1) + " min " + top3time.get(1));
+                                }
+                                if (topK > 2) {
+                                    textView2.setVisibility(View.VISIBLE);
+                                    medal_3.setVisibility(View.VISIBLE);
+                                    text_3.setText("You spent " + top3label.get(0) + " min " + top3time.get(0));
                                 }
                                 BarDataSet barDataSet = new BarDataSet(BARENTRY, "Activities");
                                 BarData barData = new BarData(BarEntryLabels, barDataSet);
@@ -251,10 +288,13 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                 ArrayList<Entry> pieY1 = new ArrayList<Entry>();
                                 ArrayList<String> pieX1 = new ArrayList<String>();
                                 for (NavigableMap.Entry<Long, String> entry : descMap1.entrySet()) {
-                                    pieY1.add(new Entry(entry.getKey(), k1));
-                                    String label = activities.map.get(entry.getValue()).getLabel();
-                                    pieX1.add(label);
-                                    k1++;
+                                    String [] acts = entry.getValue().split(";");
+                                    for (String act : acts) {
+                                        String label = activities.map.get(act).getLabel();
+                                        pieX1.add(label);
+                                        pieY1.add(new Entry(entry.getKey(), k1));
+                                        k1++;
+                                    }
                                 }
                                 PieDataSet pieDataSet1 = new PieDataSet(pieY1, "Status");
                                 pieDataSet1.setColors(ColorTemplate.VORDIPLOM_COLORS);
@@ -274,10 +314,13 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                 ArrayList<Entry> pieY2 = new ArrayList<Entry>();
                                 ArrayList<String> pieX2 = new ArrayList<String>();
                                 for (NavigableMap.Entry<Long, String> entry : descMap3.entrySet()) {
-                                    pieY2.add(new Entry(entry.getKey(), k3));
-                                    String label = activities.map.get(entry.getValue()).getLabel();
-                                    pieX2.add(label);
-                                    k3++;
+                                    String [] acts = entry.getValue().split(";");
+                                    for (String act : acts) {
+                                        String label = activities.map.get(act).getLabel();
+                                        pieX2.add(label);
+                                        pieY2.add(new Entry(entry.getKey(), k3));
+                                        k3++;
+                                    }
                                 }
                                 PieDataSet pieDataSet2 = new PieDataSet(pieY2, "Locations");
                                 pieDataSet2.setColors(ColorTemplate.PASTEL_COLORS);
@@ -297,6 +340,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                 }
             }
         });
+        Log.d("User ID in Report", userId);
     }
 
     private void loadButton(String date){
@@ -311,7 +355,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                         d.getMonthValue()-1,
                         d.getDayOfMonth()*/
                         calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH)+1,
+                        calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.setThemeDark(false);
@@ -355,8 +399,8 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
         /*d = LocalDate.of(year, monthOfYear+1, dayOfMonth);
         load(userId, d);*/
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, monthOfYear+1);
-        calendar.set(Calendar.MINUTE, dayOfMonth);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         load(userId, calendar);
     }
 }
