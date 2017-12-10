@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -299,13 +300,21 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                 PieDataSet pieDataSet1 = new PieDataSet(pieY1, "Status");
                                 pieDataSet1.setColors(ColorTemplate.VORDIPLOM_COLORS);
                                 PieData pieData1 = new PieData(pieX1, pieDataSet1);
-                                pieData1.setValueFormatter(new PercentFormatter());
+                                //pieData1.setValueFormatter(new PercentFormatter());
+                                pieData1.setValueFormatter(new PercentFormatter() {
+                                    @Override
+                                    public String getFormattedValue(float value, Entry entry,int dataSetIndex, ViewPortHandler viewPortHandler) {
+                                        return Float.toString(entry.getVal());
+                                    }
+                                });
+                                pieData1.setValueTextSize(11f);
                                 pieChart1.setData(pieData1);
                                 pieChart1.setDescription("");
                                 pieChart1.setHoleColor(Color.parseColor("#f5f5f5"));
                                 spinner.setVisibility(View.GONE);
                                 textView2.setVisibility(View.VISIBLE);
                                 chart2.setVisibility(View.VISIBLE);
+                                pieChart1.animateY(2000);
                             }
 
                             if(!timeSpent3.isEmpty()) {
@@ -325,13 +334,21 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                 PieDataSet pieDataSet2 = new PieDataSet(pieY2, "Locations");
                                 pieDataSet2.setColors(ColorTemplate.PASTEL_COLORS);
                                 PieData pieData2 = new PieData(pieX2, pieDataSet2);
-                                pieData2.setValueFormatter(new PercentFormatter());
+                                //pieData2.setValueFormatter(new PercentFormatter());
+                                pieData2.setValueFormatter(new PercentFormatter() {
+                                    @Override
+                                    public String getFormattedValue(float value, Entry entry,int dataSetIndex, ViewPortHandler viewPortHandler) {
+                                        return Float.toString(entry.getVal());
+                                    }
+                                });
+                                pieData2.setValueTextSize(11f);
                                 pieChart2.setData(pieData2);
                                 pieChart2.setDescription("");
                                 pieChart2.setHoleColor(Color.parseColor("#f5f5f5"));
                                 spinner.setVisibility(View.GONE);
                                 textView3.setVisibility(View.VISIBLE);
                                 chart3.setVisibility(View.VISIBLE);
+                                pieChart2.animateY(2000);
                             }
                         }
                     }
