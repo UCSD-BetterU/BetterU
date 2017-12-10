@@ -94,9 +94,6 @@ public class MainActivity extends AppCompatActivity
 
         setUserAndFriends();
 
-        //extrasensoryService = new Intent(MainActivity.this, ExtrasensoryService.class);
-        //startService(extrasensoryService);
-
         setExtrasensoryService();
 
     }
@@ -120,122 +117,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void setUserAndFriends() {
-        /*
-        if (((BetterUApplication) getApplication()).getCurrentFBUser() != null) {
-            UserModel user_ = ((BetterUApplication) getApplication()).getCurrentFBUser();
-            Log.d(BetterUApplication.TAG, "User is not null");
-            Log.d(BetterUApplication.TAG, user_.getName() + " " + user_.getUserId());
-            return;
-        }
-        */
-        /*
-        if (!app.isLoggedIn()) {
-            if (app.getCurrentFBUser() != null) {
-                String userId = app.getCurrentFBUser().getUserId();
-                String firstName = app.getCurrentFBUser().getFirstName();
-                // Set profile pic
-                ProfilePictureView profilePicView = findViewById(R.id.userProfile);
-                profilePicView.setProfileId(userId);
-                profilePicView.setCropped(true);
-                // Set user name
-                TextView userNameView = findViewById(R.id.userName);
-                userNameView.setText(firstName);
-            }
-            return;
-        }
-        */
-
-
-        /*
-        app.setLoggedIn(true);
-        FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
-            @Override
-            public void handleResponse(GraphResponse response) throws JSONException {
-                JSONObject userObject = response.getJSONObject();
-                String name = userObject.getString("name");
-                String firstName = userObject.getString("first_name");
-                String userId = userObject.getString("id");
-                UserModel user = new UserModel(name, firstName, userId);
-                Log.i(BetterUApplication.TAG+"_USER", user.toString());
-                ((BetterUApplication) getApplication()).setCurrentFBUser(user);
-            }
-
-            @Override
-            public void handleError(FacebookRequestError error) {
-                ((BetterUApplication) getApplication()).showError(error.toString());
-            }
-        });
-
-        GraphRequestBatch requestBatch = FBGraphAPICall.createRequestBatch(meCall);
-
-        requestBatch.addCallback(new GraphRequestBatch.Callback() {
-            @Override
-            public void onBatchCompleted(GraphRequestBatch batch) {
-                UserModel user = ((BetterUApplication) getApplication()).getCurrentFBUser();
-                if (user != null) {
-                    String userId = user.getUserId();
-                    Log.d(BetterUApplication.TAG, "userid " + userId + " name " + user.getFirstName());
-                    // Set profile pic
-                    ProfilePictureView profilePicView = findViewById(R.id.userProfile);
-                    profilePicView.setProfileId(userId);
-                    profilePicView.setCropped(true);
-                    // Set user name
-                    TextView userNameView = findViewById(R.id.userName);
-                    userNameView.setText(user.getFirstName());
-
-                    if (app.getFriendList() != null) {
-                        for (int i = 0; i < app.getFriendList().size(); ++i){
-                            Log.d(BetterUApplication.TAG+"main", app.getFriendList().get(i).getUserId() + " " + app.getFriendList().get(i).getName());
-                        }
-                        return;
-                    }
-
-                    final CollectionReference userCollection = db.collection("Users");
-                    DocumentReference friendRef = db.collection("friends").document(userId);
-                    friendRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Map<String, Object> friendListData = document.getData();
-                                    Log.d(BetterUApplication.TAG, "DocumentSnapshot data: " + friendListData);
-                                    for (Map.Entry<String, Object> friend : friendListData.entrySet()) {
-                                        String friendId = friend.getKey();
-                                        DocumentReference userRef = userCollection.document(friendId);
-                                        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-                                                        Map<String, Object> friend = document.getData();
-                                                        UserModel friendData = new UserModel(
-                                                            (String) friend.get("name"),
-                                                            (String) friend.get("first name"),
-                                                            (String) friend.get("user id"));
-                                                        Log.d(BetterUApplication.TAG+"main", "add to friendlist");
-                                                        ((BetterUApplication) getApplication()).addToFriendList(friendData);
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                    //Log.d(BetterUApplication.TAG+"FriendListMain", ((BetterUApplication) getApplication()).getFriendList().toString());
-                                } else {
-                                    Log.d(BetterUApplication.TAG, "No such document");
-                                }
-                            } else {
-                                Log.d(BetterUApplication.TAG, "get failed with ", task.getException());
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-        requestBatch.executeAsync();
-        */
 
         FBGraphAPICall meCall = FBGraphAPICall.callMe("name,first_name", new FBGraphAPICallback() {
             @Override
@@ -322,8 +203,6 @@ public class MainActivity extends AppCompatActivity
                         friendCollection.document(userId).set(friendMap, SetOptions.merge());
                     }
 
-                } else {
-                    //    showError(getString(R.string.error_fetching_profile));
                 }
             }
         });
@@ -342,7 +221,7 @@ public class MainActivity extends AppCompatActivity
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         //for 30 mint 60*60*1000
         alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 10000,
-                /*60*60*1000*/3*60*1000, pendingIntent);
+                60*60*1000, pendingIntent);
 
     }
 

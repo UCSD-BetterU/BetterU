@@ -8,41 +8,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dp"
-        android:weightSum="1">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
 
-        <ImageView
-            android:id="@+id/activity_icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_weight="0.12"
-            android:textAlignment="viewStart"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:src="@mipmap/ic_launcher" />
-
-        <TextView
-            android:id="@+id/activity_content"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.40"
-            android:textAlignment="viewStart"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Activity" />
+            android:layout_weight="1.5"
+            android:gravity="start">
+            <ImageView
+                android:id="@+id/activity_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@mipmap/ic_launcher" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/activity_ranking"
-            style="@style/TextAppearance.AppCompat.Small"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.32"
-            android:textAlignment="viewEnd"
-            android:textSize="20sp"
-            tools:text="Top 10%" />
+            android:layout_weight="3">
+            <TextView
+                android:id="@+id/activity_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textAlignment="viewStart"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Activity" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5.5">
+            <TextView
+                android:id="@+id/activity_ranking"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:textAlignment="viewEnd"
+                android:textSize="18sp"
+                tools:text="Top 10%" />
+        </LinearLayout>
 
     </LinearLayout>
 

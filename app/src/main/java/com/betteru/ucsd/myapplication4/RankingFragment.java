@@ -198,6 +198,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                         if(!document.exists()){
                             loadListView();
                             loadNoRecordView(true);
+                            spinner.setVisibility(View.GONE);
                         } else {
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
@@ -264,16 +265,18 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                                 }
                                 if(++kuser == nusers) {
-                                    Log.d("ha????", Integer.toString(kuser)+" "+Integer.toString(nusers));
+                                    Log.d("#users", Integer.toString(kuser)+" "+Integer.toString(nusers));
                                     for (String key: selfRankingData.keySet()) {
                                         HashMap<String,String> temp = new HashMap<>();
-                                        temp.put("Activity", key);
                                         float m = (float)rankingM.get(key);
                                         float n = (float)rankingN.get(key);
                                         float r = 100 *  m / n;
-                                        temp.put("Ranking", String.format("%.0f%%", r));
-                                        Log.d("checkcheck", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
-                                        list.add(temp);
+                                        if (n > 1) {
+                                            temp.put("Activity", key);
+                                            temp.put("Ranking", "Top "+String.format("%.0f%%", r)+" among "+(int)n+" users");
+                                            Log.d("ranking", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
+                                            list.add(temp);
+                                        }
                                     }
                                     loadListView();
                                     spinner.setVisibility(View.GONE);
