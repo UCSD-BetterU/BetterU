@@ -54,7 +54,7 @@ public class FriendsFragment extends Fragment {
     }
 
     private void loadListView() {
-        ListView listView = (ListView) view.findViewById(R.id.listView_friendsList);
+        ListView listView = view.findViewById(R.id.listView_friendsList);
         FriendsAdapter adapter = new FriendsAdapter(this.getActivity(), friendsList);
         listView.setAdapter(adapter);
     }

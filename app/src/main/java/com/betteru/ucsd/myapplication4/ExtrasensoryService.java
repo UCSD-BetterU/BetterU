@@ -90,8 +90,7 @@ public class ExtrasensoryService extends IntentService {
     }
 
     private void performAction() {
-        final DocumentReference docRef = db.collection("extrasensory").document(currentUser.getUserId());
-        final List<String> timestamps = new ArrayList<>();
+        DocumentReference docRef = db.collection("extrasensory").document(currentUser.getUserId());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -286,8 +285,6 @@ public class ExtrasensoryService extends IntentService {
 
     private List<Pair<String, Double>> getSpecificTimestampContent(String timestamp) {
 
-        //Log.d(BetterUApplication.TAG+"ESAtime", timestamp);
-
         if (_uuidPrefix == null || _uuidPrefix == NO_USER) {
             Log.d(BetterUApplication.TAG+"ESA", "no _uuidPrefix");
             return null;
@@ -302,14 +299,12 @@ public class ExtrasensoryService extends IntentService {
 
         String pairsStr = labelsAndProbs.size() + " labels:\n";
         for (Pair pair : labelsAndProbs) {
-            //   Log.d(BetterUApplication.TAG+"ESAdata", pair.first + " " + pair.second);
             pairsStr += pair.first + ": " + pair.second + "\n";
         }
 
         String textToPresent =
                 "Timestamp: " + timestamp + "\n\n" +
                         "Server predictions:\n" + pairsStr + "\n" + "-------------\n";
-        //Log.d(BetterUApplication.TAG+"ESA", textToPresent);
         return labelsAndProbs;
 
     }
@@ -330,7 +325,6 @@ public class ExtrasensoryService extends IntentService {
                 return null;
             }
             String fileSuffix = serverOrUser ? SERVER_PREDICTIONS_FILE_SUFFIX : USER_REPORTED_LABELS_FILE_SUFFIX;
-            //Log.d(BetterUApplication.TAG+"ESAfile", timestamp + " " + fileSuffix);
             File minuteLabelsFile = new File(esaFilesDir,timestamp + fileSuffix);
 
             // Check if file exists:
@@ -347,7 +341,6 @@ public class ExtrasensoryService extends IntentService {
                 text.append(line);
                 text.append('\n');
             }
-            //Log.d(BetterUApplication.TAG+"ESAdata", text.toString());
             bufferedReader.close() ;
             return text.toString();
 
@@ -409,7 +402,6 @@ public class ExtrasensoryService extends IntentService {
                             String label = labelTime.getKey();
                             Long time = (long) labelTime.getValue();
                             previousRecord.put(label, time);
-                            //Log.d(BetterUApplication.TAG + "ESAdownload", label + " " + String.valueOf(time));
                         }
                         Map<String, Map<String, Long>> timeOfLabels = new HashMap<>();
                         timeOfLabels.put(previousDate.first+previousDate.second, previousRecord);
@@ -431,13 +423,6 @@ public class ExtrasensoryService extends IntentService {
 
     private void uploadRecords(Map<String, List<Pair<String, Double>>> records, Map<String, Map<String, Long>> timeOfLabels) {
         timeOfLabels = addToTimeOfLabels(records, timeOfLabels);
-        for (Map.Entry<String, Map<String, Long>> a : timeOfLabels.entrySet()) {
-            //Log.d(BetterUApplication.TAG+"ESAtimedate", a.getKey());
-            for (Map.Entry<String, Long> b : a.getValue().entrySet()) {
-                //    Log.d(BetterUApplication.TAG+"ESAlabel", b.getKey());
-                //    Log.d(BetterUApplication.TAG+"ESAlabel", String.valueOf(b.getValue()));
-            }
-        }
         DocumentReference userRef = db.collection("extrasensory").document(currentUser.getUserId());
         Map<String, String> currentTimestampMap = new HashMap<>();
         currentTimestampMap.put("current_timestamp", currentTimestamp);
@@ -457,8 +442,6 @@ public class ExtrasensoryService extends IntentService {
         String formatted = format.format(date);
         String yearMonth = formatted.substring(0, 4) + formatted.substring(5, 7);
         String day = formatted.substring(8, 10);
-    //    Log.d(BetterUApplication.TAG+"yearmonth", yearMonth);
-    //    Log.d(BetterUApplication.TAG+"day", day);
         return new Pair<>(yearMonth, day);
     }
 
