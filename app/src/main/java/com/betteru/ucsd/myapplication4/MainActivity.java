@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_report) {
             fragmentClass = RRFragment.class;
         } else if (id == R.id.nav_challenge) {
-            fragmentClass = ChallengeFragment.class;
+            fragmentClass = ChallengePagerFragment.class;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
         }

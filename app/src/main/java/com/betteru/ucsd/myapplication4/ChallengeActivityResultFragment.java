@@ -42,9 +42,9 @@ import java.util.Map;
 
 public class ChallengeActivityResultFragment extends Fragment {
     static ChallengeModel data;
+    Boolean editable;
     View view;
     UserModel user;
-    ArrayList<Integer> winner_data;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<ArrayList<Integer>> result;
     @Override
@@ -59,6 +59,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         Log.i("challenge result", "on create view");
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
+        editable = (Boolean)args.getBoolean("editable");
         Log.d("DATA", Integer.toString(data.activitiesIcon.size()));
         view = inflater.inflate(R.layout.fragment_challenge_result, container, false);
         user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
@@ -112,6 +113,7 @@ public class ChallengeActivityResultFragment extends Fragment {
                 ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data);
+                args.putBoolean("editable", editable);
                 fragment.setArguments(args);
                 if(data.winner != null && !data.winner.isEmpty()) {
                     tx.hide(f);
@@ -156,10 +158,10 @@ public class ChallengeActivityResultFragment extends Fragment {
         Log.d("winner all data", result.toString());
         data.winner = new ArrayList<>();
         data.winner_name = new ArrayList<>();
-        winner_data = new ArrayList<Integer>();
+        data.winner_data = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
             int maxValue = Collections.max(result.get(i));
-            winner_data.add(maxValue);
+            data.winner_data.add(Integer.toString(maxValue));
             int maxIdx = result.get(i).lastIndexOf(maxValue);
             data.winner.add(participants.get(maxIdx));
             data.winner_name.add(participants_name.get(maxIdx));
@@ -175,7 +177,7 @@ public class ChallengeActivityResultFragment extends Fragment {
                 this.getActivity(),
                 nameList,
                 idList,
-                winner_data,
+                data.winner_data,
                 data.activities);
         listViewWinner.setAdapter(adapter);
     }

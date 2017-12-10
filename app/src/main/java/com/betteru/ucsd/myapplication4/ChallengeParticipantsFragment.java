@@ -11,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,19 +22,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import org.w3c.dom.Document;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by Yuting on 12/10/2017.
+ */
 
-public class ChallengeFragment extends Fragment {
+public class ChallengeParticipantsFragment extends Fragment {
 
     ArrayList<ChallengeModel> data = new ArrayList<>();
     View view;
@@ -49,16 +44,16 @@ public class ChallengeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Log.i("challenge fragment", "on create");
+        Log.i("challenge fragment participants", "on create");
         db = FirebaseFirestore.getInstance();
         user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("challenge fragment", "on create view");
+        Log.i("challenge fragment participants", "on create view");
         if(view == null) {
-            Log.i("challenge fragment", "view == null");
+            Log.i("challenge fragment participants", "view == null");
             view = inflater.inflate(R.layout.fragment_challenge, container, false);
             listView = (ListView) view.findViewById(R.id.ListView_challenge);
             adapter = new ChallengeAdapter(this.getActivity(), data);
@@ -81,8 +76,8 @@ public class ChallengeFragment extends Fragment {
         super.onResume();
     }
 
-    public static ChallengeFragment newInstance() {
-        ChallengeFragment fragment = new ChallengeFragment();
+    public static ChallengeParticipantsFragment newInstance() {
+        ChallengeParticipantsFragment fragment = new ChallengeParticipantsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -94,51 +89,90 @@ public class ChallengeFragment extends Fragment {
         else noRecordView.setVisibility(View.GONE);
     }
 
-    public void loadData(String userId){
+
+    public void loadData(String userId)
+    {
         showProgressDialog();
-        CollectionReference challengeRef;
-        Query query;
-        try {
-            challengeRef = db.collection("challenge");
-            query = challengeRef.whereEqualTo("owner", userId).orderBy("time", Query.Direction.DESCENDING);
-        }catch (Exception e)
-        {
-            Log.d("Exception", e.toString());
+        DocumentReference df;
+        try{
+            df = db.collection("challenge_user").document(userId);
+        }catch(Exception e){
+            Log.e("Exception", e.toString());
             return;
         }
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+        df.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task){
-                if(task.isSuccessful()){
-                    for (DocumentSnapshot document : task.getResult()) {
-
-                            Map<String, Object> obj = document.getData();
-                            ChallengeModel temp = new ChallengeModel(
-                                    (String) obj.get("owner"),
-                                    (String) obj.get("title"),
-                                    (String) obj.get("time"),
-                                    (ArrayList<String>) obj.get("participants"),
-                                    (ArrayList<String>) obj.get("participants_name"),
-                                    (ArrayList<String>) obj.get("activities"));
-                            if(obj.containsKey("winner")){
-                                    temp.setWinner(
-                                            (ArrayList<String>) obj.get("winner"),
-                                            (ArrayList<String>) obj.get("winner_name"),
-                                            (ArrayList<String>) obj.get("winner_data"));
-                            }
-                            temp.setId(document.getId());
-                            data.add(temp);
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Map<String, Object> obj = document.getData();
+                        ArrayList<String> docIdList = new ArrayList<>();
+                        for(String id : obj.keySet())
+                            docIdList.add(id);
+                        Log.d("challenge data", docIdList.toString());
+                        if(!docIdList.isEmpty()) {
+                            loadParticipantData(docIdList, 0);
+                        }
+                    } else {
+                        Log.d("challenge data", "No such document");
                     }
-                    loadNoRecordView(false);
-                }else {
-                    loadNoRecordView(true);
+                }else{
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
+            }
+        });
+    }
+    public void loadParticipantData(final ArrayList<String> idList, final Integer idx)
+    {
+        DocumentReference df;
+        try{
+            df = db.collection("challenge").document(idList.get(idx));
+        }catch(Exception e){
+            Log.e("Exception", e.toString());
+            return;
+        }
+        df.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        Map<String, Object> obj = document.getData();
+                        ChallengeModel temp = new ChallengeModel(
+                                (String) obj.get("owner"),
+                                (String) obj.get("title"),
+                                (String) obj.get("time"),
+                                (ArrayList<String>) obj.get("participants"),
+                                (ArrayList<String>) obj.get("participants_name"),
+                                (ArrayList<String>) obj.get("activities"));
+                        if(obj.containsKey("winner")){
+                            temp.setWinner(
+                                    (ArrayList<String>) obj.get("winner"),
+                                    (ArrayList<String>) obj.get("winner_name"),
+                                    (ArrayList<String>) obj.get("winner_data"));
+                        }
+                        temp.setId(document.getId());
+                        data.add(temp);
+                        if(idx+1 == idList.size()) {
+                            Log.d("challenge data", data.toString());
+                        }
+                        else
+                            loadParticipantData(idList, idx+1);
+                    } else {
+                        Log.d("challenge data", "No such document");
+                    }
+                }else{
+                    Log.d("Data in Cloud", "Error getting documents" , task.getException());
+                }
+                loadNoRecordView(false);
                 loadListView();
                 hideProgressDialog();
             }
         });
     }
+
+
     public void loadListView() {
         final Fragment f = this;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -150,11 +184,11 @@ public class ChallengeFragment extends Fragment {
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
-                args.putBoolean("editable", true);
+                args.putBoolean("editable", false);
                 //args.putSerializable("data", data_participant.get(position));
                 fragment.setArguments(args);
-                fragmentTransaction.add(R.id.fragmentContent, fragment);
-                //fragmentTransaction.replace(R.layout.fragment_challenge, fragment);
+                fragmentTransaction.replace(R.id.fragmentContent,fragment);
+                //fragmentTransaction.replace(R.id.toolbar, fragment);
                 /*
                 fragmentTransaction.hide(f);
                 fragmentTransaction.add(R.id.fragmentContent, fragment);

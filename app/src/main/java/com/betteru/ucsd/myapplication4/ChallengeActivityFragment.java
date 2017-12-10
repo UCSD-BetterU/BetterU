@@ -49,6 +49,7 @@ import static android.content.ContentValues.TAG;
 public class ChallengeActivityFragment extends Fragment
         implements DatePickerDialog.OnDateSetListener{
     static ChallengeModel data;
+    Boolean editable;
     View view;
     public final static int EDITDIALOG_FRAGMENT = 1;
     public final static int EDIT_ACTIVITY_FRAGMENT = 2;
@@ -61,13 +62,15 @@ public class ChallengeActivityFragment extends Fragment
         // Inflate the layout for this fragment
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
+        editable = (Boolean)  args.getBoolean("editable");
         Log.d("DATA", Integer.toString(data.activitiesIcon.size()));
         view = inflater.inflate(R.layout.fragment_challenge_detail, container, false);
         loadChallengeName();
         loadChallengeDate();
         loadChallengeParticipants();
         loadChallengeActivities();
-        loadEditButton();
+        if(editable)
+            loadEditButton();
         return view;
     }
     public void loadEditButton(){
@@ -99,7 +102,27 @@ public class ChallengeActivityFragment extends Fragment
             }
         });
     }
-
+    public void submitChallengeParticipants(String docId, ArrayList<String> participants){
+        final Fragment f = this;
+        DocumentReference ref = db.collection("challenge_data").document();
+        Map<String, Object> dataMap = new HashMap<>();
+        for(int i = 0; i < participants.size(); i++)
+            dataMap.put(participants.get(i),1);
+        Log.d("submit challenge participants", docId);
+        db.collection("challenge_data").document(docId).set(dataMap)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("challenge participants", "DocumentSnapshot successfully written!");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("challenge participants", "Error writing document", e);
+                }
+            });
+    }
     public void submitChallenge(){
         final Fragment f = this;
         showProgressDialog();
@@ -122,6 +145,7 @@ public class ChallengeActivityFragment extends Fragment
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                submitChallengeParticipants(data.id, data.participants);
                 Log.d("challenge", "DocumentSnapshot successfully written!");
             }
         })

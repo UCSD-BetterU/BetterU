@@ -35,10 +35,11 @@
             android:id="@+id/imageView_winner"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_alignEnd="@+id/textView_winner"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="19dp"
             android:layout_weight="1"
+            android:padding="10dp"
             app:srcCompat="@drawable/first_place_1" />
 
         <TextView
@@ -54,10 +55,11 @@
 
         <TextView
             android:id="@+id/textView_winner_act"
-            android:layout_width="120dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_winner"
+            android:layout_alignBottom="@+id/profileView_winner"
             android:layout_below="@+id/textView_winner"
+            android:layout_toEndOf="@+id/profileView_winner"
             android:layout_weight="1"
             android:paddingTop="5dp"
             android:text="Running"
@@ -65,6 +67,19 @@
             android:textAllCaps="true"
             tools:layout_editor_absoluteX="79dp"
             tools:layout_editor_absoluteY="44dp" />
+
+        <TextView
+            android:id="@+id/textView_winner_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView_winner_act"
+            android:layout_below="@+id/textView_winner"
+            android:layout_toEndOf="@+id/textView_winner_act"
+            android:layout_toStartOf="@+id/imageView_winner"
+            android:paddingTop="5dp"
+            android:text="TextView"
+            android:textAlignment="viewStart"
+            android:textAllCaps="true" />
 
     </RelativeLayout>
 

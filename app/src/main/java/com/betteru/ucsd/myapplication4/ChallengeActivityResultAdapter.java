@@ -20,13 +20,14 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
     ArrayList<String> nameList;
     ArrayList<String> activityList;
     ArrayList<String> idList;
-    ArrayList<Integer> dataList;
+    ArrayList<String> dataList;
     Activity activity;
     ProfilePictureView profile;
     TextView txtActivity;
     TextView txtName;
+    TextView txtData;
 
-    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<Integer> dataList, ArrayList<String> activityList){
+    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<String> dataList, ArrayList<String> activityList){
         super();
         this.activity =activity;
         this.nameList = nameList;
@@ -58,12 +59,12 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
         txtActivity = (TextView) convertView.findViewById(R.id.textView_winner_act);
         txtName = (TextView) convertView.findViewById(R.id.textView_winner);
         profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_winner);
-
+        txtData = (TextView) convertView.findViewById(R.id.textView_winner_data);
         txtName.setText(nameList.get(position));
         profile.setProfileId(idList.get(position));
         profile.setCropped(true);
-        txtActivity.setText(activityList.get(position).toUpperCase() + " " +
-                Integer.toString(dataList.get(position)) + " MIN");
+        txtActivity.setText(activityList.get(position).toUpperCase());
+        txtData.setText(dataList.get(position) + " MIN");
         return convertView;
     }
 }

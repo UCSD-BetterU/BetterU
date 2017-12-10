@@ -131,4 +131,7 @@
     <string name="PhoneOnTable">Phone on table</string>
     <string name="WithCoworkers">With co-workers</string>
     <string name="WithFriends">With friends</string>
+
+    <string name="ChallengeOwner">I am owner</string>
+    <string name="ChallengeParticipants">I am participants</string>
 </resources>

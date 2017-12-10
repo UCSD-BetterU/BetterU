@@ -19,6 +19,7 @@ public class ChallengeModel implements Serializable {
     ArrayList<String> participants_name;
     ArrayList<String> winner;
     ArrayList<String> winner_name;
+    ArrayList<String> winner_data;
     ArrayList<Integer> activitiesIcon;
     LocalDate date;
     String id;
@@ -58,8 +59,9 @@ public class ChallengeModel implements Serializable {
 
     }
 
-    public void setWinner(ArrayList<String> winner, ArrayList<String> winner_name){
+    public void setWinner(ArrayList<String> winner, ArrayList<String> winner_name, ArrayList<String> winner_data){
         this.winner = winner;
         this.winner_name = winner_name;
+        this.winner_data = winner_data;
     }
 }
