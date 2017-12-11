@@ -78,6 +78,8 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        calendar.add(Calendar.DATE, -1);
+
         currentFBUser = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
         userId = currentFBUser.getUserId();
 

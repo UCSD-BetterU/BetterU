@@ -69,6 +69,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        calendar.add(Calendar.DATE, -1);
         currentFBUser = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
         userId = currentFBUser.getUserId();
 

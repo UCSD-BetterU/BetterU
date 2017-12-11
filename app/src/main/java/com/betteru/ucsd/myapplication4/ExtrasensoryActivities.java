@@ -9,7 +9,7 @@ public class ExtrasensoryActivities {
         this.map = new HashMap<>();
 
         this.map.put("Lying down",
-                new ExtrasensoryActivity("lying down", "Lying Down",1, R.drawable.lying_down, 0));
+                new ExtrasensoryActivity("lying down", "Lying",1, R.drawable.lying_down, 0));
         this.map.put("Sitting",
                 new ExtrasensoryActivity("sitting", "Sitting", 1, R.drawable.sitting, 1));
         this.map.put("Standing",
@@ -23,11 +23,11 @@ public class ExtrasensoryActivities {
         this.map.put("Sleeping",
                 new ExtrasensoryActivity("Sleeping", "sleeping", 2, R.drawable.sleep, 6));
         this.map.put("Lab work",
-                new ExtrasensoryActivity("doing lab work", "Lab Work", 2, R.drawable.labwork, 7));
+                new ExtrasensoryActivity("doing lab work", "Lab", 2, R.drawable.labwork, 7));
         this.map.put("In class",
-                new ExtrasensoryActivity("in class", "In A Class", 2, R.drawable.inclass, 8));
+                new ExtrasensoryActivity("in class", "Class", 2, R.drawable.inclass, 8));
         this.map.put("In a meeting",
-                new ExtrasensoryActivity("in meetings", "In A Meeting", 2, R.drawable.inmeeting, 9));
+                new ExtrasensoryActivity("in meetings", "Meeting", 2, R.drawable.inmeeting, 9));
         this.map.put("At work",
                 new ExtrasensoryActivity("at work", "Work", 3, R.drawable.atwork, 10));
         this.map.put("Indoors",
@@ -65,23 +65,23 @@ public class ExtrasensoryActivities {
         this.map.put("Doing laundry",
                 new ExtrasensoryActivity("doing laundry", "Laundry", 2, R.drawable.laundry, 27));
         this.map.put("Washing dishes",
-                new ExtrasensoryActivity("washing dishes", "Washing Dishes", 2, R.drawable.washing_dishes, 28));
+                new ExtrasensoryActivity("washing dishes", "Dishes", 2, R.drawable.washing_dishes, 28));
         this.map.put("Watching TV",
-                new ExtrasensoryActivity("watching TV", "Watching TV", 2, R.drawable.tv, 29));
+                new ExtrasensoryActivity("watching TV", "TV", 2, R.drawable.tv, 29));
         this.map.put("Surfing the internet",
-                new ExtrasensoryActivity("surfing the Internet", "Surfing the Internet", 2, R.drawable.surfing_the_internet, 30));
+                new ExtrasensoryActivity("surfing the Internet", "Internet", 2, R.drawable.surfing_the_internet, 30));
         this.map.put("At a party",
-                new ExtrasensoryActivity("at a party", "At A Party", 2, R.drawable.at_a_party, 31));
+                new ExtrasensoryActivity("at a party", "Party", 2, R.drawable.at_a_party, 31));
         this.map.put("At a bar",
-                new ExtrasensoryActivity("at a bar", "At A Bar", 2, R.drawable.at_the_bar, 32));
+                new ExtrasensoryActivity("at a bar", "Bar", 2, R.drawable.at_the_bar, 32));
         this.map.put("At the beach",
-                new ExtrasensoryActivity("at the beach", "At the Beach",2, R.drawable.at_the_beach, 33));
+                new ExtrasensoryActivity("at the beach", "Beach",2, R.drawable.at_the_beach, 33));
         this.map.put("Singing",
                 new ExtrasensoryActivity("singing", "Singing", 2, R.drawable.singing, 34));
         this.map.put("Talking",
                 new ExtrasensoryActivity("talking", "Talking", 2, R.drawable.talking, 35));
         this.map.put("Computer work",
-                new ExtrasensoryActivity("computer work", "Computer Work",2, R.drawable.computer_work, 36));
+                new ExtrasensoryActivity("computer work", "Computer",2, R.drawable.computer_work, 36));
         this.map.put("Eating",
                 new ExtrasensoryActivity("eating", "Eating", 2, R.drawable.eating, 37));
         this.map.put("Toilet",
@@ -91,25 +91,25 @@ public class ExtrasensoryActivities {
         this.map.put("Dressing",
                 new ExtrasensoryActivity("dressing", "Dressing", 2, R.drawable.dressing, 40));
         this.map.put("At the gym",
-                new ExtrasensoryActivity("at the gym", "At The Gym", 2, R.drawable.at_the_gym, 41));
+                new ExtrasensoryActivity("at the gym", "Gym", 2, R.drawable.at_the_gym, 41));
         this.map.put("Stairs - going up",
-                new ExtrasensoryActivity("going up stairs", "Going Up Stairs", 2, R.drawable.stairs_up, 42));
+                new ExtrasensoryActivity("going up stairs", "Stairs(Up)", 2, R.drawable.stairs_up, 42));
         this.map.put("Stairs - going down",
-                new ExtrasensoryActivity("going down stairs", "Going Down Stairs", 2, R.drawable.stairs_down, 43));
+                new ExtrasensoryActivity("going down stairs", "Stairs(Down)", 2, R.drawable.stairs_down, 43));
         this.map.put("Elevator",
                 new ExtrasensoryActivity("taking an elevator", "Elevator", 2, R.drawable.elevator, 44));
         this.map.put("Phone in pocket",
-                new ExtrasensoryActivity("phone in pocket", "Phone In Pocket",4, R.drawable.phone_in_pocket, 45));
+                new ExtrasensoryActivity("phone in pocket", "Pocket",4, R.drawable.phone_in_pocket, 45));
         this.map.put("Phone in hand",
-                new ExtrasensoryActivity("phone in hand", "Phone In Hand", 4, R.drawable.phone_in_hand, 46));
+                new ExtrasensoryActivity("phone in hand", "Hand", 4, R.drawable.phone_in_hand, 46));
         this.map.put("Phone in bag",
-                new ExtrasensoryActivity("phone in bag", "Phone In Bag", 4, R.drawable.phone_in_bag, 47));
+                new ExtrasensoryActivity("phone in bag", "Bag", 4, R.drawable.phone_in_bag, 47));
         this.map.put("Phone on table",
-                new ExtrasensoryActivity("phone on table", "Phone On Table", 4, R.drawable.phone_on_table, 48));
+                new ExtrasensoryActivity("phone on table", "Table", 4, R.drawable.phone_on_table, 48));
         this.map.put("With co-workers",
-                new ExtrasensoryActivity("with co-workers", "With Co-workers", 2, R.drawable.with_coworkers, 49));
+                new ExtrasensoryActivity("with co-workers", "Co-workers", 2, R.drawable.with_coworkers, 49));
         this.map.put("With friends",
-                new ExtrasensoryActivity("with friends", "With Friends", 2, R.drawable.with_friends, 50));
+                new ExtrasensoryActivity("with friends", "Friends", 2, R.drawable.with_friends, 50));
     }
 
 
