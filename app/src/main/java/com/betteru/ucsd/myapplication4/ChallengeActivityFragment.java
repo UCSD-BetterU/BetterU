@@ -253,7 +253,6 @@ public class ChallengeActivityFragment extends Fragment
         date.setText(data.sdf.format(data.date.getTime()));
     }
     public void loadChallengeParticipants() {
-        //set GridView
         ArrayList<String> name = new ArrayList<String>();
         ArrayList<String> id = new ArrayList<String>();
 

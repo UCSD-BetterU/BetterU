@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Yuting on 11/3/2017.
  */
 
-public class ChallengeModel implements Serializable {
+public class ChallengeModel implements Serializable, Comparable<ChallengeModel> {
     String ownerId;
     String owner_name;
     String title;
@@ -76,5 +76,19 @@ public class ChallengeModel implements Serializable {
         this.winner = winner;
         this.winner_name = winner_name;
         this.winner_data = winner_data;
+    }
+
+    @Override
+    public int compareTo(ChallengeModel f) {
+
+        if (date.before(f.date)) {
+            return 1;
+        }
+        else if (date.after(f.date)) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
 }
