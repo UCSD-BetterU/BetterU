@@ -145,7 +145,7 @@ public class ChallengeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
                 //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
@@ -153,7 +153,7 @@ public class ChallengeFragment extends Fragment {
                 args.putBoolean("editable", true);
                 //args.putSerializable("data", data_participant.get(position));
                 fragment.setArguments(args);
-                fragmentTransaction.add(R.id.fragmentContent, fragment);
+                fragmentTransaction.replace(R.id.fragmentContent, fragment);
                 //fragmentTransaction.replace(R.layout.fragment_challenge, fragment);
                 /*
                 fragmentTransaction.hide(f);
@@ -181,7 +181,7 @@ public class ChallengeFragment extends Fragment {
                 new ArrayList<String>(),
                 new ArrayList<String>(),
                 new ArrayList<String>());
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
         ChallengeActivityFragment fragment = new ChallengeActivityFragment();
         Bundle args = new Bundle();
         args.putSerializable("data",newChallenge);

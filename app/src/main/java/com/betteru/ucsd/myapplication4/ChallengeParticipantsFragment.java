@@ -179,7 +179,7 @@ public class ChallengeParticipantsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
                 //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
@@ -215,7 +215,7 @@ public class ChallengeParticipantsFragment extends Fragment {
                 new ArrayList<String>(),
                 new ArrayList<String>(),
                 new ArrayList<String>());
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
         ChallengeActivityFragment fragment = new ChallengeActivityFragment();
         Bundle args = new Bundle();
         args.putSerializable("data",newChallenge);
