@@ -27,7 +27,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -300,7 +299,12 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
 
                                 BarDataSet barDataSet = new BarDataSet(BARENTRY, "Top "+(nr2+1)+" Activities");
                                 BarData barData = new BarData(BarEntryLabels, barDataSet);
-                                barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+                                int colors[] = {getContext().getColor(R.color.bar1),
+                                        getContext().getColor(R.color.bar2),
+                                        getContext().getColor(R.color.bar3),
+                                        getContext().getColor(R.color.bar4),
+                                        getContext().getColor(R.color.bar5)};
+                                barDataSet.setColors(colors);//ColorTemplate.JOYFUL_COLORS);
                                 barChart.setData(barData);
                                 barChart.setDescription("");
                                 chart1.getLayoutParams().height = (nr2+1) * 160 + 100;
@@ -323,8 +327,14 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
                                         k1++;
                                     }
                                 }
-                                PieDataSet pieDataSet1 = new PieDataSet(pieY1, "Status");
-                                pieDataSet1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+                                PieDataSet pieDataSet1 = new PieDataSet(pieY1, "");
+                                int colors[] = {getContext().getColor(R.color.pieA1),
+                                        getContext().getColor(R.color.pieA2),
+                                        getContext().getColor(R.color.pieA3),
+                                        getContext().getColor(R.color.pieA4),
+                                        getContext().getColor(R.color.pieA5),
+                                        getContext().getColor(R.color.pieA6)};
+                                pieDataSet1.setColors(colors);//ColorTemplate.VORDIPLOM_COLORS);
                                 PieData pieData1 = new PieData(pieX1, pieDataSet1);
                                 //pieData1.setValueFormatter(new PercentFormatter());
                                 pieData1.setValueFormatter(new PercentFormatter() {
@@ -357,8 +367,16 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
                                         k3++;
                                     }
                                 }
-                                PieDataSet pieDataSet2 = new PieDataSet(pieY2, "Locations");
-                                pieDataSet2.setColors(ColorTemplate.PASTEL_COLORS);
+                                PieDataSet pieDataSet2 = new PieDataSet(pieY2, "");
+                                int colors[] = {getContext().getColor(R.color.pieB1),
+                                        getContext().getColor(R.color.pieB2),
+                                        getContext().getColor(R.color.pieB3),
+                                        getContext().getColor(R.color.pieB4),
+                                        getContext().getColor(R.color.pieB5),
+                                        getContext().getColor(R.color.pieB6),
+                                        getContext().getColor(R.color.pieB7),
+                                        getContext().getColor(R.color.pieB8)};
+                                pieDataSet2.setColors(colors);//ColorTemplate.PASTEL_COLORS);
                                 PieData pieData2 = new PieData(pieX2, pieDataSet2);
                                 //pieData2.setValueFormatter(new PercentFormatter());
                                 pieData2.setValueFormatter(new PercentFormatter() {

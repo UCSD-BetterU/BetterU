@@ -13,4 +13,26 @@
     <color name="rankingA">#336633</color>
     <color name="rankingB">#669933</color>
     <color name="rankingC">#99CC99</color>
+
+    <color name="bar1">#fea3aa</color>
+    <color name="bar2">#f8b88b</color>
+    <color name="bar3">#fce06d</color>
+    <color name="bar4">#baed91</color>
+    <color name="bar5">#b2cefe</color>
+
+    <color name="pieA1">#fbf4c5</color>
+    <color name="pieA2">#edf8b1</color>
+    <color name="pieA3">#c7e9b4</color>
+    <color name="pieA4">#7fcdbb</color>
+    <color name="pieA5">#41b6c4</color>
+    <color name="pieA6">#1d91c0</color>
+
+    <color name="pieB1">#cf5f3b</color>
+    <color name="pieB2">#e78166</color>
+    <color name="pieB3">#f4a582</color>
+    <color name="pieB4">#fddbc7</color>
+    <color name="pieB5">#e0f3f8</color>
+    <color name="pieB6">#abd9e9</color>
+    <color name="pieB7">#74add1</color>
+    <color name="pieB8">#4575b4</color>
 </resources>
