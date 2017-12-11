@@ -146,7 +146,7 @@ public class ChallengeParticipantsFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document != null) {
+                    if (document.exists() && document != null) {
                         Map<String, Object> obj = document.getData();
                         ChallengeModel temp = new ChallengeModel(
                                 (String) obj.get("owner"),
