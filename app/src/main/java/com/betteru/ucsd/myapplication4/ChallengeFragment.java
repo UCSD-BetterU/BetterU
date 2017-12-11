@@ -77,7 +77,6 @@ public class ChallengeFragment extends Fragment {
             adapter.notifyDataSetChanged();
             loadListView();
         }
-        loadNewChallengeButton();
         super.onResume();
     }
 
@@ -151,7 +150,6 @@ public class ChallengeFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
                 args.putBoolean("editable", true);
-                //args.putSerializable("data", data_participant.get(position));
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
                 //fragmentTransaction.replace(R.layout.fragment_challenge, fragment);
@@ -163,35 +161,6 @@ public class ChallengeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-    }
-
-    public void loadNewChallengeButton(){
-        FloatingActionButton button = view.findViewById(R.id.button_challenge_add);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                newChallenge();
-            }
-        });
-    }
-    private void newChallenge(){
-        String timeStamp = date.now().format(ChallengeModel.formatter);
-        ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
-                "Input Challenge Name",
-                timeStamp,
-                new ArrayList<String>(),
-                new ArrayList<String>(),
-                new ArrayList<String>());
-        FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
-        ChallengeActivityFragment fragment = new ChallengeActivityFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("data",newChallenge);
-        args.putBoolean("editable", true);
-        fragment.setArguments(args);
-        fragmentTransaction.replace(R.id.fragmentContent, fragment);
-        //fragmentTransaction.hide(this);
-        //fragmentTransaction.add(R.id.fragmentContent, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 
     public ProgressDialog mProgressDialog;

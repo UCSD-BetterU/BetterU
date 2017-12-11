@@ -32,14 +32,7 @@
         </ListView>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_challenge_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_add"
-        app:srcCompat="@android:drawable/ic_media_next" />
+
 
 
 </FrameLayout>

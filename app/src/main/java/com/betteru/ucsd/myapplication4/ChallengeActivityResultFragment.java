@@ -201,7 +201,7 @@ public class ChallengeActivityResultFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
-                    if (document != null) {
+                    if (document.exists() && document != null) {
                         Map<String, Object> obj = document.getData();
                         Log.d("winner data", obj.toString());
                         for(int i = 0; i < activity.size(); i++)
@@ -245,6 +245,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         dataMap.put("title", data.title);
         dataMap.put("winner", data.winner);
         dataMap.put("winner_name", data.winner_name);
+        dataMap.put("winner_data", data.winner_data);
         Log.d("challenge", data.id);
         db.collection("challenge").document(data.id).set(dataMap, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
