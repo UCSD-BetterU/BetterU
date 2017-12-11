@@ -204,7 +204,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                         break;
                                     case 2:
                                         if (timeSpent2.containsKey(time)) {
-                                            timeSpent2.put(time, timeSpent3.get(time)+";"+key);
+                                            timeSpent2.put(time, timeSpent2.get(time)+";"+key);
                                         } else {
                                             timeSpent2.put(time, key);
                                         }
@@ -244,43 +244,48 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                             if(!timeSpent2.isEmpty()) {
                                 NavigableMap<Long, String> descMap2 = timeSpent2.descendingMap();
                                 int k2 = 0;
-                                ArrayList<String> top3label = new ArrayList<>();
+                                int nr2 = -1;
+                                ArrayList<String> top3text = new ArrayList<>();
                                 ArrayList<Long> top3time = new ArrayList<>();
                                 for (NavigableMap.Entry<Long, String> entry : timeSpent2.entrySet()) {
                                     String [] acts = entry.getValue().split(";");
                                     for (String act : acts) {
+                                        k2++;
+                                        if(nact2-k2>=15){continue;}
+                                        nr2++;
                                         String label = activities.map.get(act).getLabel();
+                                        String text = activities.map.get(act).getText();
                                         BarEntryLabels.add(label);
-                                        BARENTRY.add(new BarEntry(entry.getKey(), k2));
-                                        if((nact2-k2)<=3){
-                                            top3label.add(label);
+                                        BARENTRY.add(new BarEntry(entry.getKey(), nr2));
+                                        if((nact2-k2)<3){
+                                            top3text.add(text);
                                             top3time.add(entry.getKey());
                                         }
-                                        k2++;
                                     }
                                 }
-                                int topK = top3label.size();
+                                int topK = top3text.size();
                                 if (topK > 0) {
                                     textView1.setVisibility(View.VISIBLE);
                                     medal_1.setVisibility(View.VISIBLE);
-                                    text_1.setText("You spent " + top3time.get(2) + " min " + top3label.get(2));
+                                    text_1.setText("You spent " + top3time.get(topK-1) + " min " + top3text.get(topK-1));
                                 }
                                 if (topK > 1) {
                                     textView2.setVisibility(View.VISIBLE);
                                     medal_2.setVisibility(View.VISIBLE);
-                                    text_2.setText("You spent " + top3time.get(1) + " min " + top3label.get(1));
+                                    text_2.setText("You spent " + top3time.get(topK-2) + " min " + top3text.get(topK-2));
                                 }
                                 if (topK > 2) {
                                     textView2.setVisibility(View.VISIBLE);
                                     medal_3.setVisibility(View.VISIBLE);
-                                    text_3.setText("You spent " + top3time.get(0) + " min " + top3label.get(0));
+                                    text_3.setText("You spent " + top3time.get(topK-3) + " min " + top3text.get(topK-3));
                                 }
-                                BarDataSet barDataSet = new BarDataSet(BARENTRY, "Activities");
+
+                                BarDataSet barDataSet = new BarDataSet(BARENTRY, "Top "+(nr2+1)+" Activities");
                                 BarData barData = new BarData(BarEntryLabels, barDataSet);
                                 barDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
                                 barChart.setData(barData);
                                 barChart.setDescription("");
-                                chart1.getLayoutParams().height = k2 * 160 + 100;
+                                chart1.getLayoutParams().height = (nr2+1) * 160 + 100;
                                 spinner.setVisibility(View.GONE);
                                 chart1.setVisibility(View.VISIBLE);
                                 barChart.animateY(2000);
@@ -310,7 +315,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                         return Float.toString(entry.getVal());
                                     }
                                 });
-                                pieData1.setValueTextSize(11f);
+                                pieData1.setValueTextSize(10f);
                                 pieChart1.setData(pieData1);
                                 pieChart1.setDescription("");
                                 pieChart1.setHoleColor(Color.parseColor("#f5f5f5"));
@@ -344,7 +349,7 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                                         return Float.toString(entry.getVal());
                                     }
                                 });
-                                pieData2.setValueTextSize(11f);
+                                pieData2.setValueTextSize(10f);
                                 pieChart2.setData(pieData2);
                                 pieChart2.setDescription("");
                                 pieChart2.setHoleColor(Color.parseColor("#f5f5f5"));

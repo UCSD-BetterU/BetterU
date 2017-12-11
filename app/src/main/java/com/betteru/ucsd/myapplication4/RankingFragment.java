@@ -160,7 +160,6 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                     if (document != null) {
                         if (!document.exists()) {
                             Log.d("Data in Cloud", "no preferences");
-                            spinner.setVisibility(View.GONE);
                             loadNoRecordView(true);
                             noRecordView.setText("No Ranking Preferences");
                         } else {
@@ -198,10 +197,12 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                         if(!document.exists()){
                             loadListView();
                             loadNoRecordView(true);
-                            spinner.setVisibility(View.GONE);
                         } else {
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
+                            if (obj.isEmpty()) {
+                                loadNoRecordView(true);
+                            }
                             for (String key : obj.keySet()) {
                                 if (!activities.map.containsKey(key)) {
                                     continue;
@@ -306,7 +307,6 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                         if(!document.exists()){
                             loadListView();
                             loadNoRecordView(true);
-                            spinner.setVisibility(View.GONE);
                         } else {
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
@@ -372,7 +372,9 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         });
     }
     private void loadNoRecordView(Boolean flag){
+        spinner.setVisibility(View.GONE);
         if(flag == true) noRecordView.setVisibility(View.VISIBLE);
+        else noRecordView.setVisibility(View.GONE);
     }
     private void loadListView(){
         ListView listView=(ListView) getView().findViewById(R.id.rankingListView);
