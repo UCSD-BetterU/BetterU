@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +22,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.betteru.ucsd.myapplication4.DatePickerFragment;
 import com.betteru.ucsd.myapplication4.R;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -324,7 +321,11 @@ public class ChallengeDetailFragment extends Fragment
             builder.setView(dialogView);
             EditText edit = (EditText) dialogView.findViewById(R.id.editText_challenge_name);
             String challengeName = getArguments().getString("challengeName");
-            edit.setText(challengeName);
+            if (challengeName.equals("Input Challenge Name")) {
+                edit.setHint(challengeName);
+            } else {
+                edit.setText(challengeName);
+            }
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     EditText edit = (EditText) dialogView.findViewById(R.id.editText_challenge_name);
