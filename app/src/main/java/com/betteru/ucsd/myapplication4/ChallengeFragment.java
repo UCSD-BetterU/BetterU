@@ -81,7 +81,7 @@ public class ChallengeFragment extends Fragment {
     }
 
     public void loadNoRecordView(Boolean flag){
-        TextView noRecordView = (TextView) getView().findViewById(R.id.textView_noChallengeRecord);
+        TextView noRecordView = (TextView) view.findViewById(R.id.textView_noChallengeRecord);
         if(flag == true) noRecordView.setVisibility(View.VISIBLE);
         else noRecordView.setVisibility(View.GONE);
     }
