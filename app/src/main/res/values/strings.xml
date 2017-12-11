@@ -132,6 +132,6 @@
     <string name="WithCoworkers">With co-workers</string>
     <string name="WithFriends">With friends</string>
 
-    <string name="ChallengeOwner">I am challenger</string>
+    <string name="ChallengeOwner">I am the host</string>
     <string name="ChallengeParticipants">I am participants</string>
 </resources>
