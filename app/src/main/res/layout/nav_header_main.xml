@@ -16,15 +16,17 @@
         android:id="@+id/userProfile"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:foreground="@drawable/circle_green"/>
+        android:foreground="@drawable/circle_green"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/userName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingLeft="6dp"
         android:text="John Snow"
+        android:layout_gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 
