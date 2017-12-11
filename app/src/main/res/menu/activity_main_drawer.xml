@@ -6,15 +6,19 @@
             android:id="@+id/nav_goal"
             android:title="Goal" /> -->
         <item
+            android:icon="@drawable/report_icon"
             android:id="@+id/nav_report"
             android:title="Report" />
         <item
+            android:icon="@drawable/challenge_icon"
             android:id="@+id/nav_challenge"
             android:title="Challenge" />
         <item
+            android:icon="@drawable/friend_icon"
             android:id="@+id/nav_friends"
             android:title="Friends" />
         <item
+            android:icon="@drawable/logout_icon"
             android:id="@+id/nav_logout"
             android:title="Log Out" />
     </group>
