@@ -54,7 +54,6 @@ public class ChallengeActivityListFragment extends Fragment {
         return view;
     }
     private void chooseActivity(){
-        //String[] list = getResources().getStringArray(R.array.challenge_activity_array);
         String[] list = ChallengeActivityEnum.getAllName();
         adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_multiple_choice, list);
         listView.setAdapter(adapter);

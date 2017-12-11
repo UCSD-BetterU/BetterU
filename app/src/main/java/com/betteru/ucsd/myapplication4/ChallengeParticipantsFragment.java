@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -64,8 +65,9 @@ public class ChallengeParticipantsFragment extends Fragment {
     @Override
     public void onResume(){
         Log.i("challenge list", Integer.toString(data.size()));
-        if(data.isEmpty())
+        if(data.isEmpty()) {
             loadData(user.getUserId());
+        }
         else {
             loadNoRecordView(false);
             adapter.refresh(data);
@@ -125,6 +127,7 @@ public class ChallengeParticipantsFragment extends Fragment {
     public void loadParticipantData(final ArrayList<String> idList, final Integer idx)
     {
         if(idx == idList.size()){
+            Collections.sort(data);
             loadNoRecordView(false);
             loadListView();
             hideProgressDialog();
