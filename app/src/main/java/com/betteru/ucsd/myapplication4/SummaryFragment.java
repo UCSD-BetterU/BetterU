@@ -133,6 +133,7 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
         todayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE,-1);
                 load(userId, calendar);
             }
         });
@@ -176,6 +177,21 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
         timeSpent2.clear();
         timeSpent3.clear();
         nact2 = 0;
+
+        /*db.collection("extrasensory").document(userId).collection("201711").document("14")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null) {
+                    if (!document.exists()) {
+                    } else {
+                        Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
+                        Map<String, Object> obj = document.getData();
+                        db.collection("extrasensory").document("user0"+k).collection("201712").document("08").update(obj);
+                    }}}}});*/
+
         dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){

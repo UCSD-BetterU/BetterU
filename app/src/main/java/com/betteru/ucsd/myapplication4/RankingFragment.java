@@ -105,6 +105,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         todayButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE,-1);
                 load(userId, calendar);
             }
         });

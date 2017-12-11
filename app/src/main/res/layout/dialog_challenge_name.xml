@@ -10,6 +10,5 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Challenge Name"
         android:textAlignment="viewStart" />
 </android.support.constraint.ConstraintLayout>
