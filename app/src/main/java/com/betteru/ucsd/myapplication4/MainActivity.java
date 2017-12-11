@@ -2,17 +2,14 @@ package com.betteru.ucsd.myapplication4;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.IntentService;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.media.FaceDetector;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,11 +27,7 @@ import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.ProfileTracker;
 import com.facebook.login.widget.ProfilePictureView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -95,7 +88,6 @@ public class MainActivity extends AppCompatActivity
         setUserAndFriends();
 
         setExtrasensoryService();
-
     }
 
     /**
@@ -130,6 +122,13 @@ public class MainActivity extends AppCompatActivity
                 BetterUApplication app = (BetterUApplication) getApplication();
                 Log.i(BetterUApplication.TAG+"_USER", "user set" + name);
                 app.setCurrentFBUser(user);
+                Fragment fragment = null;
+                try {
+                    fragment = (Fragment) RRFragment.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                getFragmentManager().beginTransaction().replace(R.id.fragmentContent, fragment).addToBackStack(null).commit();
             }
 
             @Override

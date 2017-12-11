@@ -5,6 +5,7 @@ package com.betteru.ucsd.myapplication4;
  */
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,13 @@ public class RankingAdapter extends BaseAdapter{
 
     public ArrayList<HashMap<String, String>> list;
     Activity activity;
-    TextView txtFirst;
-    TextView txtSecond;
+    TextView txt1, txt2, txt3, txt4;
     ImageView icon;
 
     public static final String FIRST_COLUMN="Activity";
     public static final String SECOND_COLUMN="Ranking";
+    public static final String THIRD_COLUMN="Users";
+    public static final String COLOR = "Color";
 
     public RankingAdapter(Activity activity,ArrayList<HashMap<String, String>> list){
         super();
@@ -54,22 +56,31 @@ public class RankingAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-         LayoutInflater inflater=activity.getLayoutInflater();
-         ExtrasensoryActivities activities = new ExtrasensoryActivities();
-
         if(convertView == null){
-
+            LayoutInflater inflater=activity.getLayoutInflater();
             convertView=inflater.inflate(R.layout.ranking_item, null);
-
-            icon = (ImageView) convertView.findViewById(R.id.activity_icon);
-            txtFirst=(TextView) convertView.findViewById(R.id.activity_content);
-            txtSecond=(TextView) convertView.findViewById(R.id.activity_ranking);
         }
 
+        ExtrasensoryActivities activities = new ExtrasensoryActivities();
+
+        icon = (ImageView) convertView.findViewById(R.id.activity_icon);
+        txt1=(TextView) convertView.findViewById(R.id.activity_content);
+        txt2=(TextView) convertView.findViewById(R.id.activity_ranking_1);
+        txt3=(TextView) convertView.findViewById(R.id.activity_ranking_2);
+        txt4=(TextView) convertView.findViewById(R.id.activity_ranking_3);
         HashMap<String, String> map=list.get(position);
         ExtrasensoryActivity activity = activities.map.get(map.get(FIRST_COLUMN));
-        txtFirst.setText(activity.getLabel());
-        txtSecond.setText(map.get(SECOND_COLUMN));
+        txt1.setText(activity.getLabel());
+        txt2.setText("Top ");
+        txt3.setText(map.get(SECOND_COLUMN));
+        txt4.setText(map.get(THIRD_COLUMN));
+        String color = map.get(COLOR);
+        if (!color.equals("")) {
+            //txt2.setTextColor(Integer.valueOf(color));
+            txt3.setTextColor(Integer.valueOf(color));
+            //txt4.setTextColor(Integer.valueOf(color));
+            txt3.setTypeface(null, Typeface.BOLD);
+        }
         icon.setImageResource(activity.getIcon());
         return convertView;
     }

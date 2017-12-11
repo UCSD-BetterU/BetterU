@@ -160,6 +160,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                     if (document != null) {
                         if (!document.exists()) {
                             Log.d("Data in Cloud", "no preferences");
+                            loadListView();
                             loadNoRecordView(true);
                             noRecordView.setText("No Ranking Preferences");
                         } else {
@@ -201,6 +202,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
                             if (obj.isEmpty()) {
+                                loadListView();
                                 loadNoRecordView(true);
                             }
                             for (String key : obj.keySet()) {
@@ -274,7 +276,17 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                         float r = 100 *  m / n;
                                         if (n > 1) {
                                             temp.put("Activity", key);
-                                            temp.put("Ranking", "Top "+String.format("%.0f%%", r)+" among "+(int)n+" users");
+                                            temp.put("Ranking", String.format("%.0f%%", r));
+                                            temp.put("Users", " among "+(int)n+" users");
+                                            String color = "";
+                                            if (r>=85) {
+                                                color = Integer.toString(getContext().getColor(R.color.rankingA));
+                                            } else if (r>=60) {
+                                                color = Integer.toString(getContext().getColor(R.color.rankingB));
+                                            } else {
+                                                color = Integer.toString(getContext().getColor(R.color.rankingC));
+                                            }
+                                            temp.put("Color", color);
                                             Log.d("ranking", key+" "+m+"/"+n+" "+r+" "+ String.format("%.0f%%", r));
                                             list.add(temp);
                                         }

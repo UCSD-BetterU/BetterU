@@ -30,14 +30,14 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:gravity="start">
             <TextView
                 android:id="@+id/activity_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAlignment="viewStart"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Activity" />
         </LinearLayout>
@@ -45,16 +45,33 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="5.5">
+            android:layout_weight="5.5"
+            android:orientation="horizontal"
+            android:gravity="right">
             <TextView
-                android:id="@+id/activity_ranking"
+                android:id="@+id/activity_ranking_1"
                 style="@style/TextAppearance.AppCompat.Small"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
                 android:textAlignment="viewEnd"
-                android:textSize="18sp"
-                tools:text="Top 10%" />
+                android:textSize="16sp"
+                tools:text="Top " />
+            <TextView
+                android:id="@+id/activity_ranking_2"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="viewEnd"
+                android:textSize="16sp"
+                tools:text="10%"/>
+            <TextView
+                android:id="@+id/activity_ranking_3"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="viewEnd"
+                android:textSize="16sp"
+                tools:text=" among 5 users" />
         </LinearLayout>
 
     </LinearLayout>
