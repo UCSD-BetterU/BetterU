@@ -1,39 +1,36 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.betteru.ucsd.myapplication4.R;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by Yuting on 11/5/2017.
+ * Created by Yuting on 12/11/2017.
  */
 
-public class ChallengeActivityAdapter extends BaseAdapter {
+public class ChallengeParticipantListAdapter extends BaseAdapter {
     //public ArrayList<UserModel> list = new ArrayList<>();
     public ArrayList<String> nameList;
-    public ArrayList<Integer> iconList;
+    public ArrayList<String> idList;
     Activity activity;
-    ImageView imgIcon;
     TextView txtName;
+    ImageView imgIcon;
     ProfilePictureView profile;
 
-    public ChallengeActivityAdapter(Activity activity,ArrayList<String> nameList, ArrayList<Integer> iconList){
+    public ChallengeParticipantListAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList){
         super();
         this.activity =activity;
         this.nameList = nameList;
-        this.iconList = iconList;
+        this.idList = idList;
     }
 
     @Override
@@ -54,18 +51,20 @@ public class ChallengeActivityAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        LayoutInflater inflater=activity.getLayoutInflater();
+
         if(convertView == null){
-            LayoutInflater inflater=activity.getLayoutInflater();
+
             convertView=inflater.inflate(R.layout.item_challenge_activities, null);
+            txtName = (TextView) convertView.findViewById(R.id.textView_icon_name);
+            imgIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
+            profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_icon);
+            profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_icon);
         }
-
-        txtName = (TextView) convertView.findViewById(R.id.textView_icon_name);
-        imgIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
-        profile = (ProfilePictureView) convertView.findViewById(R.id.profileView_icon);
-
         txtName.setText(nameList.get(position));
-        imgIcon.setImageResource(iconList.get(position));
-        profile.setVisibility(View.GONE);
+        imgIcon.setVisibility(View.GONE);
+        profile.setProfileId(idList.get(position));
+        profile.setCropped(true);
         return convertView;
     }
 }

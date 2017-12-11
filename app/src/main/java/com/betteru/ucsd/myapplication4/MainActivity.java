@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.betteru.ucsd.myapplication4.challenge.ChallengeMainFragment;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookRequestError;
 import com.facebook.GraphRequestBatch;
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_report) {
             fragmentClass = ReportFragment.class;
         } else if (id == R.id.nav_challenge) {
-            fragmentClass = ChallengePagerFragment.class;
+            fragmentClass = ChallengeMainFragment.class;
         } else if (id == R.id.nav_friends) {
             fragmentClass = FriendsFragment.class;
         }

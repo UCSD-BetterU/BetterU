@@ -1,22 +1,22 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.betteru.ucsd.myapplication4.R;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
 
 /**
- * Created by Yuting on 11/30/2017.
+ * Created by Yuting on 12/11/2017.
  */
 
-public class ChallengeActivityResultAdapter extends BaseAdapter {
+public class ChallengeResultListAdapter extends BaseAdapter {
     ArrayList<String> nameList;
     ArrayList<String> activityList;
     ArrayList<String> idList;
@@ -27,7 +27,7 @@ public class ChallengeActivityResultAdapter extends BaseAdapter {
     TextView txtName;
     TextView txtData;
 
-    public ChallengeActivityResultAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<String> dataList, ArrayList<String> activityList){
+    public ChallengeResultListAdapter(Activity activity,ArrayList<String> nameList, ArrayList<String> idList, ArrayList<String> dataList, ArrayList<String> activityList){
         super();
         this.activity =activity;
         this.nameList = nameList;

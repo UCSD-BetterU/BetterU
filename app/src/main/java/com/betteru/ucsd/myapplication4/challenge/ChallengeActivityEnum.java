@@ -1,11 +1,23 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
+/**
+ * Created by Yuting on 12/11/2017.
+ */
+
+import com.betteru.ucsd.myapplication4.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Mapping between the name of activity and the icon
+ * Total 51 activity's name, defined by extrasensory
  * Created by Yuting on 11/12/2017.
  */
 
@@ -63,39 +75,40 @@ public enum ChallengeActivityEnum {
     Coworkers("With co-workers", R.drawable.with_coworkers),
     Friends("With friends", R.drawable.with_friends);
 
-        private final String name;
-        private final Integer icon;
+    private final String name;
+    private final Integer icon;
 
-        // Reverse-lookup map for getting a day from an abbreviation
-        private static final Map<String, ChallengeActivityEnum> lookup = new HashMap<String, ChallengeActivityEnum>();
+    // Reverse-lookup map for getting a day from an abbreviation
+    private static final Map<String, ChallengeActivityEnum> lookup = new HashMap<String, ChallengeActivityEnum>();
 
-        static {
-            for (ChallengeActivityEnum d : ChallengeActivityEnum.values()) {
-                lookup.put(d.getName(), d);
-            }
-        }
-
-        private ChallengeActivityEnum(String name, Integer icon) {
-            this.name = name;
-            this.icon = icon;
-        }
-
-        public String getName() {
-            return name;
-        }
-        public Integer getIcon() {return icon;}
-
-        public static ChallengeActivityEnum get(String name) {
-            return lookup.get(name);
-        }
-
-        public static String[] getAllName(){
-            ArrayList<String> ret = new ArrayList<String>();
-            for (ChallengeActivityEnum d : ChallengeActivityEnum.values()) {
-                ret.add(d.getName());
-            }
-            return Arrays.copyOf(ret.toArray(), ret.toArray().length, String[].class);
-
+    static {
+        for (ChallengeActivityEnum d : ChallengeActivityEnum.values()) {
+            lookup.put(d.getName(), d);
         }
     }
+
+    private ChallengeActivityEnum(String name, Integer icon) {
+        this.name = name;
+        this.icon = icon;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public Integer getIcon() {return icon;}
+
+    public static ChallengeActivityEnum get(String name) {
+        return lookup.get(name);
+    }
+
+    public static String[] getAllName(){
+        ArrayList<String> ret = new ArrayList<String>();
+        for (ChallengeActivityEnum d : ChallengeActivityEnum.values()) {
+            ret.add(d.getName());
+        }
+        return Arrays.copyOf(ret.toArray(), ret.toArray().length, String[].class);
+
+    }
+}
+
 

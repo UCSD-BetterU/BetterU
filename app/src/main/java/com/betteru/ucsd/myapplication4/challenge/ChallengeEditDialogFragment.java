@@ -1,5 +1,20 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,13 +33,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.betteru.ucsd.myapplication4.BetterUApplication;
+import com.betteru.ucsd.myapplication4.R;
+import com.betteru.ucsd.myapplication4.UserModel;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Created by Yuting on 12/8/2017.
  */
-public class EditActivityDialogFragment extends DialogFragment
+public class ChallengeEditDialogFragment extends DialogFragment
         implements DialogInterface.OnDismissListener{
 
     ChallengeModel data;
@@ -38,8 +57,8 @@ public class EditActivityDialogFragment extends DialogFragment
     ArrayList<String> firstNameList = new ArrayList<>();
     ArrayList<String> idList = new ArrayList<>();
 
-    public static EditActivityDialogFragment  newInstance(ChallengeModel data, Boolean particpants) {
-        EditActivityDialogFragment f = new EditActivityDialogFragment ();
+    public static ChallengeEditDialogFragment newInstance(ChallengeModel data, Boolean particpants) {
+        ChallengeEditDialogFragment f = new ChallengeEditDialogFragment();
         Bundle args = new Bundle();
         args.putSerializable("data", data);
         args.putBoolean("participants", particpants);
@@ -49,10 +68,9 @@ public class EditActivityDialogFragment extends DialogFragment
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         //get arguments
         Bundle args = getArguments();
-        data = (ChallengeModel) args.getSerializable("data");
+        data = (ChallengeModel)args.getSerializable("data");
         flag = (Boolean)args.get("participants") ;
         //get view
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -88,7 +106,7 @@ public class EditActivityDialogFragment extends DialogFragment
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
-                EditActivityDialogFragment.this.getDialog().cancel();
+                ChallengeEditDialogFragment.this.getDialog().cancel();
             }
         });
         // Create the AlertDialog object and return it
@@ -170,3 +188,4 @@ public class EditActivityDialogFragment extends DialogFragment
         }
     }
 }
+

@@ -1,17 +1,16 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
@@ -23,7 +22,9 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.betteru.ucsd.myapplication4.DatePickerFragment;
+import com.betteru.ucsd.myapplication4.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,22 +36,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-
-
-public class ChallengeActivityFragment extends Fragment
+public class ChallengeDetailFragment extends Fragment
         implements DatePickerDialog.OnDateSetListener{
-    static ChallengeModel data;
+    ChallengeModel data;
     Boolean editable;
     View view;
     public final static int EDITDIALOG_FRAGMENT = 1;
@@ -153,68 +147,39 @@ public class ChallengeActivityFragment extends Fragment
         dataMap.put("title", data.title);
         Log.d("challenge", data.id);
         db.collection("challenge").document(data.id).set(dataMap, SetOptions.merge())
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        submitChallengeParticipants(data.id, data.participants);
+                        Log.d("challenge", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("challenge", "Error writing document", e);
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                submitChallengeParticipants(data.id, data.participants);
-                Log.d("challenge", "DocumentSnapshot successfully written!");
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("challenge", "Error writing document", e);
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
-             @Override
-             public void onComplete(@NonNull Task<Void> task) {
-                 /*
-                ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
-                Bundle args = new Bundle();
-                args.putSerializable("data",data);
-                fragment.setArguments(args);
+            public void onComplete(@NonNull Task<Void> task) {
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.popBackStack();
+                ChallengeMainFragment fragment = ChallengeMainFragment.newInstance();
+                FragmentTransaction fx = getFragmentManager().beginTransaction();
                 fx.replace(R.id.fragmentContent, fragment);
                 fx.commit();
-                */
-                 /*
-                 getFragmentManager().popBackStack();
-                 FragmentTransaction fx = getFragmentManager().beginTransaction();
-                 FragmentTransaction tx = getActivity().getFragmentManager().beginTransaction();
-                 tx.remove(f);
-                 tx.commit();
-                 */
-                 FragmentManager fragmentManager = getFragmentManager();
-                 fragmentManager.popBackStack();
-                 ChallengePagerFragment fragment = new ChallengePagerFragment().newInstance();
-                 FragmentTransaction fx = getFragmentManager().beginTransaction();
-                 fx.replace(R.id.fragmentContent, fragment);
-                 fx.commit();
-                 hideProgressDialog();
-             }
-         });
+                hideProgressDialog();
+            }
+        });
     }
 
     public void loadChallengeActivityButton(){
         ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
         button.setVisibility(View.VISIBLE);
-        /*
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                ChallengeActivityListFragment fragment = new ChallengeActivityListFragment();
-                Bundle args = new Bundle();
-                args.putSerializable("data",data);
-                args.putBoolean("participants", false);
-                fragment.setArguments(args);
-                fragmentTransaction.replace(R.id.fragmentContent, fragment);
-                fragmentTransaction.commit();
-            }
-        });
-        */
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                DialogFragment newFragment = EditActivityDialogFragment.newInstance(data, false);
-                newFragment.setTargetFragment(ChallengeActivityFragment.this, EDIT_ACTIVITY_FRAGMENT);
+                DialogFragment newFragment = ChallengeEditDialogFragment.newInstance(data, false);
+                newFragment.setTargetFragment(ChallengeDetailFragment.this, EDIT_ACTIVITY_FRAGMENT);
                 newFragment.show(getFragmentManager(), "challengeActivityEditDialog");
             }
         });
@@ -222,24 +187,10 @@ public class ChallengeActivityFragment extends Fragment
 
     public void loadChallengeParticipantsButton(){
         ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeParticipant);
-        /*
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                ChallengeActivityListFragment fragment = new ChallengeActivityListFragment();
-                Bundle args = new Bundle();
-                args.putSerializable("data",data);
-                args.putBoolean("participants", true);
-                fragment.setArguments(args);
-                fragmentTransaction.replace(R.id.fragmentContent, fragment);
-                fragmentTransaction.commit();
-            }
-        });
-        */
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                DialogFragment newFragment = EditActivityDialogFragment.newInstance(data, true);
-                newFragment.setTargetFragment(ChallengeActivityFragment.this, EDIT_PARTICIPANTS_FRAGMENT);
+                DialogFragment newFragment = ChallengeEditDialogFragment.newInstance(data, true);
+                newFragment.setTargetFragment(ChallengeDetailFragment.this, EDIT_PARTICIPANTS_FRAGMENT);
                 newFragment.show(getFragmentManager(), "challengeParticipantsEditDialog");
             }
         });
@@ -264,15 +215,19 @@ public class ChallengeActivityFragment extends Fragment
             id.add(data.participants.get(i));
         }
         GridView gridViewParticipants = (GridView) view.findViewById(R.id.gridview_challenge_participants);
-        ChallengeParticipantsAdapter adapterPar = new ChallengeParticipantsAdapter(this.getActivity(),
-                name,id);
+        ChallengeParticipantListAdapter adapterPar = new ChallengeParticipantListAdapter(
+                this.getActivity(),
+                name,
+                id);
         gridViewParticipants.setAdapter(adapterPar);
     }
     public void loadChallengeActivities(){
         //set GridView
         GridView gridViewActivities = (GridView) view.findViewById(R.id.gridView_challenge_activities);
-        ChallengeActivityAdapter adapterAct = new ChallengeActivityAdapter(this.getActivity(),
-                data.activities, data.activitiesIcon);
+        ChallengeActivityListAdapter adapterAct = new ChallengeActivityListAdapter(
+                this.getActivity(),
+                data.activities,
+                data.activitiesIcon);
         Log.d("challenge detail page", data.activities.toString());
         Log.d("challenge detail page", data.activitiesIcon.toString());
         gridViewActivities.setAdapter(adapterAct);
@@ -284,7 +239,7 @@ public class ChallengeActivityFragment extends Fragment
             public void onClick(View v) {
                 //showDialog();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
-                        ChallengeActivityFragment.this,
+                        ChallengeDetailFragment.this,
                         data.date.get(Calendar.YEAR),
                         data.date.get(Calendar.MONTH),
                         data.date.get(Calendar.DAY_OF_MONTH)
@@ -304,7 +259,7 @@ public class ChallengeActivityFragment extends Fragment
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 DialogFragment newFragment = EditChallengeNameDialogFragment.newInstance(data.title);
-                newFragment.setTargetFragment(ChallengeActivityFragment.this, EDITDIALOG_FRAGMENT);
+                newFragment.setTargetFragment(ChallengeDetailFragment.this, EDITDIALOG_FRAGMENT);
                 newFragment.show(getFragmentManager(), "challengeNameEditDialog");
             }
         });
@@ -348,27 +303,7 @@ public class ChallengeActivityFragment extends Fragment
         }
     }
 
-    private class PickerAdapter extends FragmentPagerAdapter {
-        private static final int NUM_PAGES = 2;
-        Fragment datePickerFragment;
-
-        PickerAdapter(FragmentManager fm) {
-            super(fm);
-            datePickerFragment = new DatePickerFragment1();
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return datePickerFragment;
-        }
-    }
-
-    public static class EditChallengeNameDialogFragment extends DialogFragment
+   public static class EditChallengeNameDialogFragment extends DialogFragment
             implements DialogInterface.OnDismissListener{
 
         public static EditChallengeNameDialogFragment newInstance(String title) {
@@ -403,7 +338,7 @@ public class ChallengeActivityFragment extends Fragment
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User cancelled the dialog
-                    EditChallengeNameDialogFragment.this.getDialog().cancel();
+                    ChallengeDetailFragment.EditChallengeNameDialogFragment.this.getDialog().cancel();
                 }
             });
             // Create the AlertDialog object and return it
@@ -438,3 +373,4 @@ public class ChallengeActivityFragment extends Fragment
 
 
 }
+

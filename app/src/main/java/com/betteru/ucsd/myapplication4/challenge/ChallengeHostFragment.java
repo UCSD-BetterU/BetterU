@@ -1,4 +1,4 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -16,6 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.betteru.ucsd.myapplication4.BetterUApplication;
+import com.betteru.ucsd.myapplication4.R;
+import com.betteru.ucsd.myapplication4.UserModel;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -30,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ChallengeFragment extends Fragment {
+public class ChallengeHostFragment extends Fragment {
 
     ArrayList<ChallengeModel> data = new ArrayList<>();
     View view;
@@ -73,8 +77,8 @@ public class ChallengeFragment extends Fragment {
         super.onResume();
     }
 
-    public static ChallengeFragment newInstance() {
-        ChallengeFragment fragment = new ChallengeFragment();
+    public static ChallengeHostFragment newInstance() {
+        ChallengeHostFragment fragment = new ChallengeHostFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -141,8 +145,7 @@ public class ChallengeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
                 FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
-                //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
-                ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
+                ChallengeResultFragment fragment = new ChallengeResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
                 args.putBoolean("edit", true);

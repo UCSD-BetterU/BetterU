@@ -1,4 +1,4 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,16 +15,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.betteru.ucsd.myapplication4.BetterUApplication;
+import com.betteru.ucsd.myapplication4.R;
+import com.betteru.ucsd.myapplication4.UserModel;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by Yuting on 12/10/2017.
+ * Created by Yuting on 12/11/2017.
  */
 
-public class ChallengePagerFragment extends Fragment {
+public class ChallengeMainFragment extends Fragment {
     ViewPager viewPager;
-    ChallengePagerFragment.PickerAdapter adapter;
+    PickerAdapter adapter;
     UserModel user;
     View view;
     Calendar calendar = Calendar.getInstance();
@@ -39,7 +43,7 @@ public class ChallengePagerFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        adapter = new ChallengePagerFragment.PickerAdapter(getChildFragmentManager());
+        adapter = new PickerAdapter(getChildFragmentManager());
         viewPager = getView().findViewById(R.id.pager_challenge);
         viewPager.setAdapter(adapter);
 
@@ -58,8 +62,8 @@ public class ChallengePagerFragment extends Fragment {
 
         PickerAdapter(FragmentManager fm) {
             super(fm);
-            ownerFragment = ChallengeFragment.newInstance();
-            participantFragment = ChallengeParticipantsFragment.newInstance();
+            ownerFragment = ChallengeHostFragment.newInstance();
+            participantFragment = ChallengeParticipantFragment.newInstance();
         }
 
         @Override
@@ -82,6 +86,7 @@ public class ChallengePagerFragment extends Fragment {
         int getTitle(int position) {
             switch(position) {
                 case 0:
+                    //TODO: system testing
                     return R.string.ChallengeOwner;
                 case 1:
                     return R.string.ChallengeParticipants;
@@ -91,8 +96,8 @@ public class ChallengePagerFragment extends Fragment {
         }
     }
 
-    public static ChallengePagerFragment newInstance() {
-        ChallengePagerFragment fragment = new ChallengePagerFragment();
+    public static ChallengeMainFragment newInstance() {
+        ChallengeMainFragment fragment = new ChallengeMainFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -121,7 +126,7 @@ public class ChallengePagerFragment extends Fragment {
                 new ArrayList<String>(),
                 new ArrayList<String>());
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        ChallengeActivityFragment fragment = new ChallengeActivityFragment();
+        ChallengeDetailFragment fragment = new ChallengeDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable("data",newChallenge);
         args.putBoolean("edit", true);

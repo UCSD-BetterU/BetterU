@@ -1,21 +1,25 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
-import android.app.DialogFragment;
+/**
+ * Created by Yuting on 12/11/2017.
+ */
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.betteru.ucsd.myapplication4.BetterUApplication;
+import com.betteru.ucsd.myapplication4.R;
+import com.betteru.ucsd.myapplication4.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,16 +27,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.lang.reflect.Array;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +39,7 @@ import java.util.Map;
  * Created by Yuting on 11/30/2017.
  */
 
-public class ChallengeActivityResultFragment extends Fragment {
+public class ChallengeResultFragment extends Fragment {
     static ChallengeModel data;
     Boolean editable;
     View view;
@@ -112,7 +110,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentTransaction tx = getFragmentManager().beginTransaction();
-                ChallengeActivityFragment fragment = new ChallengeActivityFragment();
+                ChallengeDetailFragment fragment = new ChallengeDetailFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data);
                 args.putBoolean("edit", editable);
@@ -171,7 +169,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         ListView listViewWinner = (ListView) view.findViewById(R.id.listView_winner);
         ArrayList<String> idList = data.winner;
         ArrayList<String> nameList = data.winner_name;
-        ChallengeActivityResultAdapter adapter = new ChallengeActivityResultAdapter(
+        ChallengeResultListAdapter adapter = new ChallengeResultListAdapter(
                 this.getActivity(),
                 nameList,
                 idList,
@@ -199,7 +197,7 @@ public class ChallengeActivityResultFragment extends Fragment {
             docRef = df.collection(year).document(day);
         }catch (Exception e){
             getUserDailyActivity(pIdx + 1, participants, participants_name,
-                        year, day, activity);
+                    year, day, activity);
             Log.d("winner exception", e.toString());
             return;
         }
@@ -247,6 +245,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         dataMap.put("winner_name", data.winner_name);
         dataMap.put("winner_data", data.winner_data);
         Log.d("challenge", data.id);
+
         db.collection("challenge").document(data.id).set(dataMap, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

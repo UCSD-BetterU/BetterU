@@ -1,11 +1,10 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.betteru.ucsd.myapplication4.BetterUApplication;
+import com.betteru.ucsd.myapplication4.R;
+import com.betteru.ucsd.myapplication4.UserModel;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import java.util.Map;
  * Created by Yuting on 12/10/2017.
  */
 
-public class ChallengeParticipantsFragment extends Fragment {
+public class ChallengeParticipantFragment extends Fragment {
 
     ArrayList<ChallengeModel> data = new ArrayList<>();
     View view;
@@ -64,21 +64,22 @@ public class ChallengeParticipantsFragment extends Fragment {
     }
     @Override
     public void onResume(){
+        super.onResume();
         Log.i("challenge list", Integer.toString(data.size()));
         if(data.isEmpty()) {
             loadData(user.getUserId());
         }
         else {
             loadNoRecordView(false);
-            adapter.refresh(data);
+            //adapter.refresh(data);
             //adapter.notifyDataSetChanged();
             loadListView();
         }
-        super.onResume();
+        //super.onResume();
     }
 
-    public static ChallengeParticipantsFragment newInstance() {
-        ChallengeParticipantsFragment fragment = new ChallengeParticipantsFragment();
+    public static ChallengeParticipantFragment newInstance() {
+        ChallengeParticipantFragment fragment = new ChallengeParticipantFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -133,11 +134,13 @@ public class ChallengeParticipantsFragment extends Fragment {
             loadNoRecordView(false);
             loadListView();
             hideProgressDialog();
+            return;
         }
         DocumentReference df;
         try{
             df = db.collection("challenge").document(idList.get(idx));
         }catch(Exception e){
+            loadParticipantData(idList, idx+1);
             Log.e("Exception", e.toString());
             return;
         }
@@ -183,7 +186,7 @@ public class ChallengeParticipantsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
                 FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
-                ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
+                ChallengeResultFragment fragment = new ChallengeResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
                 args.putBoolean("edit", false);

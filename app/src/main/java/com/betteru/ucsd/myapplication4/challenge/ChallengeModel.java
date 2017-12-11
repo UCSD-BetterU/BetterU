@@ -1,14 +1,16 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
+
+/**
+ * Created by Yuting on 12/11/2017.
+ */
 
 import android.util.Log;
+import com.betteru.ucsd.myapplication4.R;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Yuting on 11/3/2017.

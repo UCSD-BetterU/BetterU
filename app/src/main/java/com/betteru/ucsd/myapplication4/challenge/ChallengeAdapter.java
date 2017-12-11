@@ -1,4 +1,4 @@
-package com.betteru.ucsd.myapplication4;
+package com.betteru.ucsd.myapplication4.challenge;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.betteru.ucsd.myapplication4.R;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
