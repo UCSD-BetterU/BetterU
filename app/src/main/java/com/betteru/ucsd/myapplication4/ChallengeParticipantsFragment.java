@@ -99,6 +99,7 @@ public class ChallengeParticipantsFragment extends Fragment {
             df = db.collection("challenge_user").document(userId);
         }catch(Exception e){
             Log.e("Exception", e.toString());
+            hideProgressDialog();
             return;
         }
         df.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -106,7 +107,7 @@ public class ChallengeParticipantsFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    if (document != null) {
+                    if (document.exists() && document != null) {
                         Map<String, Object> obj = document.getData();
                         ArrayList<String> docIdList = new ArrayList<>();
                         for(String id : obj.keySet())
@@ -121,6 +122,7 @@ public class ChallengeParticipantsFragment extends Fragment {
                 }else{
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
+                hideProgressDialog();
             }
         });
     }

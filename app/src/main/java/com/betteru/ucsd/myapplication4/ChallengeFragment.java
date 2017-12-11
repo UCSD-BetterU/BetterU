@@ -96,6 +96,7 @@ public class ChallengeFragment extends Fragment {
         }catch (Exception e)
         {
             Log.d("Exception", e.toString());
+            hideProgressDialog();
             return;
         }
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
@@ -103,7 +104,8 @@ public class ChallengeFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task){
                 if(task.isSuccessful()){
                     for (DocumentSnapshot document : task.getResult()) {
-
+                        if(document.exists() && document != null) {
+                            loadNoRecordView(false);
                             Map<String, Object> obj = document.getData();
                             ChallengeModel temp = new ChallengeModel(
                                     (String) obj.get("owner"),
@@ -113,16 +115,16 @@ public class ChallengeFragment extends Fragment {
                                     (ArrayList<String>) obj.get("participants"),
                                     (ArrayList<String>) obj.get("participants_name"),
                                     (ArrayList<String>) obj.get("activities"));
-                            if(obj.containsKey("winner")){
-                                    temp.setWinner(
-                                            (ArrayList<String>) obj.get("winner"),
-                                            (ArrayList<String>) obj.get("winner_name"),
-                                            (ArrayList<String>) obj.get("winner_data"));
+                            if (obj.containsKey("winner")) {
+                                temp.setWinner(
+                                        (ArrayList<String>) obj.get("winner"),
+                                        (ArrayList<String>) obj.get("winner_name"),
+                                        (ArrayList<String>) obj.get("winner_data"));
                             }
                             temp.setId(document.getId());
                             data.add(temp);
+                        }
                     }
-                    loadNoRecordView(false);
                 }else {
                     loadNoRecordView(true);
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
