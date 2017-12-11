@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                 app.setCurrentFBUser(user);
                 Fragment fragment = null;
                 try {
-                    fragment = (Fragment) RRFragment.newInstance();
+                    fragment = (Fragment) ReportFragment.newInstance();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = GoalFragment.class;
         } else */
         if (id == R.id.nav_report) {
-            fragmentClass = RRFragment.class;
+            fragmentClass = ReportFragment.class;
         } else if (id == R.id.nav_challenge) {
             fragmentClass = ChallengePagerFragment.class;
         } else if (id == R.id.nav_friends) {
