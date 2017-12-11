@@ -19,14 +19,14 @@
                 android:id="@+id/imageView_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:foreground="@drawable/circle"
+                android:foreground="@drawable/circle_white"
                 app:srcCompat="@android:drawable/sym_def_app_icon" />
 
             <com.facebook.login.widget.ProfilePictureView
                 android:id="@+id/profileView_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:foreground="@drawable/circle"
+                android:foreground="@drawable/circle_white"
                 app:srcCompat="@android:drawable/sym_def_app_icon"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
