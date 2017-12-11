@@ -112,7 +112,9 @@ public class ChallengePagerFragment extends Fragment {
         c.add(Calendar.DATE, 2);
         String timeStamp = ChallengeModel.sdf.format(c.getTime());
         Log.d("challenge add new challenge", timeStamp);
-        ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
+        ChallengeModel newChallenge = new ChallengeModel(
+                user.getUserId(),
+                user.getFirstName(),
                 "Input Challenge Name",
                 timeStamp,
                 new ArrayList<String>(),

@@ -107,6 +107,7 @@ public class ChallengeFragment extends Fragment {
                             Map<String, Object> obj = document.getData();
                             ChallengeModel temp = new ChallengeModel(
                                     (String) obj.get("owner"),
+                                    (String) obj.get("owner_name"),
                                     (String) obj.get("title"),
                                     (String) obj.get("time"),
                                     (ArrayList<String>) obj.get("participants"),

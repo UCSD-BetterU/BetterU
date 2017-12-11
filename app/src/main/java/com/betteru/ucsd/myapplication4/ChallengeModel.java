@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class ChallengeModel implements Serializable {
     String ownerId;
+    String owner_name;
     String title;
     String timeStamp;
     ArrayList<String> activities;
@@ -31,10 +32,11 @@ public class ChallengeModel implements Serializable {
     //static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     //cal.setTime(sdf.parse("Mon Mar 14 16:02:37 GMT 2011"));// all done
-    ChallengeModel(String ownerId, String title, String timeStamp,
+    ChallengeModel(String ownerId, String owner_name, String title, String timeStamp,
                    ArrayList<String> participants, ArrayList<String> participants_name, ArrayList<String> activities)
     {
         this.ownerId = ownerId;
+        this.owner_name = owner_name;
         this.title = title;
         this.timeStamp = timeStamp;
         try {

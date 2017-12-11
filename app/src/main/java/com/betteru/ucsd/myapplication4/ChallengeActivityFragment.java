@@ -145,6 +145,7 @@ public class ChallengeActivityFragment extends Fragment
         Log.d("submit challenge", data.participants_name.toString());
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("owner",data.ownerId );
+        dataMap.put("owner_name", data.owner_name);
         dataMap.put("participants", data.participants);
         dataMap.put("participants_name", data.participants_name);
         dataMap.put("activities", data.activities);
@@ -253,8 +254,16 @@ public class ChallengeActivityFragment extends Fragment
     }
     public void loadChallengeParticipants() {
         //set GridView
-        ArrayList<String> name = data.participants_name;
-        ArrayList<String> id = data.participants;
+        ArrayList<String> name = new ArrayList<String>();
+        ArrayList<String> id = new ArrayList<String>();
+
+        name.add(data.owner_name);
+        id.add(data.ownerId);
+        for(int i = 0; i < data.participants.size(); i++)
+        {
+            name.add(data.participants_name.get(i));
+            id.add(data.participants.get(i));
+        }
         GridView gridViewParticipants = (GridView) view.findViewById(R.id.gridview_challenge_participants);
         ChallengeParticipantsAdapter adapterPar = new ChallengeParticipantsAdapter(this.getActivity(),
                 name,id);

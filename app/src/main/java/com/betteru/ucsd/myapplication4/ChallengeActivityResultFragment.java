@@ -142,8 +142,8 @@ public class ChallengeActivityResultFragment extends Fragment {
             participants.add(data.participants.get(i));
             participants_name.add(data.participants_name.get(i));
         }
-        participants.add(user.getUserId());
-        participants_name.add(user.getFirstName());
+        participants.add(data.ownerId);
+        participants_name.add(data.owner_name);
         result = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < activity.size(); i++) {
             result.add(new ArrayList<Integer>(Collections.nCopies(participants.size(), 0)));
@@ -237,6 +237,7 @@ public class ChallengeActivityResultFragment extends Fragment {
         }
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("owner",data.ownerId );
+        dataMap.put("owner_name", data.owner_name);
         dataMap.put("participants", data.participants);
         dataMap.put("participants_name", data.participants_name);
         dataMap.put("activities", data.activities);
