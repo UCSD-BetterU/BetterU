@@ -230,6 +230,7 @@
             android:layout_height="300dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="8dp"
             tools:context="com.android_examples.piechart_android_examplescom.MainActivity">
 
             <com.github.mikephil.charting.charts.PieChart

@@ -185,6 +185,9 @@ public class ReportFragment extends Fragment implements DatePickerDialog.OnDateS
                         } else {
                             Log.d("DATA IN CLOUD", document.getId() + " -> " + document.getData());
                             Map<String, Object> obj = document.getData();
+                            if (obj.isEmpty()){
+                                loadNoRecordView(true);
+                            }
                             for (String key : obj.keySet()) {
                                 if (!activities.map.containsKey(key)) {
                                     continue;

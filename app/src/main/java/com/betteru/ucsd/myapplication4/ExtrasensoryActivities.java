@@ -8,7 +8,7 @@ public class ExtrasensoryActivities {
     public ExtrasensoryActivities() {
         this.map = new HashMap<>();
 
-        this.map.put("LyingDown",
+        this.map.put("Lying",
                 new ExtrasensoryActivity("lying down", "Lying Down",1, R.drawable.lying_down, 0));
         this.map.put("Sitting",
                 new ExtrasensoryActivity("sitting", "Sitting", 1, R.drawable.sitting, 1));
@@ -22,7 +22,7 @@ public class ExtrasensoryActivities {
                 new ExtrasensoryActivity("bicycling", "Bicycling", 2, R.drawable.bicycling, 5));
         this.map.put("Sleeping",
                 new ExtrasensoryActivity("Sleeping", "sleeping", 2, R.drawable.sleep, 6));
-        this.map.put("LabWork",
+        this.map.put("Lab Work",
                 new ExtrasensoryActivity("doing lab work", "Lab Work", 2, R.drawable.labwork, 7));
         this.map.put("Class",
                 new ExtrasensoryActivity("in class", "In A Class", 2, R.drawable.inclass, 8));
@@ -108,7 +108,7 @@ public class ExtrasensoryActivities {
                 new ExtrasensoryActivity("phone on table", "Phone On Table", 4, R.drawable.phone_on_table, 48));
         this.map.put("Coworkers",
                 new ExtrasensoryActivity("with co-workers", "With Co-workers", 2, R.drawable.with_coworkers, 49));
-        this.map.put("friends",
+        this.map.put("Friends",
                 new ExtrasensoryActivity("with friends", "With Friends", 2, R.drawable.with_friends, 50));
     }
 
