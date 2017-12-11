@@ -259,7 +259,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                                 if (!selfRankingData.containsKey(key)) {
                                                     continue;
                                                 }
-                                                if(document.getLong(key) <= selfRankingData.get(key)) {
+                                                if(document.getLong(key) > selfRankingData.get(key)) {
                                                     rankingM.put(key, rankingM.get(key)+1);
                                                 }
                                                 rankingN.put(key, rankingN.get(key)+1);
@@ -278,12 +278,16 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                         float r = 100 *  m / n;
                                         if (n > 1) {
                                             temp.put("Activity", key);
-                                            temp.put("Ranking", String.format("%.0f%%", r));
+                                            if (r>0) {
+                                                temp.put("Ranking", String.format("%.0f%%", r));
+                                            } else {
+                                                temp.put("Ranking", "1%");
+                                            }
                                             temp.put("Users", " among "+(int)n+" users");
                                             String color = "";
-                                            if (r>=85) {
+                                            if (r<=20) {
                                                 color = Integer.toString(getContext().getColor(R.color.rankingA));
-                                            } else if (r>=60) {
+                                            } else if (r<=60) {
                                                 color = Integer.toString(getContext().getColor(R.color.rankingB));
                                             } else {
                                                 color = Integer.toString(getContext().getColor(R.color.rankingC));
@@ -336,7 +340,7 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
                                 int n = allUserData.size();
                                 int r = 0;
                                 for(Object t: allUserData){
-                                    if(selfTime>=(long)t) r++;
+                                    if(selfTime<(long)t) r++;
                                 }
                                 float rank = 100 * (float) r / (float) n;
                                 String ranking = String.format("%.0f%%", rank);

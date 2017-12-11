@@ -177,7 +177,7 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
         timeSpent3.clear();
         nact2 = 0;
 
-        /*db.collection("extrasensory").document(userId).collection("201711").document("14")
+        /*db.collection("extrasensory").document(userId).collection("201711").document("09")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
         @Override
         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -188,8 +188,61 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
                     } else {
                         Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
                         Map<String, Object> obj = document.getData();
-                        db.collection("extrasensory").document("user0"+k).collection("201712").document("08").update(obj);
-                    }}}}});*/
+                        db.collection("extrasensory").document("1951153148235912").collection("201712").document("07").update(obj);
+                    }}}}});
+        db.collection("extrasensory").document(userId).collection("201711").document("10")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (!document.exists()) {
+                        } else {
+                            Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            db.collection("extrasensory").document("1951153148235912").collection("201712").document("08").update(obj);
+                        }}}}});
+        db.collection("extrasensory").document(userId).collection("201711").document("13")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (!document.exists()) {
+                        } else {
+                            Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            db.collection("extrasensory").document("1951153148235912").collection("201712").document("09").update(obj);
+                        }}}}});
+        db.collection("extrasensory").document(userId).collection("201711").document("14")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (!document.exists()) {
+                        } else {
+                            Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            db.collection("extrasensory").document("1951153148235912").collection("201712").document("10").update(obj);
+                        }}}}});
+        db.collection("extrasensory").document(userId).collection("201711").document("16")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (!document.exists()) {
+                        } else {
+                            Log.d("DATA IN CLOUDhaha", document.getId() + " -> " + document.getData());
+                            Map<String, Object> obj = document.getData();
+                            db.collection("extrasensory").document("1951153148235912").collection("201712").document("11").update(obj);
+                        }}}}});
+                        */
 
         dbData.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
             @Override
