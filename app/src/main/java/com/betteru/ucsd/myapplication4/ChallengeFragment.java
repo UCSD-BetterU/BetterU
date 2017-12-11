@@ -142,7 +142,7 @@ public class ChallengeFragment extends Fragment {
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
-                args.putBoolean("editable", true);
+                args.putBoolean("edit", true);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent, fragment);
                 //fragmentTransaction.replace(R.layout.fragment_challenge, fragment);

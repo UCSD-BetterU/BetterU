@@ -63,19 +63,20 @@ public class ChallengeActivityFragment extends Fragment
         // Inflate the layout for this fragment
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
-        editable = (Boolean)  args.getBoolean("editable");
-        Log.d("DATA", Integer.toString(data.activitiesIcon.size()));
+        editable = (Boolean) args.getBoolean("edit");
+        Log.d("Challenge Activity Fragment Edit", editable.toString());
         view = inflater.inflate(R.layout.fragment_challenge_detail, container, false);
         loadChallengeName();
         loadChallengeDate();
         loadChallengeParticipants();
         loadChallengeActivities();
-        if(editable)
-            loadEditButton();
+        loadEditButton(editable);
         return view;
     }
-    public void loadEditButton(){
-        if(data.winner != null  || data.date.before(Calendar.getInstance())){
+    public void loadEditButton(Boolean edit){
+        Log.d("challenge data", data.timeStamp);
+        if((!edit) || (data.winner != null)  || (data.date.before(Calendar.getInstance()))){
+            Log.d("challenge data edit gone", "");
             ImageButton button2 = (ImageButton) view.findViewById(R.id.imageButton_challengeDate);
             button2.setVisibility(View.GONE);
             ImageButton button3 = (ImageButton) view.findViewById(R.id.imageButton_challengeName);
@@ -88,6 +89,7 @@ public class ChallengeActivityFragment extends Fragment
             button1.setVisibility(View.GONE);
             return;
         }
+        Log.d("challenge data edit", "load challenge edit button");
         loadChallengeNameButton();
         loadChallengeDateButton();
         loadChallengeActivityButton();
@@ -96,6 +98,7 @@ public class ChallengeActivityFragment extends Fragment
     }
     public void loadChallengeSubmitButton(){
         Button button = view.findViewById(R.id.button_saveChallenge);
+        button.setVisibility(View.VISIBLE);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d("challenge", "submit challenge");
@@ -186,6 +189,7 @@ public class ChallengeActivityFragment extends Fragment
 
     public void loadChallengeActivityButton(){
         ImageButton button = (ImageButton) view.findViewById(R.id.imageButton_challengeActivity);
+        button.setVisibility(View.VISIBLE);
         /*
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

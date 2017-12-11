@@ -10,6 +10,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class ChallengePagerFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         for(int i=0;i<adapter.getCount();i++) //noinspection ConstantConditions
             tabLayout.getTabAt(i).setText(adapter.getTitle(i));
+        loadNewChallengeButton();
     }
 
     private class PickerAdapter extends FragmentPagerAdapter {
@@ -106,7 +108,10 @@ public class ChallengePagerFragment extends Fragment {
     }
 
     private void newChallenge(){
-        String timeStamp = ChallengeModel.sdf.format(Calendar.getInstance().getTime());
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 2);
+        String timeStamp = ChallengeModel.sdf.format(c.getTime());
+        Log.d("challenge add new challenge", timeStamp);
         ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
                 "Input Challenge Name",
                 timeStamp,
@@ -117,11 +122,9 @@ public class ChallengePagerFragment extends Fragment {
         ChallengeActivityFragment fragment = new ChallengeActivityFragment();
         Bundle args = new Bundle();
         args.putSerializable("data",newChallenge);
-        args.putBoolean("editable", true);
+        args.putBoolean("edit", true);
         fragment.setArguments(args);
         fragmentTransaction.replace(R.id.fragmentContent, fragment);
-        //fragmentTransaction.hide(this);
-        //fragmentTransaction.add(R.id.fragmentContent, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

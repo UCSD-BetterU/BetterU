@@ -183,7 +183,7 @@ public class ChallengeParticipantsFragment extends Fragment {
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
-                args.putBoolean("editable", false);
+                args.putBoolean("edit", false);
                 //args.putSerializable("data", data_participant.get(position));
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent,fragment);

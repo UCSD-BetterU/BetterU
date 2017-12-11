@@ -1,5 +1,7 @@
 package com.betteru.ucsd.myapplication4;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -23,7 +25,7 @@ public class ChallengeModel implements Serializable {
     ArrayList<String> winner_name;
     ArrayList<String> winner_data;
     ArrayList<Integer> activitiesIcon;
-    public Calendar date;
+    public Calendar date = Calendar.getInstance();
     String id;
 
     //static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -39,6 +41,7 @@ public class ChallengeModel implements Serializable {
             this.date.setTime(sdf.parse(timeStamp));
         }catch(Exception e)
         {
+            Log.e("parse error", e.toString());
             this.date = Calendar.getInstance();
         }
         this.activities = activities;

@@ -60,9 +60,8 @@ public class ChallengeActivityResultFragment extends Fragment {
         Log.i("challenge result", "on create view");
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
-        editable = (Boolean)args.getBoolean("editable");
+        editable = (Boolean) args.getBoolean("edit");
         Log.d("challenge detail editable", editable.toString());
-        
         view = inflater.inflate(R.layout.fragment_challenge_result, container, false);
         user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
         loadChallengeDate();
@@ -116,7 +115,8 @@ public class ChallengeActivityResultFragment extends Fragment {
                 ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data);
-                args.putBoolean("editable", editable);
+                args.putBoolean("edit", editable);
+                Log.d("Data edit", editable.toString());
                 fragment.setArguments(args);
                 if(data.winner != null && !data.winner.isEmpty()) {
                     tx.hide(f);
@@ -144,14 +144,12 @@ public class ChallengeActivityResultFragment extends Fragment {
         }
         participants.add(user.getUserId());
         participants_name.add(user.getFirstName());
-
-        //initialize result matrix
         result = new ArrayList<ArrayList<Integer>>();
         for (int i = 0; i < activity.size(); i++) {
             result.add(new ArrayList<Integer>(Collections.nCopies(participants.size(), 0)));
         }
-        //TODO: change year and day
-        getUserDailyActivity(0, participants, participants_name, "201712", "05", activity);
+        Log.d("winner", participants_name.toString() + " " + year + " " + day);
+        getUserDailyActivity(0, participants, participants_name, year, day, activity);
     }
 
     public void generateWinner(ArrayList<String> participants, ArrayList<String> participants_name) {
@@ -193,6 +191,15 @@ public class ChallengeActivityResultFragment extends Fragment {
             docRef = df.collection(year).document(day);
         }catch (Exception e)
         {
+            if(pIdx+1 == participants.size()) {
+                generateWinner(participants, participants_name);
+                submitWinner();
+                showWinner();
+                hideProgressDialog();
+            }
+            else
+                getUserDailyActivity(pIdx+1, participants,participants_name,
+                        year, day, activity);
             Log.d("winner exception", e.toString());
             return;
         }
@@ -222,9 +229,11 @@ public class ChallengeActivityResultFragment extends Fragment {
                                 year, day, activity);
                     } else {
                         Log.d("winner get extrasensory data","No such document");
+                        hideProgressDialog();
                     }
                 }else {
                     Log.d("winner get extrasensory data", "Error getting documents", task.getException());
+                    hideProgressDialog();
                 }
             }
         });
