@@ -69,7 +69,7 @@ public class ChallengeParticipantsFragment extends Fragment {
         else {
             loadNoRecordView(false);
             adapter.refresh(data);
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
             loadListView();
         }
         super.onResume();
@@ -83,7 +83,7 @@ public class ChallengeParticipantsFragment extends Fragment {
     }
 
     public void loadNoRecordView(Boolean flag){
-        TextView noRecordView = (TextView) getView().findViewById(R.id.textView_noChallengeRecord);
+        TextView noRecordView = (TextView) view.findViewById(R.id.textView_noChallengeRecord);
         if(flag == true) noRecordView.setVisibility(View.VISIBLE);
         else noRecordView.setVisibility(View.GONE);
     }
@@ -124,6 +124,11 @@ public class ChallengeParticipantsFragment extends Fragment {
     }
     public void loadParticipantData(final ArrayList<String> idList, final Integer idx)
     {
+        if(idx == idList.size()){
+            loadNoRecordView(false);
+            loadListView();
+            hideProgressDialog();
+        }
         DocumentReference df;
         try{
             df = db.collection("challenge").document(idList.get(idx));
@@ -153,20 +158,13 @@ public class ChallengeParticipantsFragment extends Fragment {
                         }
                         temp.setId(document.getId());
                         data.add(temp);
-                        if(idx+1 == idList.size()) {
-                            Log.d("challenge data", data.toString());
-                        }
-                        else
-                            loadParticipantData(idList, idx+1);
                     } else {
                         Log.d("challenge data", "No such document");
                     }
                 }else{
                     Log.d("Data in Cloud", "Error getting documents" , task.getException());
                 }
-                loadNoRecordView(false);
-                loadListView();
-                hideProgressDialog();
+                loadParticipantData(idList, idx+1);
             }
         });
     }
@@ -179,19 +177,12 @@ public class ChallengeParticipantsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 int pos = position + 1;
                 FragmentTransaction fragmentTransaction = getParentFragment().getFragmentManager().beginTransaction();
-                //ChallengeActivityFragment fragment = new ChallengeActivityFragment();
                 ChallengeActivityResultFragment fragment = new ChallengeActivityResultFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("data", data.get(position));
                 args.putBoolean("edit", false);
-                //args.putSerializable("data", data_participant.get(position));
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragmentContent,fragment);
-                //fragmentTransaction.replace(R.id.toolbar, fragment);
-                /*
-                fragmentTransaction.hide(f);
-                fragmentTransaction.add(R.id.fragmentContent, fragment);
-                */
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

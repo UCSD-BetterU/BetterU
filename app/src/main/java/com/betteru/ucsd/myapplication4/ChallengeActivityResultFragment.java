@@ -184,21 +184,21 @@ public class ChallengeActivityResultFragment extends Fragment {
     public void getUserDailyActivity(final Integer pIdx, final ArrayList<String>participants,
                                      final ArrayList<String> participants_name,
                                      final String year, final String day, final ArrayList<String> activity){
+        if(pIdx == participants.size()) {
+            generateWinner(participants, participants_name);
+            submitWinner();
+            showWinner();
+            hideProgressDialog();
+            return;
+        }
         DocumentReference df;
         DocumentReference docRef;
+        Log.d("winner user daily activity", participants_name.get(pIdx));
         try {
             df = db.collection("extrasensory").document(participants.get(pIdx));
             docRef = df.collection(year).document(day);
-        }catch (Exception e)
-        {
-            if(pIdx+1 == participants.size()) {
-                generateWinner(participants, participants_name);
-                submitWinner();
-                showWinner();
-                hideProgressDialog();
-            }
-            else
-                getUserDailyActivity(pIdx+1, participants,participants_name,
+        }catch (Exception e){
+            getUserDailyActivity(pIdx + 1, participants, participants_name,
                         year, day, activity);
             Log.d("winner exception", e.toString());
             return;
@@ -210,31 +210,21 @@ public class ChallengeActivityResultFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists() && document != null) {
                         Map<String, Object> obj = document.getData();
-                        Log.d("winner data", obj.toString());
                         for(int i = 0; i < activity.size(); i++)
                         {
                             String act = activity.get(i);
                             if(obj.containsKey(act))
                                 result.get(i).set(pIdx, ((Long) obj.get(act)).intValue());
                         }
-                        Log.d("winner get extrasensory data","result");
-                        if(pIdx+1 == participants.size()) {
-                            generateWinner(participants, participants_name);
-                            submitWinner();
-                            showWinner();
-                            hideProgressDialog();
-                        }
-                        else
-                            getUserDailyActivity(pIdx+1, participants,participants_name,
-                                year, day, activity);
                     } else {
                         Log.d("winner get extrasensory data","No such document");
-                        hideProgressDialog();
+                        //hideProgressDialog();
                     }
                 }else {
                     Log.d("winner get extrasensory data", "Error getting documents", task.getException());
-                    hideProgressDialog();
                 }
+                getUserDailyActivity(pIdx+1, participants,participants_name,year, day, activity);
+                hideProgressDialog();
             }
         });
     }

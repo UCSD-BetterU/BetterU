@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -108,24 +109,29 @@ public class ChallengeActivityFragment extends Fragment
     }
     public void submitChallengeParticipants(String docId, ArrayList<String> participants){
         final Fragment f = this;
-        DocumentReference ref = db.collection("challenge_data").document();
-        Map<String, Object> dataMap = new HashMap<>();
-        for(int i = 0; i < participants.size(); i++)
-            dataMap.put(participants.get(i),1);
-        Log.d("submit challenge participants", docId);
-        db.collection("challenge_data").document(docId).set(dataMap)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("challenge participants", "DocumentSnapshot successfully written!");
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w("challenge participants", "Error writing document", e);
-                }
-            });
+        for(int i = 0; i < participants.size(); i++) {
+            try {
+                CollectionReference cf = db.collection("challenge_user");
+                DocumentReference docRef = cf.document(participants.get(i));
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put(docId, 1);
+                docRef.set(dataMap, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("challenge participants", "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("challenge participants", "Error writing document", e);
+                            }
+                        });
+            }catch(Exception e){
+                Log.e("winner submit challenge participants error", e.toString());
+            }
+        }
     }
     public void submitChallenge(){
         final Fragment f = this;
@@ -178,7 +184,7 @@ public class ChallengeActivityFragment extends Fragment
                  */
                  FragmentManager fragmentManager = getFragmentManager();
                  fragmentManager.popBackStack();
-                 ChallengeFragment fragment = new ChallengeFragment().newInstance();
+                 ChallengePagerFragment fragment = new ChallengePagerFragment().newInstance();
                  FragmentTransaction fx = getFragmentManager().beginTransaction();
                  fx.replace(R.id.fragmentContent, fragment);
                  fx.commit();

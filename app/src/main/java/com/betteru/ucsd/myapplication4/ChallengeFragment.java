@@ -67,7 +67,7 @@ public class ChallengeFragment extends Fragment {
         else {
             loadNoRecordView(false);
             adapter.refresh(data);
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
             loadListView();
         }
         super.onResume();
