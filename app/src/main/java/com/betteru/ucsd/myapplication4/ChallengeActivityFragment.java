@@ -36,6 +36,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +75,7 @@ public class ChallengeActivityFragment extends Fragment
         return view;
     }
     public void loadEditButton(){
-        if(data.winner != null  || data.date.isBefore(LocalDate.now())){
+        if(data.winner != null  || data.date.before(Calendar.getInstance())){
             ImageButton button2 = (ImageButton) view.findViewById(R.id.imageButton_challengeDate);
             button2.setVisibility(View.GONE);
             ImageButton button3 = (ImageButton) view.findViewById(R.id.imageButton_challengeName);
@@ -238,7 +239,7 @@ public class ChallengeActivityFragment extends Fragment
     }
     public void loadChallengeDate(){
         TextView date = (TextView) view.findViewById(R.id.textView_challengeDate);
-        date.setText(data.date.format(data.formatter));
+        date.setText(data.sdf.format(data.date.getTime()));
     }
     public void loadChallengeParticipants() {
         //set GridView
@@ -266,9 +267,9 @@ public class ChallengeActivityFragment extends Fragment
                 //showDialog();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
                         ChallengeActivityFragment.this,
-                        data.date.getYear(),
-                        data.date.getMonthValue()-1,
-                        data.date.getDayOfMonth()
+                        data.date.get(Calendar.YEAR),
+                        data.date.get(Calendar.MONTH),
+                        data.date.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.setThemeDark(false);
                 dpd.vibrate(true);
@@ -293,8 +294,10 @@ public class ChallengeActivityFragment extends Fragment
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        data.date = LocalDate.of(year, monthOfYear+1, dayOfMonth);
-        data.timeStamp = data.date.format(data.formatter);
+        data.date.set(Calendar.YEAR, year);
+        data.date.set(Calendar.MONTH, monthOfYear);
+        data.date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        data.timeStamp = data.sdf.format(data.date.getTime());
         loadChallengeDate();
     }
 

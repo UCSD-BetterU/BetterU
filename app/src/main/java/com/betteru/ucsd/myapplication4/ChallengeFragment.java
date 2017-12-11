@@ -24,12 +24,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import org.w3c.dom.Document;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +36,6 @@ public class ChallengeFragment extends Fragment {
     View view;
     FirebaseFirestore db;
     UserModel user;
-    LocalDate date;
     ListView listView;
     ChallengeAdapter adapter;
 

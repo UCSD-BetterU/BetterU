@@ -1,8 +1,10 @@
 package com.betteru.ucsd.myapplication4;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,18 +23,24 @@ public class ChallengeModel implements Serializable {
     ArrayList<String> winner_name;
     ArrayList<String> winner_data;
     ArrayList<Integer> activitiesIcon;
-    LocalDate date;
+    public Calendar date;
     String id;
 
-    static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    //static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    //cal.setTime(sdf.parse("Mon Mar 14 16:02:37 GMT 2011"));// all done
     ChallengeModel(String ownerId, String title, String timeStamp,
                    ArrayList<String> participants, ArrayList<String> participants_name, ArrayList<String> activities)
     {
         this.ownerId = ownerId;
         this.title = title;
         this.timeStamp = timeStamp;
-        this.date = LocalDate.parse(timeStamp, formatter);
+        try {
+            this.date.setTime(sdf.parse(timeStamp));
+        }catch(Exception e)
+        {
+            this.date = Calendar.getInstance();
+        }
         this.activities = activities;
         this.participants = participants;
         this.participants_name = participants_name;

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -75,8 +76,8 @@ public class ChallengeAdapter extends BaseAdapter {
         txtTitle.setText(obj.title);
         txtParticipantNum.setText(Integer.toString(obj.participants.size()));
         txtActivityNum.setText(Integer.toString(obj.activities.size()));
-        txtDate.setText(obj.date.format(obj.formatter));
-        if(obj.date.isAfter(LocalDate.now()))
+        txtDate.setText(obj.sdf.format(obj.date.getTime()));
+        if(obj.date.after(Calendar.getInstance()))
             imgStatus.setImageResource(R.color.colorChallengeFuture);
         else if(obj.winner == null)
             imgStatus.setImageResource(R.color.colorChallengeNear);

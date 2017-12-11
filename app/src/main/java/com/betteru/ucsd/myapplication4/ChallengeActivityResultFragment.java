@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,7 +61,8 @@ public class ChallengeActivityResultFragment extends Fragment {
         Bundle args = getArguments();
         data = (ChallengeModel) args.getSerializable("data");
         editable = (Boolean)args.getBoolean("editable");
-        Log.d("DATA", Integer.toString(data.activitiesIcon.size()));
+        Log.d("challenge detail editable", editable.toString());
+        
         view = inflater.inflate(R.layout.fragment_challenge_result, container, false);
         user = ((BetterUApplication) getActivity().getApplication()).getCurrentFBUser();
         loadChallengeDate();
@@ -85,12 +87,13 @@ public class ChallengeActivityResultFragment extends Fragment {
 
     public void loadChallengeDate() {
         TextView date = (TextView) view.findViewById(R.id.textView_challengeDate);
-        date.setText(data.date.format(data.formatter));
+        date.setText(data.sdf.format(data.date.getTime()));
     }
 
     public void loadChallengeWinner() {
         //set GridView
-        if (data.date.isAfter(LocalDate.now())) {
+        //if (data.date.isAfter(LocalDate.now())) {
+        if(data.date.after(Calendar.getInstance())){
             noWinner(true);
             return;
         }
@@ -130,12 +133,9 @@ public class ChallengeActivityResultFragment extends Fragment {
     }
 
     public void generateChallengeResult() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd");
-        String year = data.date.format(formatter);
-        String day = data.date.format(formatter2);
+        String year = String.format("%04d%02d", data.date.get(Calendar.YEAR), data.date.get(Calendar.MONTH)+1);
+        String day = String.format("%02d", data.date.get(Calendar.DAY_OF_MONTH));
         ArrayList<String> activity = data.activities;
-
         ArrayList<String> participants = new ArrayList<>();
         ArrayList<String> participants_name = new ArrayList<>();
         for (int i = 0; i < data.participants.size(); i++) {

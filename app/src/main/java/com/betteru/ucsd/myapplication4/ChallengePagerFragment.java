@@ -106,7 +106,7 @@ public class ChallengePagerFragment extends Fragment {
     }
 
     private void newChallenge(){
-        String timeStamp = "20171210";//date.now().format(ChallengeModel.formatter);
+        String timeStamp = ChallengeModel.sdf.format(Calendar.getInstance().getTime());
         ChallengeModel newChallenge = new ChallengeModel(user.getUserId(),
                 "Input Challenge Name",
                 timeStamp,
