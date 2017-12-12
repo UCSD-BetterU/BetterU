@@ -14,31 +14,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import java.util.ArrayList;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.betteru.ucsd.myapplication4.BetterUApplication;
 import com.betteru.ucsd.myapplication4.R;
 import com.betteru.ucsd.myapplication4.UserModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Yuting on 12/8/2017.
@@ -182,8 +163,8 @@ public class ChallengeEditDialogFragment extends DialogFragment
             int position = checked.keyAt(i);
             // Add sport if it is checked i.e.) == TRUE!
             if (checked.valueAt(i)) {
-                data.participants.add(idList.get(i));
-                data.participants_name.add(firstNameList.get(i));
+                data.participants.add(idList.get(position));
+                data.participants_name.add(firstNameList.get(position));
             }
         }
     }

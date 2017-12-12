@@ -360,7 +360,7 @@ public class SummaryFragment extends Fragment implements DatePickerDialog.OnDate
                                 barDataSet.setColors(colors);//ColorTemplate.JOYFUL_COLORS);
                                 barChart.setData(barData);
                                 barChart.setDescription("");
-                                chart1.getLayoutParams().height = (nr2+1) * 160 + 100;
+                                chart1.getLayoutParams().height = (nr2+1) * 100 + 100;
                                 spinner.setVisibility(View.GONE);
                                 chart1.setVisibility(View.VISIBLE);
                                 barChart.animateY(2000);

@@ -133,5 +133,5 @@
     <string name="WithFriends">With friends</string>
 
     <string name="ChallengeOwner">I Am Host</string>
-    <string name="ChallengeParticipants">I Am Attendee</string>
+    <string name="ChallengeParticipants">I Am Participant</string>
 </resources>
