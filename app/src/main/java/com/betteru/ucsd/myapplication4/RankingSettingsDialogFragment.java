@@ -2,7 +2,6 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -31,6 +30,12 @@ public class RankingSettingsDialogFragment extends DialogFragment {
     private CheckBox[] boxes = new CheckBox[51];
     private boolean[] preferences = new boolean[51];
     private HashMap<Integer, Boolean> changedPreferences = new HashMap<Integer, Boolean>();
+
+    private onPreferenceSetListner mCallback;
+
+    public interface onPreferenceSetListner {
+        void onPreferenceSet();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,9 +119,9 @@ public class RankingSettingsDialogFragment extends DialogFragment {
 
                 db.collection("ranking_preferences").document(userId).update(childUpdates);
 
-                Intent intent = new Intent("DialogChangeSaved");
-                getActivity().sendBroadcast(intent);
-
+                //Intent intent = new Intent("DialogChangeSaved");
+                //getActivity().sendBroadcast(intent);
+                mCallback.onPreferenceSet();
                 getDialog().dismiss();
             }
         });
@@ -169,5 +174,13 @@ public class RankingSettingsDialogFragment extends DialogFragment {
                 }
             }
         });
+    }
+
+    public static RankingSettingsDialogFragment newInstance(onPreferenceSetListner listner) {
+        RankingSettingsDialogFragment fragment = new RankingSettingsDialogFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        fragment.mCallback = listner;
+        return fragment;
     }
 }

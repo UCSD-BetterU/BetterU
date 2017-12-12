@@ -2,10 +2,6 @@ package com.betteru.ucsd.myapplication4;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -35,7 +31,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 
-public class RankingFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class RankingFragment extends Fragment implements DatePickerDialog.OnDateSetListener, RankingSettingsDialogFragment.onPreferenceSetListner {
     private ListView mainListView ;
     private TextView noRecordView;
     private ArrayAdapter<String> listAdapter ;
@@ -110,23 +106,24 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
             }
         });
 
+        final RankingFragment f = this;
         FloatingActionButton settingButton = (FloatingActionButton) getView().findViewById(R.id.button_setting);
         settingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = new RankingSettingsDialogFragment();
+                DialogFragment dialog = RankingSettingsDialogFragment.newInstance(f);//new RankingSettingsDialogFragment();
                 dialog.show(getFragmentManager(), "RankingSettingsDialogFragment");
             }
         });
 
-        BroadcastReceiver dialogReceiver = new BroadcastReceiver() {
+       /* BroadcastReceiver dialogReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 load(userId, calendar);
             }
         };
         IntentFilter filter = new IntentFilter("DialogChangeSaved");
-        getActivity().registerReceiver(dialogReceiver,filter);
+        getActivity().registerReceiver(dialogReceiver,filter);*/
     }
 
     private void load(String userId, Calendar calendar) {
@@ -424,5 +421,10 @@ public class RankingFragment extends Fragment implements DatePickerDialog.OnDate
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         load(userId, calendar);
+    }
+
+    @Override
+    public void onPreferenceSet() {
+        load(userId,calendar);
     }
 }
